@@ -5,7 +5,7 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD,
   username: process.env.DB_USERNAME,
   database: process.env.DB_NAME,
-  dialect: "mariadb",
+  dialect: "mysql",
   logging: false,
 });
 
