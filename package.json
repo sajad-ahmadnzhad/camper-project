@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start:dev": "nodemon app.ts",
+    "start:dev": "nodemon ./src/app.ts",
     "start": "tsc && node ./dist/app.js"
   },
   "dependencies": {
