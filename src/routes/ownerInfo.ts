@@ -3,10 +3,7 @@ import { create, getOne, update } from "../controllers/ownerInfo";
 import basicAuthMiddleware from "../middlewares/basicAuth";
 import validationMiddleware from "../middlewares/validation";
 import uploader from "../utils/uploader";
-import {
-  createOwnerInfoSchema,
-  updateOwnerInfoSchema,
-} from "../validators/ownerInfo";
+import { createOwnerInfoSchema, updateOwnerInfoSchema } from "../validators/ownerInfo";
 
 const router = express.Router();
 
