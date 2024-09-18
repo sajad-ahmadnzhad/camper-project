@@ -16,8 +16,6 @@ app.use(express.json({ limit: "50MB" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(process.cwd(), "public")));
 
-// app.use(express.static(path.join(__dirname, "..", "public")));
-
 app.use(expressEjsLayouts);
 app.set("view engine", "ejs");
 app.set("layout", "layouts/website/main.ejs");

@@ -1,37 +1,36 @@
 import { NextFunction, Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
-export const about = async (req: Request, res: Response, next: NextFunction) => {
+export const ownerInfos = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  res.locals.layout = "layouts/panel/main.ejs";
+
+  res.render("pages/panel/ownerInfos.ejs", { page: "owner-infos" });
+});
+
+export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  res.locals.layout = "layouts/panel/main.ejs";
+
+  res.render("pages/panel/campers.ejs", { page: "campers" });
+});
+
+export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  res.locals.layout = "layouts/auth/main.ejs";
+
+  res.render("pages/auth/login.ejs", { page: "login" });
+});
+
+export const about = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.render("pages/website/about.ejs", { page: "" });
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
-export const blog = async (req: Request, res: Response, next: NextFunction) => {
+});
+export const blog = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.render("pages/website/blog.ejs", { page: "blog" });
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
-export const contact = async (req: Request, res: Response, next: NextFunction) => {
+});
+export const contact = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.render("pages/website/contact.ejs", { page: "contact" });
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
-export const resume = async (req: Request, res: Response, next: NextFunction) => {
+});
+export const resume = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.render("pages/website/resume.ejs", { page: "resume" });
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
-export const works = async (req: Request, res: Response, next: NextFunction) => {
+});
+export const works = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.render("pages/website/works.ejs", { page: "works" });
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+});
