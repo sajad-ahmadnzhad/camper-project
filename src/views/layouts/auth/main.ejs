@@ -1,133 +1,56 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
   <head>
-    <title>Glassmorphism login Form Tutorial in html css</title>
-
-    <link rel="stylesheet" href="/assets/styles/style-rtl.css" />
-    <!--Stylesheet-->
-    <style media="screen">
-      *,
-      *:before,
-      *:after {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-      }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ورود به سیستم</title>
+    <link rel="shortcut icon" type="image/png" href="/panel/assets/images/logos/favicon.png" />
+    <link rel="stylesheet" href="/panel/assets/css/styles.min.css" />
+    <style>
       body {
-        background-color: #080710;
-      }
-      .background {
-        width: 430px;
-        height: 520px;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        left: 50%;
-        top: 50%;
-      }
-      .background .shape {
-        height: 200px;
-        width: 200px;
-        position: absolute;
-        border-radius: 50%;
-      }
-      .shape:first-child {
-        background: linear-gradient(#1845ad, #23a2f6);
-        left: -80px;
-        top: -80px;
-      }
-      .shape:last-child {
-        background: linear-gradient(to right, #ff512f, #f09819);
-        right: -30px;
-        bottom: -80px;
-      }
-      form {
-        height: 520px;
-        width: 400px;
-        background-color: rgba(255, 255, 255, 0.13);
-        position: absolute;
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
-        border-radius: 10px;
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
-        padding: 50px 35px;
-      }
-      form * {
-        font-family: "IRY", sans-serif;
-        color: #ffffff;
-        letter-spacing: 0.5px;
-        outline: none;
-        border: none;
-      }
-      form h3 {
-        font-size: 32px;
-        font-weight: 500;
-        line-height: 42px;
-        text-align: center;
+        font-family: "IRANSans", sans-serif;
       }
 
-      label {
-        display: block;
-        margin-top: 30px;
-        font-size: 16px;
-        font-weight: 500;
+      .form-check-input {
+        float: right;
       }
-      input {
-        display: block;
-        height: 50px;
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.07);
-        border-radius: 3px;
-        padding: 0 10px;
-        margin-top: 8px;
-        font-size: 14px;
-        font-weight: 300;
-      }
-      ::placeholder {
-        color: #e5e5e5;
-      }
-      button {
-        margin-top: 50px;
-        width: 100%;
-        background-color: #ffffff;
-        color: #080710;
-        padding: 15px 0;
-        font-size: 18px;
-        font-weight: 600;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .social {
-        margin-top: 30px;
-        display: flex;
-      }
-      .social div {
-        background: red;
-        width: 150px;
-        border-radius: 3px;
-        padding: 5px 10px 10px 5px;
-        background-color: rgba(255, 255, 255, 0.27);
-        color: #eaf0fb;
-        text-align: center;
-      }
-      .social div:hover {
-        background-color: rgba(255, 255, 255, 0.47);
-      }
-      .social .fb {
-        margin-left: 25px;
-      }
-      .social i {
-        margin-right: 4px;
+
+      .form-check-label {
+        margin-right: 1.25rem;
       }
     </style>
   </head>
+
   <body>
-    <div class="background">
-      <div class="shape"></div>
-      <div class="shape"></div>
+    <!--  Body Wrapper -->
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
+      <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center w-100">
+          <div class="row justify-content-center w-100">
+            <div class="col-md-8 col-lg-6 col-xxl-3">
+              <div class="card mb-0">
+                <div class="card-body">
+                  <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                    <img src="/panel/assets/images/logos/dark-logo.svg" width="180" alt="لوگو" />
+                  </a>
+                  <p class="text-center">کمپین‌های اجتماعی شما</p>
+                  <%- body %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <%- body %>
+    <script src="/panel/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/panel/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
