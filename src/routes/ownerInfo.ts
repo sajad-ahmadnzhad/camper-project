@@ -16,9 +16,9 @@ router
       { name: "avatar", maxCount: 1 },
       { name: "cover", maxCount: 1 },
     ]),
-    validationMiddleware(createOwnerInfoSchema),
-    create
+    validationMiddleware(createOwnerInfoSchema)
   )
+
   .put(
     basicAuthMiddleware,
     uploader.fields([

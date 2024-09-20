@@ -4,11 +4,7 @@ import httpErrors from "http-errors";
 import { deleteFile, uploadFile } from "../utils/s3";
 import httpStatus from "http-status";
 
-export const getOne = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getOne = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const ownerInfo = await OwnerInfoModel.findOne();
 
@@ -18,11 +14,7 @@ export const getOne = async (
   }
 };
 
-export const create = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { body } = req;
 
@@ -64,11 +56,7 @@ export const create = async (
   }
 };
 
-export const update = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const update = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { body } = req;
 

@@ -1,5 +1,3 @@
-
-
 <div class="col-lg-12 d-flex align-items-stretch mt-4">
   <div class="card w-100">
     <div class="card-body p-4">
@@ -49,15 +47,87 @@
 </div>
 
 <script
-src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
-integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
-crossorigin="anonymous"
-referrerpolicy="no-referrer"
+  src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
+  integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
 ></script>
 
-<script>
-CKEDITOR.replace("description", {
-  contentsLangDirection: "rtl",
-  language: "fa",
-});
-</script>
+<!-- <script>
+  CKEDITOR.replace("description", {
+    contentsLangDirection: "rtl",
+    language: "fa",
+  });
+</script> -->
+
+<!-- <div class="card-body p-4">
+  <h5 class="card-title fw-semibold mb-4">بروزرسانی کمپر</h5>
+  <form>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="name" class="form-label">نام کمپر</label>
+          <input type="text" class="form-control" id="name" placeholder="نام کمپر" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="price" class="form-label">قیمت</label>
+          <input type="number" class="form-control" id="price" placeholder="قیمت به تومان" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="mb-3 w-100">
+          <div class="profile-cards">
+            <label for="images" class="form-label">تصاویر</label>
+            <div class="custom-file-upload">
+              <label for="formFiles" class="btn btn-primary">انتخاب تصاویر</label>
+              <input class="form-control" type="file" id="formFiles" multiple style="display: none" />
+            </div>
+            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mx-auto">
+        <div class="container">
+          <div class="mb-3 text-center">
+            <div class="profile-card mx-auto">
+              <div class="text-center mb-3">
+                <img
+                  id="profileImage1"
+                  src="/assets/images/no-image.jpg"
+                  alt="Profile Image"
+                  class="profile-image img-thumbnail"
+                  style="width: 150px; height: 150px"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger w-60 m-auto mt-2"
+                  onclick="resetImage('profileImage1', '/assets/images/no-image.jpg')"
+                >
+                  حذف تصویر
+                </button>
+              </div>
+              <label for="formFile1" class="form-label">تصویر پروفایل</label>
+              <div class="custom-file-upload">
+                <label for="formFile1" class="btn btn-primary">انتخاب فایل</label>
+                <span id="file-chosen1">فایلی انتخاب نشده</span>
+                <input class="form-control" type="file" id="formFile1" style="display: none" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12">
+        <label for="description" class="form-label">توضیحات</label>
+        <textarea class="form-control" id="description" rows="5" placeholder="توضیحات کمپر"></textarea>
+      </div>
+    </div>
+  </form>
+</div> -->
