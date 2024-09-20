@@ -113,19 +113,21 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
     }
 
     const countImages = camper.dataValues.images.length + camperImages?.length;
-    if ((camperImages && camper.dataValues.images.length >= 3) || countImages > 3) {
-      throw new httpErrors.BadRequest("تعداد عکس های آپلود شده به حد مجاز رسیده است.");
+
+    if (camperImages && countImages > 3) {
+      throw new httpErrors.BadRequest(
+        "تعداد عکس های آپلود شده به حد مجاز رسیده است."
+      );
     }
 
     let mainImageLocation: null | string = null;
 
     if (camperMainImage) {
-      await deleteFile(camper.dataValues.mainImage);
-
       const compressMainImageBuffer = await compressImage(camperMainImage[0]);
       const path = `/campers/${Date.now()}--${camperMainImage[0].originalname}`;
       const mainImage = await uploadFile(compressMainImageBuffer, path);
       mainImageLocation = mainImage.Location;
+      await deleteFile(camper.dataValues.mainImage);
     }
 
     const imagesLocation: string[] = [];
