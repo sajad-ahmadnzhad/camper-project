@@ -8,13 +8,16 @@ import notFoundMiddleware from "./middlewares/notFound";
 import path from "path";
 import ownerInfoRouter from "./routes/ownerInfo";
 import viewsRouter from "./routes/views";
+import authRouter from "./routes/auth";
 import expressEjsLayouts from "express-ejs-layouts";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json({ limit: "50MB" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(process.cwd(), "public")));
+app.use(cookieParser());
 
 app.use(expressEjsLayouts);
 app.set("view engine", "ejs");
@@ -26,6 +29,7 @@ const { PORT = 4000 } = process.env;
 app.use("/", viewsRouter);
 app.use("/api/campers", camperRouter);
 app.use("/api/ownerInfo", ownerInfoRouter);
+app.use("/api/auth", authRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
