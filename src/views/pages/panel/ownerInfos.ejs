@@ -33,6 +33,7 @@
               <input type="text" class="form-control" id="summary" placeholder="خلاصه‌ای کوتاه" />
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-6 mb-4">
               <div class="container">
@@ -48,7 +49,9 @@
                     <button
                       type="button"
                       class="btn btn-danger w-60 m-auto mt-2"
-                      onclick="resetImage('profileImage1', '/assets/images/no-image.jpg')"
+                      id="resetImageBtn1"
+                      onclick="resetImage('profileImage1', '/assets/images/no-image.jpg', 'file-chosen1', 'resetImageBtn1')"
+                      style="display: none"
                     >
                       حذف تصویر
                     </button>
@@ -75,10 +78,13 @@
                       class="profile-image img-thumbnail"
                       style="width: 150px; height: 150px"
                     />
+                    <!-- اضافه کردن دکمه حذف با آی‌دی resetImageBtn2 -->
                     <button
                       type="button"
                       class="btn btn-danger w-60 m-auto mt-2"
-                      onclick="resetImage('profileImage2', '/assets/images/no-image.jpg')"
+                      id="resetImageBtn2"
+                      onclick="resetImage('profileImage2', '/assets/images/no-image.jpg', 'file-chosen2', 'resetImageBtn2')"
+                      style="display: none"
                     >
                       حذف تصویر
                     </button>
@@ -98,52 +104,7 @@
             </div>
           </div>
 
-          <script>
-            document.getElementById("avatarURL").addEventListener("change", function (event) {
-              const file = event.target.files[0];
-              const fileChosen = document.getElementById("file-chosen1");
-
-              if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                  document.getElementById("profileImage1").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-
-                fileChosen.textContent = file.name;
-              } else {
-                fileChosen.textContent = "فایلی انتخاب نشده";
-              }
-            });
-
-            document.getElementById("mainCover").addEventListener("change", function (event) {
-              const file = event.target.files[0];
-              const fileChosen = document.getElementById("file-chosen2");
-
-              if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                  document.getElementById("profileImage2").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-
-                fileChosen.textContent = file.name;
-              } else {
-                fileChosen.textContent = "فایلی انتخاب نشده";
-              }
-            });
-
-            function resetImage(imageId, defaultSrc) {
-              document.getElementById(imageId).src = defaultSrc;
-              const fileInputId = imageId === "profileImage1" ? "avatarURL" : "mainCover";
-              document.getElementById(fileInputId).value = "";
-              const fileChosenId = imageId === "profileImage1" ? "file-chosen1" : "file-chosen2";
-              document.getElementById(fileChosenId).textContent = "فایلی انتخاب نشده";
-            }
-          </script>
-
-          <style></style>
-
+          <script src="/panel/pages/ownerInfos.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
         </div>
       </form>

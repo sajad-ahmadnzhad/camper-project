@@ -79,56 +79,43 @@ function createCamperClickHandler() {
     confirmButtonText: "ثبت کمپر",
     cancelButtonText: "منصرف شدم",
     preConfirm: () => {
-      submitCamperData();
+      return submitCamperData();
     },
     didOpen: scriptImageSelected,
   });
 }
 
 function scriptImageSelected() {
-  // برای انتخاب 3 تصویر حداکثر
+  const resetImageBtn = document.getElementById("resetImageBtn");
+  resetImageBtn.style.display = "none"; // مخفی کردن دکمه حذف در ابتدا
+
   document.getElementById("formFiles").addEventListener("change", function (event) {
     const files = event.target.files;
     const imagePreviewContainer = document.getElementById("imagePreviewContainer");
 
-    // بررسی تعداد فایل‌های انتخاب شده
+    clearErrors();
+
     if (files.length > 3) {
-      Swal.fire({
-        icon: "error",
-        title: "خطا",
-        text: "شما فقط می‌توانید ۳ تصویر انتخاب کنید.",
-      });
+      setError("formFiles", "شما فقط می‌توانید ۳ تصویر انتخاب کنید.");
       event.target.value = "";
       return;
     }
 
-    // بررسی نوع و حجم هر فایل
     for (let i = 0; i < files.length; i++) {
-      // بررسی نوع فایل
       if (!["image/jpeg", "image/jpg", "image/png"].includes(files[i].type)) {
-        Swal.fire({
-          icon: "error",
-          title: "خطا",
-          text: "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.",
-        });
+        setError("formFiles", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
         event.target.value = "";
         return;
       }
 
-      // بررسی حجم فایل (بیشتر از 2 مگابایت)
       if (files[i].size > 2 * 1024 * 1024) {
-        Swal.fire({
-          icon: "error",
-          title: "خطا",
-          text: `حجم فایل ${files[i].name} نباید بیشتر از ۲ مگابایت باشد.`,
-        });
+        setError("formFiles", `حجم فایل ${files[i].name} نباید بیشتر از ۲ مگابایت باشد.`);
         event.target.value = "";
         return;
       }
     }
 
-    // اگر همه بررسی‌ها تایید شد، پیش‌نمایش تصاویر را نمایش بده
-    imagePreviewContainer.innerHTML = ""; // پاک کردن پیش‌نمایش قبلی
+    imagePreviewContainer.innerHTML = "";
     if (files.length > 0) {
       Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
@@ -148,7 +135,7 @@ function scriptImageSelected() {
           removeBtn.style.right = "5px";
           removeBtn.innerHTML = "&times;";
           removeBtn.onclick = function () {
-            imgContainer.remove(); // حذف تصویر از لیست
+            imgContainer.remove();
           };
 
           imgContainer.appendChild(img);
@@ -164,61 +151,103 @@ function scriptImageSelected() {
     const file = event.target.files[0];
     const fileChosen = document.getElementById("file-chosen1");
 
-    // بررسی نوع فایل
+    clearErrors(); // پاکسازی خطاهای قبلی
+
     if (file && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
-      Swal.fire({
-        icon: "error",
-        title: "خطا",
-        text: "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.",
-      });
+      setError("mainImage", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
       event.target.value = "";
       fileChosen.textContent = "فایلی انتخاب نشده";
+      resetImageBtn.style.display = "none"; // مخفی کردن دکمه حذف
       return;
     }
 
-    // بررسی حجم فایل (بیشتر از 2 مگابایت)
     if (file && file.size > 2 * 1024 * 1024) {
-      Swal.fire({
-        icon: "error",
-        title: "خطا",
-        text: "حجم فایل نباید بیشتر از ۲ مگابایت باشد.",
-      });
+      setError("mainImage", "حجم فایل نباید بیشتر از ۲ مگابایت باشد.");
       event.target.value = "";
       fileChosen.textContent = "فایلی انتخاب نشده";
+      resetImageBtn.style.display = "none"; // مخفی کردن دکمه حذف
       return;
     }
 
-    // نمایش پیش‌نمایش تصویر در صورت تایید
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
         document.getElementById("profileImage1").src = e.target.result;
+        resetImageBtn.style.display = "inline-block"; // نمایش دکمه حذف
       };
       reader.readAsDataURL(file);
       fileChosen.textContent = file.name;
     } else {
       fileChosen.textContent = "فایلی انتخاب نشده";
+      resetImageBtn.style.display = "none"; // مخفی کردن دکمه حذف
     }
   });
 
   document.getElementById("resetImageBtn").addEventListener("click", function () {
     document.getElementById("profileImage1").src = "/assets/images/no-image.jpg";
-    document.getElementById("mainImage").value = ""; // ریست کردن input
-    document.getElementById("file-chosen1").textContent = "فایلی انتخاب نشده"; // متن پیش فرض
+    document.getElementById("mainImage").value = "";
+    document.getElementById("file-chosen1").textContent = "فایلی انتخاب نشده";
+    resetImageBtn.style.display = "none"; // مخفی کردن دکمه حذف بعد از حذف تصویر
   });
 }
 
 async function submitCamperData() {
+  clearErrors();
+
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
   const description = document.getElementById("description").value;
-
   const profileImage = document.getElementById("mainImage").files[0];
   const multipleImages = document.getElementById("formFiles").files;
 
+  let hasError = false;
+
+  if (!name) {
+    setError("name", "نام کمپر الزامی است.");
+    hasError = true;
+  }
+
+  if (!price || isNaN(price) || price <= 0) {
+    setError("price", "قیمت معتبر نیست.");
+    hasError = true;
+  }
+
+  if (!description) {
+    setError("description", "توضیحات الزامی است.");
+    hasError = true;
+  }
+
+  // چک کردن اینکه آیا تصویری انتخاب شده است یا خیر
+  if (!profileImage) {
+    setError("mainImage", "تصویر پروفایل الزامی است.");
+    hasError = true;
+  }
+
+  if (multipleImages.length === 0) {
+    setError("formFiles", "حداقل یک تصویر برای گالری الزامی است.");
+    hasError = true;
+  }
+
+  if (profileImage && profileImage.size > 2 * 1024 * 1024) {
+    setError("mainImage", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
+    hasError = true;
+  }
+
+  for (let i = 0; i < multipleImages.length; i++) {
+    if (multipleImages[i].size > 2 * 1024 * 1024) {
+      setError("formFiles", `حجم فایل ${multipleImages[i].name} نباید بیشتر از ۲ مگابایت باشد.`);
+      hasError = true;
+    }
+  }
+
+  if (hasError) {
+    // اگر خطا وجود داشت، فرم ارسال نشود و ارورها نمایش داده شوند
+    return false; // جلوگیری از بسته شدن swal
+  }
+
   const formData = new FormData();
   formData.append("name", name);
-  formData.append("price", price);
+  formData.append("price", parseInt(price, 10));
   formData.append("description", description);
 
   if (profileImage) {
@@ -239,23 +268,49 @@ async function submitCamperData() {
     const data = await res.json();
 
     if (res.status == 201) {
-      Swal.fire("موفق", "کمپر با موفقیت ثبت شد!", "success");
+      Swal.fire({
+        icon: "success",
+        title: "موفقیت",
+        text: "کمپر با موفقیت ثبت شد!",
+      });
+      return true;
     } else if (res.status == 400) {
-      if (typeof data === "object") {
-        let errorMessages = "";
-
-        Object.entries(data).forEach(([field, message]) => {
-          errorMessages += `${field}: ${message}\n`;
-        });
-
-        Swal.fire("خطا", errorMessages, "error");
-      } else {
-        Swal.fire("خطا", "مشکلی رخ داده است", "error");
-      }
+      handleFormErrors(data);
+      return false;
     }
   } catch (error) {
-    Swal.fire("خطا", "ثبت کمپر با خطا مواجه شد", "error");
+    setError("form", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
+    return false;
   }
+}
+
+function setError(fieldId, errorMessage) {
+  const field = document.getElementById(fieldId);
+
+  if (field.parentNode.querySelector(".text-danger")) {
+    return;
+  }
+
+  const errorSpan = document.createElement("span");
+  errorSpan.className = "text-danger";
+  errorSpan.textContent = errorMessage;
+
+  errorSpan.style.display = "block";
+  errorSpan.style.marginTop = "5px";
+  errorSpan.style.fontSize = "16px";
+
+  field.parentNode.appendChild(errorSpan);
+}
+
+function clearErrors() {
+  const errorSpans = document.querySelectorAll(".text-danger");
+  errorSpans.forEach((span) => span.remove());
+}
+
+function handleFormErrors(errors) {
+  Object.entries(errors).forEach(([field, message]) => {
+    setError(field, message);
+  });
 }
 
 function updateCamperClickHandler() {
