@@ -241,8 +241,7 @@ async function submitCamperData() {
   }
 
   if (hasError) {
-    // اگر خطا وجود داشت، فرم ارسال نشود و ارورها نمایش داده شوند
-    return false; // جلوگیری از بسته شدن swal
+    return false;
   }
 
   const formData = new FormData();
@@ -275,11 +274,27 @@ async function submitCamperData() {
       });
       return true;
     } else if (res.status == 400) {
-      handleFormErrors(data);
+      let errorMessage = "";
+
+      Object.keys(data).forEach((key) => {
+        errorMessage += `${data[key]} \n`;
+      });
+
+      Swal.fire({
+        icon: "error",
+        title: "خطا",
+        text: errorMessage,
+      });
+
       return false;
     }
   } catch (error) {
-    setError("form", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
+    Swal.fire({
+      icon: "error",
+      title: "خطای ارتباطی",
+      text: "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.",
+    });
+
     return false;
   }
 }
