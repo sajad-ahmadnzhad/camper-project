@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-export default (payload: object) => {
-  const { ACCESS_TOKEN_SECRET_KRY } = process.env;
-  return jwt.sign(payload, ACCESS_TOKEN_SECRET_KRY as string, {
+
+export default (payload: object , secretKey: string) => {
+  return jwt.sign(payload, secretKey, {
     expiresIn: "30d",
   });
 };

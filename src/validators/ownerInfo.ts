@@ -6,19 +6,19 @@ export const createOwnerInfoSchema = Joi.object({
     "string.empty": "نام نمی تواند خالی باشد.",
     "string.min": "نام حداقل باید 5 حرف داشته باشد.",
     "string.max": "نام حداکثر باید 100 حرف داشته باشد.",
-    "string.required": "نام اجباری می باشد.",
+    "any.required": "نام اجباری می باشد.",
   }),
   bio: Joi.string().max(1000).min(10).required().messages({
     "string.base": "بیوگرافی باید یک رشته باشد.",
     "string.empty": "بیوگرافی نمی تواند خالی باشد.",
     "string.min": "بیوگرافی حداقل باید 10 حرف داشته باشد.",
     "string.max": "بیوگرافی حداکثر باید 1000 حرف داشته باشد.",
-    "string.required": "بیوگرافی اجباری می باشد.",
+    "any.required": "بیوگرافی اجباری می باشد.",
   }),
   phoneNumber: Joi.string().required().messages({
     "string.base": "شماره تلفن باید یک رشته باشد.",
     "string.empty": "شماره تلفن نمی تواند خالی باشد.",
-    "string.required": "شماره تلفن اجباری می باشد.",
+    "any.required": "شماره تلفن اجباری می باشد.",
   }),
   email: Joi.string().email().optional().messages({
     "string.base": "ایمیل باید یک رشته باشد.",
@@ -30,7 +30,7 @@ export const createOwnerInfoSchema = Joi.object({
     "string.empty": "خلاصه نمی تواند خالی باشد.",
     "string.min": "خلاصه حداقل باید 5 حرف داشته باشد.",
     "string.max": "خلاصه حداکثر باید 30 حرف داشته باشد.",
-    "string.required": "خلاصه اجباری می باشد.",
+    "any.required": "خلاصه اجباری می باشد.",
   }),
   socialLinks: Joi.array()
     .items(
