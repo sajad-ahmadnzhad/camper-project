@@ -1,14 +1,5 @@
 import { Router } from "express";
-import {
-  create,
-  getAll,
-  getOne,
-  newest,
-  remove,
-  search,
-  update,
-  removeImage,
-} from "../controllers/camper";
+import { create, getAll, getOne, newest, remove, search, update, removeImage } from "../controllers/camper";
 import basicAuthMiddleware from "./../middlewares/basicAuth";
 import validationMiddleware from "../middlewares/validation";
 import { createCamperSchema, updateCamperSchema } from "../validators/camper";

@@ -9,12 +9,14 @@ import path from "path";
 import ownerInfoRouter from "./routes/ownerInfo";
 import viewsRouter from "./routes/views";
 import expressEjsLayouts from "express-ejs-layouts";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json({ limit: "50MB" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(process.cwd(), "public")));
+app.use(cors());
 
 app.use(expressEjsLayouts);
 app.set("view engine", "ejs");
