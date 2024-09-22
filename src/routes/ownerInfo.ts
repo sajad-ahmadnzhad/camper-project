@@ -1,6 +1,6 @@
 import express from "express";
-import { create, getOne, update } from "../controllers/ownerInfo";
-import basicAuthMiddleware from "../middlewares/basicAuth";
+import { getOne, update } from "../controllers/ownerInfo";
+import authMiddleware from "../middlewares/auth";
 import validationMiddleware from "../middlewares/validation";
 import uploader from "../utils/uploader";
 import { createOwnerInfoSchema, updateOwnerInfoSchema } from "../validators/ownerInfo";
@@ -11,7 +11,7 @@ router
   .route("/")
   .get(getOne)
   .post(
-    basicAuthMiddleware,
+    authMiddleware,
     uploader.fields([
       { name: "avatar", maxCount: 1 },
       { name: "cover", maxCount: 1 },
@@ -20,7 +20,7 @@ router
   )
 
   .put(
-    basicAuthMiddleware,
+    authMiddleware,
     uploader.fields([
       { name: "avatar", maxCount: 1 },
       { name: "cover", maxCount: 1 },

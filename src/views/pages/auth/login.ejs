@@ -1,22 +1,96 @@
-<form>
+<form id="loginForm">
   <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">نام کاربری</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+    <label for="username" class="form-label">نام کاربری</label>
+    <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp" required />
   </div>
   <div class="mb-4">
-    <label for="exampleInputPassword1" class="form-label">رمز عبور</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" />
+    <label for="password" class="form-label">رمز عبور</label>
+    <input name="password" type="password" class="form-control" id="password" required />
   </div>
-  <div class="d-flex align-items-center justify-content-between mb-4">
-    <div class="form-check">
-      <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked />
-      <label class="form-check-label text-dark" for="flexCheckChecked"> به خاطر سپاری این دستگاه </label>
-    </div>
-    <a class="text-primary fw-bold" href="./index.html">فراموشی رمز عبور؟</a>
-  </div>
-  <a href="./index.html" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">ورود</a>
-  <div class="d-flex align-items-center justify-content-center">
-    <p class="fs-4 mb-0 fw-bold">جدید هستید؟</p>
-    <a class="text-primary fw-bold ms-2" href="./authentication-register.html">ایجاد حساب کاربری</a>
-  </div>
+  <div class="d-flex align-items-center justify-content-between mb-4"></div>
+  <input type="submit" value="ورود" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" />
+  <div class="d-flex align-items-center justify-content-center"></div>
 </form>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const errorMessage = "<%= locals.messages.errorMessage %>";
+    const successMessage = "<%= locals.messages.successMessage %>";
+
+    if (errorMessage) {
+      Swal.fire({
+        icon: "error",
+        title: "خطا!",
+        text: errorMessage,
+        confirmButtonText: "باشه",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
+    } else if (successMessage) {
+      Swal.fire({
+        icon: "success",
+        title: "موفقیت!",
+        text: successMessage,
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
+    }
+  });
+  document.getElementById("loginForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      const response = await fetch("http://localhost:3002/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.status == 201) {
+        Swal.fire({
+          icon: "success",
+          title: "موفق",
+          text: result.message,
+          confirmButtonText: "باشه",
+        }).then(() => {
+          window.location.href = "/panel";
+        });
+      } else if (response.status == 200) {
+        Swal.fire({
+          icon: "success",
+          title: "موفق",
+          text: result.message,
+          confirmButtonText: "باشه",
+        }).then(() => {
+          window.location.href = "/panel";
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "خطا",
+          text: result.message || "نام کاربری یا رمز عبور اشتباه است.",
+          confirmButtonText: "باشه",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "خطای سرور",
+        text: "مشکلی در ارتباط با سرور پیش آمد، لطفاً دوباره تلاش کنید.",
+        confirmButtonText: "باشه",
+      });
+    }
+  });
+</script>
