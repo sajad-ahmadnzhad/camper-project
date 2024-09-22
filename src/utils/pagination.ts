@@ -13,7 +13,7 @@ export default async <T>(
   where: any = {},
   order: any[] = [["createdAt", "DESC"]]
 ): Promise<PaginationResult<T>> => {
-  const { limit = 20, page = 1 } = query;
+  const { limit = 10, page = 1 } = query;
 
   const limitValue = parseInt(limit, 10);
   const pageValue = parseInt(page, 10);

@@ -1,45 +1,96 @@
 <style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  .table .camper-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    /* display: inline-block; */
+  }
+  .table td,
+  .table th {
+    padding: 8px !important; /* کاهش فاصله سلول‌های جدول */
+    vertical-align: middle; /* متن در وسط سلول */
   }
 
-  th,
-  td {
-    padding: 12px 15px;
-    text-align: center;
-    vertical-align: middle;
+  .table-responsive {
+    border-radius: 10px;
+    /* overflow: hidden; */
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
   }
 
-  th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+  .table tbody tr {
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #e9ecef;
   }
 
-  img {
-    max-width: 50px;
-    height: auto;
+  .table tbody tr:hover {
+    background-color: #f1f3f5;
   }
 
+  .table img {
+    border: 2px solid #dee2e6;
+    padding: 2px;
+    width: 60px; /* تنظیم اندازه تصاویر */
+    height: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .table img:hover {
+    transform: scale(1.05); /* کمی بزرگتر شدن تصویر با هاور */
+  }
+
+  /* تنظیم دکمه‌ها با استایل بوت‌استرپ */
   .btn {
-    margin: 5px 0;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+    border-color: #ffc107;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border-color: #dc3545;
+  }
+
+  .btn:hover {
+    opacity: 0.85;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  /* استایل متن برای حالت "هیچ کمپی وجود ندارد" */
+  .table tbody tr td[colspan="5"] {
+    font-size: 16px;
+    color: #6c757d;
   }
 </style>
-
 <div class="col-lg-12 d-flex align-items-stretch mt-4">
   <div class="card w-100">
     <div class="card-body p-4">
       <h5 class="card-title fw-semibold mb-4">مدیریت کمپرهای ثبت شده</h5>
 
+      <!-- Search form -->
       <div class="row mb-3">
         <div class="col-md-4 mb-2">
-          <input type="text" class="form-control" placeholder="جستجو کمپر" />
+          <form id="search-form" method="GET" action="/panel/campers">
+            <input type="text" name="search" class="form-control" placeholder="جستجو کمپر" value="<%= query || '' %>" />
+          </form>
         </div>
         <div class="col-md-2 text-md-end">
-          <button type="submit" class="btn btn-primary w-100 w-md-auto" onclick="createCamperClickHandler()">ثبت کمپر جدید</button>
+          <button type="button" class="btn btn-primary w-100 w-md-auto" onclick="createCamperClickHandler()">ثبت کمپر جدید</button>
         </div>
       </div>
 
+      <!-- Table to display campers -->
       <div class="table-responsive">
         <table class="table text-nowrap mb-0 align-middle">
           <thead class="text-dark fs-5">
@@ -48,7 +99,6 @@
               <th class="border-bottom-0">تصویر</th>
               <th class="border-bottom-0">عنوان</th>
               <th class="border-bottom-0">قیمت</th>
-
               <th class="border-bottom-0 text-center">عملیات</th>
             </tr>
           </thead>
@@ -59,112 +109,48 @@
               <td class="border-bottom-0">
                 <img src="<%= camper.mainImage %>" alt="تصویر کمپر" width="80" class="rounded" />
               </td>
-              <td class="border-bottom-0"><%= camper.name %></td>
+              <td class="border-bottom-0 camper-name"><%= camper.name %></td>
               <td class="border-bottom-0"><%= camper.price.toLocaleString('fa-IR') %> تومان</td>
               <td class="border-bottom-0 text-center">
                 <button
                   class="btn btn-warning btn-sm"
-                  onclick="updateCamperClickHandler(' <%- encodeURIComponent(JSON.stringify(camper)) %>' )"
+                  onclick="updateCamperClickHandler('<%- encodeURIComponent(JSON.stringify(camper)) %>')"
                 >
                   ویرایش
                 </button>
-                <button class="btn btn-danger btn-sm" onclick="removeCamperClickHandler(`<%= camper.id %>`)">حذف</button>
+                <button class="btn btn-danger btn-sm" onclick="removeCamperClickHandler('<%= camper.id %>')">حذف</button>
               </td>
             </tr>
             <% }) %> <% } else { %>
             <tr>
-              <td colspan="7" class="text-center">هیچ کمپی وجود ندارد</td>
+              <td colspan="5" class="text-center">هیچ کمپی وجود ندارد</td>
             </tr>
             <% } %>
           </tbody>
         </table>
       </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <!-- Previous Page Button -->
+        <% if (pagination.currentPage > 1) { %>
+        <form method="GET" action="/panel/campers" id="pagination-form-prev" style="cursor: pointer">
+          <input type="hidden" name="page" value="<%= pagination.currentPage - 1 %>" />
+          <input type="hidden" name="query" value="<%= query || '' %>" />
+          <button type="submit" class="btn btn-outline-primary">صفحه قبل</button>
+        </form>
+        <% } %>
+
+        <span>صفحه <%= pagination.currentPage %> از <%= pagination.totalPages %></span>
+
+        <!-- Next Page Button -->
+        <% if (pagination.currentPage < pagination.totalPages) { %>
+        <form method="GET" action="/panel/campers" id="pagination-form-next" style="cursor: pointer">
+          <input type="hidden" name="page" value="<%= pagination.currentPage + 1 %>" />
+          <input type="hidden" name="query" value="<%= query || '' %>" />
+          <button type="submit" class="btn btn-outline-primary">صفحه بعد</button>
+        </form>
+        <% } %>
+      </div>
     </div>
   </div>
 </div>
-
-<!-- <script
-  src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
-  integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script> -->
-
-<!-- <script>
-  CKEDITOR.replace("description", {
-    contentsLangDirection: "rtl",
-    language: "fa",
-  });
-</script> -->
-
-<!-- <div class="card-body p-4">
-  <h5 class="card-title fw-semibold mb-4">بروزرسانی کمپر</h5>
-  <form>
-    <div class="row g-3">
-      <div class="col-md-6">
-        <div class="mb-3">
-          <label for="name" class="form-label">نام کمپر</label>
-          <input type="text" class="form-control" id="name" placeholder="نام کمپر" />
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="mb-3">
-          <label for="price" class="form-label">قیمت</label>
-          <input type="number" class="form-control" id="price" placeholder="قیمت به تومان" />
-        </div>
-      </div>
-    </div>
-
-    <div class="row g-3">
-      <div class="col-md-6">
-        <div class="mb-3 w-100">
-          <div class="profile-cards">
-            <label for="images" class="form-label">تصاویر</label>
-            <div class="custom-file-upload">
-              <label for="formFiles" class="btn btn-primary">انتخاب تصاویر</label>
-              <input class="form-control" type="file" id="formFiles" multiple style="display: none" />
-            </div>
-            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mx-auto">
-        <div class="container">
-          <div class="mb-3 text-center">
-            <div class="profile-card mx-auto">
-              <div class="text-center mb-3">
-                <img
-                  id="avatarImage"
-                  src="/assets/images/no-image.jpg"
-                  alt="Profile Image"
-                  class="profile-image img-thumbnail"
-                  style="width: 150px; height: 150px"
-                />
-                <button
-                  type="button"
-                  class="btn btn-danger w-60 m-auto mt-2"
-                  onclick="resetImage('avatarImage', '/assets/images/no-image.jpg')"
-                >
-                  حذف تصویر
-                </button>
-              </div>
-              <label for="formFile1" class="form-label">تصویر پروفایل</label>
-              <div class="custom-file-upload">
-                <label for="formFile1" class="btn btn-primary">انتخاب فایل</label>
-                <span id="file-chosen1">فایلی انتخاب نشده</span>
-                <input class="form-control" type="file" id="formFile1" style="display: none" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row g-3">
-      <div class="col-12">
-        <label for="description" class="form-label">توضیحات</label>
-        <textarea class="form-control" id="description" rows="5" placeholder="توضیحات کمپر"></textarea>
-      </div>
-    </div>
-  </form>
-</div> -->
