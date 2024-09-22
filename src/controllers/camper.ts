@@ -115,9 +115,7 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
     const countImages = camper.dataValues.images.length + camperImages?.length;
 
     if (camperImages && countImages > 3) {
-      throw new httpErrors.BadRequest(
-        "تعداد عکس های آپلود شده به حد مجاز رسیده است."
-      );
+      throw new httpErrors.BadRequest("تعداد عکس های آپلود شده به حد مجاز رسیده است.");
     }
 
     let mainImageLocation: null | string = null;

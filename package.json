@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start:dev": "nodemon ./src/app.ts",
-    "start": "rimraf ./dist && tsc && node ./dist/app.js"
+    "start": "rimraf ./dist && tsc && nodemon ./dist/app.js"
   },
   "dependencies": {
     "aws-sdk": "^2.1691.0",

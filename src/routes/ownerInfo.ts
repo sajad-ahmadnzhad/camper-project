@@ -1,5 +1,5 @@
 import express from "express";
-import { getOne, update } from "../controllers/ownerInfo";
+import { create, getOne, update } from "../controllers/ownerInfo";
 import authMiddleware from "../middlewares/auth";
 import validationMiddleware from "../middlewares/validation";
 import uploader from "../utils/uploader";
@@ -16,7 +16,8 @@ router
       { name: "avatar", maxCount: 1 },
       { name: "cover", maxCount: 1 },
     ]),
-    validationMiddleware(createOwnerInfoSchema)
+    validationMiddleware(createOwnerInfoSchema),
+    create
   )
 
   .put(

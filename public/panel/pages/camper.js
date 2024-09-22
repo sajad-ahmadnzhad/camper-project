@@ -43,7 +43,7 @@ function createOrUpdateCamperModal(camper = null) {
                 <div class="profile-card mx-auto">
                   <div class="text-center mb-3">
                        <img
-                        id="profileImage1"
+                        id="avatarImage"
                         src="${mainImageSrc}"
                         alt="Profile Image"
                         class="profile-image img-thumbnail"
@@ -257,7 +257,7 @@ async function scriptImageSelected(camper) {
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
-        document.getElementById("profileImage1").src = e.target.result;
+        document.getElementById("avatarImage").src = e.target.result;
         resetImageBtn.style.display = "inline-block";
       };
       reader.readAsDataURL(file);
@@ -269,12 +269,7 @@ async function scriptImageSelected(camper) {
   });
 
   document.getElementById("resetImageBtn").addEventListener("click", async function () {
-    // if (camper && camper.mainImage) {
-    //   await fetch(`http://localhost:3002/api/campers/delete-image/${camper.mainImage.id}`, {
-    //     method: "DELETE",
-    //   });
-    // }
-    document.getElementById("profileImage1").src = camper.mainImage;
+    document.getElementById("avatarImage").src = camper?.mainImage || "/assets/images/no-image.jpg";
     document.getElementById("mainImage").value = "";
     document.getElementById("file-chosen1").textContent = "فایلی انتخاب نشده";
     resetImageBtn.style.display = "none";

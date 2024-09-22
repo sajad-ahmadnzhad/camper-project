@@ -8,10 +8,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const { accessToken } = req.cookies;
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET_KEY as string;
 
-    if (!accessTokenSecret) {
-      throw new httpErrors.InternalServerError("کلید توکن تنظیم نشده است.");
-    }
-
     if (!accessToken) {
       if (req.path !== "/login") {
         req.flash("errorMessage", "ابتدا باید وارد شوید.");
@@ -27,10 +23,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
         req.flash("errorMessage", "توکن منقضی شده است.");
+        res.clearCookie("accessToken");
         return res.redirect("/login");
       }
       if (error instanceof jwt.JsonWebTokenError) {
         req.flash("errorMessage", "توکن نامعتبر است.");
+        res.clearCookie("accessToken");
         return res.redirect("/login");
       }
       return next(new httpErrors.Unauthorized("خطای احراز هویت."));
@@ -39,6 +37,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const admin = await AdminModel.findOne({ where: { id: decodedToken.id } });
     if (!admin) {
       req.flash("errorMessage", "مدیری پیدا نشد.");
+      res.clearCookie("accessToken");
       return res.redirect("/login");
     }
 

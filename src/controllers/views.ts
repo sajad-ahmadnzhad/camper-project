@@ -1,13 +1,23 @@
 import { NextFunction, Request, Response } from "express";
-import { getAll } from "./camper";
 const asyncHandler = require("express-async-handler");
+import jwt from "jsonwebtoken";
 
 import CamperModel from "./../models/Camper";
 import pagination from "../utils/pagination";
+import OwnerInfoModel from "../models/OwnerInfo";
 
 export const ownerInfos = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.locals.layout = "layouts/panel/main.ejs";
+  // const { accessToken } = req.cookies;
+  // const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET_KEY as string;
+  // let decodedToken: any;
+  // decodedToken = jwt.verify(accessToken, accessTokenSecret);
 
+  // console.log(decodedToken);
+  // const ownerInfo = await OwnerInfoModel.findOne({ where: { id: decodedToken.id } });
+
+  // console.log(ownerInfo);
+
+  res.locals.layout = "layouts/panel/main.ejs";
   res.render("pages/panel/ownerInfos.ejs", { page: "owner-infos" });
 });
 
