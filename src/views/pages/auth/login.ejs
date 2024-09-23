@@ -76,6 +76,18 @@
         }).then(() => {
           window.location.href = "/panel";
         });
+      } else if (response.status == 400) {
+        let errorMessage = "";
+
+        Object.keys(result).forEach((key) => {
+          errorMessage += `${result[key]} \n`;
+        });
+
+        Swal.fire({
+          icon: "error",
+          title: "خطا",
+          text: errorMessage,
+        });
       } else {
         Swal.fire({
           icon: "error",
