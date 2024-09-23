@@ -231,6 +231,10 @@ export const removeImage = async (req: Request, res: Response, next: NextFunctio
       throw new httpErrors.NotFound("عکس مورد نظر در سیستم یافت نشد.");
     }
 
+    if(camper.dataValues.images.length == 1) {
+      throw new httpErrors.BadRequest('حداقل یک تصویر باید در گالری باشد.')
+    }
+
     const images = camper.dataValues.images.filter((img: string) => img !== image);
 
     await camper.update({ images });
