@@ -1,6 +1,5 @@
-import { S3, AWSError } from "aws-sdk";
+import { S3 } from "aws-sdk";
 import s3 from "../configs/s3";
-import { PromiseResult } from "aws-sdk/lib/request";
 
 export const uploadFile = (
   buffer: Buffer,
@@ -17,15 +16,11 @@ export const uploadFile = (
     .promise();
 };
 
-export const deleteFile = (
-  url: string
-): Promise<PromiseResult<S3.DeleteObjectOutput, AWSError>> => {
-  return s3
-    .deleteObject({
-      Bucket: process.env.S3_BUCKET_NAME as string,
-      Key: extractKeyFromUrl(url),
-    })
-    .promise();
+export const deleteFile = (url: string) => {
+ return s3.deleteObject({
+    Bucket: process.env.S3_BUCKET_NAME as string,
+    Key: extractKeyFromUrl(url),
+  }).promise();
 };
 
 const extractKeyFromUrl = (url: string): string => {

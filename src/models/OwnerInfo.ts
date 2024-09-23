@@ -31,7 +31,7 @@ const OwnerInfo = db.define(
     },
     mainCover: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,

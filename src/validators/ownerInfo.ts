@@ -15,10 +15,11 @@ export const createOwnerInfoSchema = Joi.object({
     "string.max": "بیوگرافی حداکثر باید 1000 حرف داشته باشد.",
     "any.required": "بیوگرافی اجباری می باشد.",
   }),
-  phoneNumber: Joi.string().required().messages({
+  phoneNumber: Joi.string().pattern(/^09\d{9}$/).required().messages({
     "string.base": "شماره تلفن باید یک رشته باشد.",
     "string.empty": "شماره تلفن نمی تواند خالی باشد.",
     "any.required": "شماره تلفن اجباری می باشد.",
+    "string.pattern.base":"شماره موبایل وارد شده نادرست می باشد."
   }),
   email: Joi.string().email().optional().messages({
     "string.base": "ایمیل باید یک رشته باشد.",
@@ -60,10 +61,14 @@ export const updateOwnerInfoSchema = Joi.object({
     "string.min": "بیوگرافی حداقل باید 10 حرف داشته باشد.",
     "string.max": "بیوگرافی حداکثر باید 1000 حرف داشته باشد.",
   }),
-  phoneNumber: Joi.string().optional().messages({
-    "string.base": "شماره تلفن باید یک رشته باشد.",
-    "string.empty": "شماره تلفن نمی تواند خالی باشد.",
-  }),
+  phoneNumber: Joi.string()
+    .pattern(/^09\d{9}$/)
+    .optional()
+    .messages({
+      "string.base": "شماره تلفن باید یک رشته باشد.",
+      "string.empty": "شماره تلفن نمی تواند خالی باشد.",
+      "string.pattern.base": "شماره موبایل وارد شده نادرست می باشد.",
+    }),
   email: Joi.string().email().optional().messages({
     "string.base": "ایمیل باید یک رشته باشد.",
     "string.empty": "ایمیل نمی تواند خالی باشد.",
