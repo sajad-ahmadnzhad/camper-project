@@ -5,7 +5,6 @@ function setError(fieldId, errorMessage) {
   if (field.parentNode.querySelector(".text-danger")) {
     return;
   }
-  
 
   const errorSpan = document.createElement("span");
   errorSpan.className = "text-danger";
@@ -36,7 +35,7 @@ const showAlert = (icon, title, text, confirmButtonText = "باشه") => {
     confirmButtonText: confirmButtonText,
   });
 };
-const showAlertWithReload = (icon ,title, text, timer = 1500) => {
+const showAlertWithReload = (icon, title, text, timer = 1500) => {
   Swal.fire({
     title: title,
     text: text,
@@ -45,6 +44,6 @@ const showAlertWithReload = (icon ,title, text, timer = 1500) => {
     timer: timer,
     timerProgressBar: true,
   }).then(() => {
-    window.location.reload(); 
+    window.location.reload();
   });
 };

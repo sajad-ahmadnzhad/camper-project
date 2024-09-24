@@ -115,7 +115,7 @@ async function scriptImageSelected(camper) {
 
       const img = document.createElement("img");
       img.src = imageUrl;
-      img.classList.add("img-thumbnail");
+      img.classList.add("img-thumbnail", "camper-image");
       img.style.width = "100px";
       img.style.height = "100px";
 
@@ -136,25 +136,34 @@ async function scriptImageSelected(camper) {
             cancelButtonColor: "#d33",
             confirmButtonText: "بله، حذف شود!",
             cancelButtonText: "لغو",
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
-              fetch(`http://localhost:3002/api/campers/remove-image/${camper.id}`, {
-                method: "DELETE",
-                body: JSON.stringify({ image: camper.images[index] }),
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              })
-                .then((res) => {
-                  if (res.status == 200) {
-                    showAlertWithReload("success", "حذف شد!", "عکس مورد نظر با موفقیت حذف شد");
-                  } else {
-                    showAlert("error", "خطا", "حذف تصویر با خطا مواجه شد");
-                  }
-                })
-                .catch((err) => {
-                  showAlert("error", "خطا", "از سمت سرور خطایی رخ داده است");
+              try {
+                const res = await fetch(`http://localhost:3002/api/campers/remove-image/${camper.id}`, {
+                  method: "DELETE",
+                  body: JSON.stringify({ image: camper.images[index] }),
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
                 });
+                const data = await res.json();
+                if (res.status == 200) {
+                  showAlertWithReload("success", "حذف شد!", "عکس مورد نظر با موفقیت حذف شد");
+                } else if (res.status == 400) {
+                  let errorMessage = "";
+
+                  Object.keys(data).forEach((key) => {
+                    errorMessage += `${data[key]} \n`;
+                  });
+
+                  showAlert("error", "خطا", errorMessage);
+                  return false;
+                } else {
+                  showAlert("error", "خطا", "بروزرسانی کمپر با خطا مواجه شد");
+                }
+              } catch (error) {
+                showAlert("error", "خطا", error.message);
+              }
             }
           });
         }
@@ -173,15 +182,20 @@ async function scriptImageSelected(camper) {
     const files = event.target.files;
     clearErrors();
 
-    console.log(files.length > 3, files.length + countChildImage > 3);
+    Array.from(imagePreviewContainer.children).forEach((child) => {
+      if (!child.querySelector("img").classList.contains("camper-image")) {
+        child.remove();
+      }
+    });
 
+    // بررسی تعداد تصاویر برای جلوگیری از انتخاب بیش از ۳ تصویر
     if (files.length > 3 || files.length + countChildImage > 3) {
       setError("formFiles", "شما فقط می‌توانید ۳ تصویر انتخاب کنید.");
       event.target.value = "";
       return;
     }
 
-    // imagePreviewContainer.innerHTML = "";
+    // اضافه کردن تصاویر جدید
     if (files.length > 0) {
       Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
@@ -267,77 +281,39 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
   const camperMainImage = document.getElementById("mainImage").files[0];
   const multipleImages = document.getElementById("formFiles").files;
 
+  //* Validate form data using the external validation function
+  const formData = { name, price, description, camperMainImage, multipleImages };
+  const errors = validateCamperData(formData, isUpdate);
+
   let hasError = false;
-
-
-  if (!name) {
-    setError("name", "نام کمپر الزامی است.");
+  Object.keys(errors).forEach((field) => {
+    setError(field, errors[field]);
     hasError = true;
-  }
-
-  if (!price || isNaN(price) || price <= 0) {
-    setError("price", "قیمت معتبر نیست.");
-    hasError = true;
-  }
-
-  if (!description) {
-    setError("description", "توضیحات الزامی است.");
-    hasError = true;
-  }
-
-  if (camperMainImage && camperMainImage.size > 2 * 1024 * 1024) {
-    setError("mainImage", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
-    hasError = true;
-  }
-
-  if (!isUpdate && !camperMainImage) {
-    setError("mainImage", "عکس کمپر الزامی است.");
-    hasError = true;
-  }
-
-  if (!isUpdate && !multipleImages.length) {
-    setError("formFiles", "تصاویر کمپر الزامی است.");
-    hasError = true;
-  }
-
-  const formData = new FormData();
-  if (multipleImages.length > 0) {
-    for (let i = 0; i < multipleImages.length; i++) {
-      if (multipleImages[i].size > 2 * 1024 * 1024) {
-        setError("formFiles", `حجم فایل ${multipleImages[i].name} نباید بیشتر از ۲ مگابایت باشد.`);
-        hasError = true;
-      }
-      formData.append("camperImages", multipleImages[i]);
-    }
-  }
-
+  });
 
   if (hasError) {
     return false;
   }
 
+  const formDataToSend = new FormData();
 
+  // Append the necessary fields based on updates
   if (!camperId || name !== originalCamper.name) {
-    formData.append("name", name);
+    formDataToSend.append("name", name);
   }
   if (!camperId || price !== originalCamper.price) {
-    formData.append("price", parseInt(price, 10));
+    formDataToSend.append("price", parseInt(price, 10));
   }
   if (!camperId || description !== originalCamper.description) {
-    formData.append("description", description);
+    formDataToSend.append("description", description);
   }
-
-
-
 
   if (camperMainImage) {
-    formData.append("camperMainImage", camperMainImage);
+    formDataToSend.append("camperMainImage", camperMainImage);
   }
 
-
-
-  if (hasError) {
-    return false;
+  for (let i = 0; i < multipleImages.length; i++) {
+    formDataToSend.append("camperImages", multipleImages[i]);
   }
 
   try {
@@ -346,18 +322,19 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
 
     const res = await fetch(url, {
       method: method,
-      body: formData,
+      body: formDataToSend,
     });
     const data = await res.json();
 
-    if (res.status == 201 || res.status == 200) {
+    if (res.status === 201 || res.status === 200) {
       showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
       return true;
-    } else if (res.status == 400) {
+    } else if (res.status === 400) {
       let errorMessage = "";
 
-      Object.keys(data).forEach((key) => {
-        errorMessage += `${data[key]} \n`;
+      Object.keys(data.errors).forEach((key) => {
+        setError(key, data.errors[key]);
+        errorMessage += `${data.errors[key]} \n`;
       });
 
       showAlert("error", "خطا", errorMessage);
@@ -365,13 +342,9 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     }
   } catch (error) {
     showAlert("error", "خطای ارتباطی", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
-
     return false;
   }
 }
-
-
-
 
 function handleFormErrors(errors) {
   Object.entries(errors).forEach(([field, message]) => {
@@ -398,4 +371,62 @@ function removeCamperClickHandler(camperId) {
       });
     }
   });
+}
+
+// validation.js
+
+function validateCamperData({ name, price, description, camperMainImage, multipleImages }, isUpdate = false) {
+  let errors = {};
+
+  //* Validate name
+  if (!name) {
+    errors.name = "نام کمپر الزامی است.";
+  } else if (name.length < 5) {
+    errors.name = "نام کمپر حداقل باید 5 حرف داشته باشد.";
+  } else if (name.length > 100) {
+    errors.name = "نام کمپر حداکثر باید 100 حرف داشته باشد.";
+  }
+
+  //* Validate price
+  if (!price) {
+    errors.price = "قیمت الزامی است.";
+  } else if (isNaN(price) || price <= 0) {
+    errors.price = "قیمت معتبر نیست.";
+  } else if (parseInt(price, 10) < 100) {
+    errors.price = "قیمت کمپر باید حداقل 100 باشد.";
+  }
+
+  //* Validate description
+  if (!description) {
+    errors.description = "توضیحات الزامی است.";
+  } else if (description.length < 5) {
+    errors.description = "توضیحات حداقل باید 5 حرف داشته باشد.";
+  } else if (description.length > 1000) {
+    errors.description = "توضیحات حداکثر باید 1000 حرف داشته باشد.";
+  }
+
+  //* Validate main image
+  if (camperMainImage && camperMainImage.size > 2 * 1024 * 1024) {
+    errors.mainImage = "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.";
+  }
+
+  if (!isUpdate && !camperMainImage) {
+    errors.mainImage = "عکس کمپر الزامی است.";
+  }
+
+  //* Validate multiple images
+  if (!isUpdate && (!multipleImages || multipleImages.length === 0)) {
+    errors.formFiles = "تصاویر کمپر الزامی است.";
+  }
+
+  //* Validate each file size
+  if (multipleImages && multipleImages.length > 0) {
+    for (let i = 0; i < multipleImages.length; i++) {
+      if (multipleImages[i].size > 2 * 1024 * 1024) {
+        errors.formFiles = `حجم فایل ${multipleImages[i].name} نباید بیشتر از ۲ مگابایت باشد.`;
+      }
+    }
+  }
+
+  return errors;
 }

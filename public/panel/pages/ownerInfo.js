@@ -16,9 +16,9 @@ document.getElementById("addSocialLink").addEventListener("click", () => {
   });
 });
 
-
-
 document.addEventListener("DOMContentLoaded", async () => {
+  document.getElementById("avatarURL").value = "";
+  document.getElementById("mainCover").value = "";
   let initialData = {};
 
   try {
@@ -34,6 +34,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    clearErrors();
+
+    const fullName = document.getElementById("fullName").value;
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const email = document.getElementById("email").value;
+    const bio = document.getElementById("bio").value;
+    const summary = document.getElementById("summary").value;
+    const avatarImage = document.getElementById("avatarURL").files[0];
+    const mainCoverImage = document.getElementById("mainCover").files[0];
+
+    //* Validate form data using the external validation function
+    const formDataValue = { fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage };
+    const errors = validateOwnerInfo(formDataValue);
+    console.log(errors);
+
+    let hasError = false;
+    Object.keys(errors).forEach((field) => {
+      setError(field, errors[field]);
+      hasError = true;
+    });
+
+    if (hasError) {
+      return false;
+    }
 
     const socialLinks = Array.from(document.querySelectorAll(".social-link"))
       .map((input) => input.value)
@@ -90,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         showAlert("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
       } else if (res.status == 400) {
         let errorMessage = "";
-        
+
         Object.keys(result).forEach((key) => {
           errorMessage += `${result[key]} \n`;
         });
@@ -178,3 +203,62 @@ document.getElementById("mainCover").addEventListener("change", function (event)
   }
 });
 
+function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage }) {
+  let errors = {};
+
+  //* Full Name validation
+  if (!fullName) {
+    errors.fullName = "نام نمی تواند خالی باشد.";
+  } else if (fullName.length < 5) {
+    errors.fullName = "نام حداقل باید 5 حرف داشته باشد.";
+  } else if (fullName.length > 100) {
+    errors.fullName = "نام حداکثر باید 100 حرف داشته باشد.";
+  }
+
+  //* Bio validation
+  if (!bio) {
+    errors.bio = "بیوگرافی نمی تواند خالی باشد.";
+  } else if (bio.length < 10) {
+    errors.bio = "بیوگرافی حداقل باید 10 حرف داشته باشد.";
+  } else if (bio.length > 1000) {
+    errors.bio = "بیوگرافی حداکثر باید 1000 حرف داشته باشد.";
+  }
+
+  //* Phone Number validation
+  const phoneRegex = /^09\d{9}$/;
+  if (!phoneNumber) {
+    errors.phoneNumber = "شماره تلفن اجباری می باشد.";
+  } else if (!phoneRegex.test(phoneNumber)) {
+    errors.phoneNumber = "شماره موبایل وارد شده نادرست می باشد.";
+  }
+
+  //* Email validation
+  if (email && !/\S+@\S+\.\S+/.test(email)) {
+    errors.email = "ایمیل نادرست می باشد.";
+  }
+
+  //* Summary validation
+  if (!summary) {
+    errors.summary = "خلاصه نمی تواند خالی باشد.";
+  } else if (summary.length < 5) {
+    errors.summary = "خلاصه حداقل باید 5 حرف داشته باشد.";
+  } else if (summary.length > 30) {
+    errors.summary = "خلاصه حداکثر باید 30 حرف داشته باشد.";
+  }
+
+  //* Validate avatar image
+  if (avatarImage && avatarImage.size > 2 * 1024 * 1024) {
+    errors.avatarURL = "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.";
+  } else if (!avatarImage || avatarImage.length === 0) {
+    errors.avatarURL = "تصویر پروفایل الزامی می باشد.";
+  }
+
+  //* Validate main cover image
+  if (mainCoverImage && mainCoverImage.size > 2 * 1024 * 1024) {
+    errors.mainCover = "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.";
+  } else if (!mainCoverImage || mainCoverImage.length === 0) {
+    errors.mainCover = "تصویر زمینه الزامی می باشد.";
+  }
+
+  return errors;
+}
