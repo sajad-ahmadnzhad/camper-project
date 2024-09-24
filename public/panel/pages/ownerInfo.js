@@ -1,3 +1,12 @@
+const submitButton = document.getElementById("submit-ownerInfos");
+function disableSubmitButton() {
+  submitButton.innerText = "ارسال اطلاعات...";
+  submitButton.disabled = true;
+}
+function enableSubmitButton() {
+  submitButton.innerText = "ثبت تغییرات";
+  submitButton.disabled = false;
+}
 document.getElementById("addSocialLink").addEventListener("click", () => {
   const container = document.getElementById("socialLinksContainer");
 
@@ -17,8 +26,9 @@ document.getElementById("addSocialLink").addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
-  document.getElementById("avatarURL").value = "";
-  document.getElementById("mainCover").value = "";
+  let isUpdate = false;
+  // const avatarImage = (document.getElementById("avatarURL").value = "");
+  // const mainCoverImage = (document.getElementById("mainCover").value = "");
   let initialData = {};
 
   try {
@@ -27,12 +37,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
       fillFormWithUserData(data);
       initialData = data;
+      isUpdate = true;
     }
   } catch (error) {
     console.log("User does not exist or error fetching data", error);
   }
 
   document.querySelector("form").addEventListener("submit", async (e) => {
+    disableSubmitButton();
+
     e.preventDefault();
 
     clearErrors();
@@ -42,13 +55,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const email = document.getElementById("email").value;
     const bio = document.getElementById("bio").value;
     const summary = document.getElementById("summary").value;
-    const avatarImage = document.getElementById("avatarURL").files[0];
-    const mainCoverImage = document.getElementById("mainCover").files[0];
 
     //* Validate form data using the external validation function
-    const formDataValue = { fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage };
-    const errors = validateOwnerInfo(formDataValue);
-    console.log(errors);
+    const formDataValue = { fullName, phoneNumber, email, bio, summary };
+    const errors = validateOwnerInfo(formDataValue, isUpdate);
 
     let hasError = false;
     Object.keys(errors).forEach((field) => {
@@ -103,23 +113,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
     const apiUrl = method === "PUT" ? `http://localhost:3002/api/ownerInfo` : "http://localhost:3002/api/ownerInfo";
 
-    try {
-      const res = await fetch(apiUrl, {
-        method: method,
-        body: formData,
-      });
-      const response = await res.json();
-      if (res.status == 200) {
-        showAlert("success", "موفق", result.message);
-      } else if (res.status == 201) {
-        showAlert("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
-      } else if (res.status == 400) {
-        const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
-        showAlert("error", "خطا", errorMessage);
-      }
-    } catch (error) {
-      showAlert("error", "خطای ارتباطی", errorMessage);
-      return false;
+    const res = await fetch(apiUrl, {
+      method: method,
+      body: formData,
+    });
+    const response = await res.json();
+    if (res.status == 200) {
+      showAlert("success", "موفق", response.message);
+      enableSubmitButton();
+    } else if (res.status == 201) {
+      showAlert("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
+      enableSubmitButton();
+    } else if (res.status == 400) {
+      const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+      showAlert("error", "خطا", errorMessage);
+      enableSubmitButton();
+    } else {
+      showAlertWithReload("error", "خطا شبکه", "خطایی از سمت سرور پیش آمده");
+      enableSubmitButton();
     }
   });
 });
@@ -199,7 +210,7 @@ document.getElementById("mainCover").addEventListener("change", function (event)
   }
 });
 
-function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage }) {
+function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage }, isUpdate) {
   let errors = {};
 
   //* Trim input fields
@@ -247,20 +258,6 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarI
     errors.summary = "خلاصه حداقل باید 5 حرف داشته باشد.";
   } else if (summary.length > 30) {
     errors.summary = "خلاصه حداکثر باید 30 حرف داشته باشد.";
-  }
-
-  //* Validate avatar image
-  if (avatarImage && avatarImage.size > 2 * 1024 * 1024) {
-    errors.avatarURL = "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.";
-  } else if (!avatarImage || avatarImage.length === 0) {
-    errors.avatarURL = "تصویر پروفایل الزامی می باشد.";
-  }
-
-  //* Validate main cover image
-  if (mainCoverImage && mainCoverImage.size > 2 * 1024 * 1024) {
-    errors.mainCover = "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.";
-  } else if (!mainCoverImage || mainCoverImage.length === 0) {
-    errors.mainCover = "تصویر زمینه الزامی می باشد.";
   }
 
   return errors;
