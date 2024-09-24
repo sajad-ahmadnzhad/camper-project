@@ -123,7 +123,7 @@
             </tr>
             <% }) %> <% } else { %>
             <tr>
-              <td colspan="5" class="text-center">هیچ کمپی وجود ندارد</td>
+              <td colspan="5" class="text-center">هیچ کمپری وجود ندارد</td>
             </tr>
             <% } %>
           </tbody>
@@ -139,9 +139,10 @@
           <button type="submit" class="btn btn-outline-primary">صفحه قبل</button>
         </form>
         <% } %>
-
+        <!---->
+        <% if (pagination.totalPages ){ %>
         <span>صفحه <%= pagination.currentPage %> از <%= pagination.totalPages %></span>
-
+        <% } %>
         <!-- Next Page Button -->
         <% if (pagination.currentPage < pagination.totalPages) { %>
         <form method="GET" action="/panel/campers" id="pagination-form-next" style="cursor: pointer">

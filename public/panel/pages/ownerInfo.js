@@ -16,6 +16,25 @@ document.getElementById("addSocialLink").addEventListener("click", () => {
   });
 });
 
+function setError(fieldId, errorMessage) {
+  const field = document.getElementById(fieldId);
+
+  if (field.parentNode.querySelector(".text-danger")) {
+    return;
+  }
+
+  const errorSpan = document.createElement("span");
+  errorSpan.className = "text-danger";
+  errorSpan.textContent = errorMessage;
+
+  errorSpan.style.display = "block";
+  errorSpan.style.marginTop = "5px";
+  errorSpan.style.fontSize = "16px";
+
+  field.parentNode.appendChild(errorSpan);
+}
+let hasError = false;
+
 document.addEventListener("DOMContentLoaded", async () => {
   let initialData = {};
 
@@ -69,6 +88,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       formData.append("cover", mainCoverFileInput);
     }
 
+    console.log(hasError);
+    if (hasError) {
+      return false;
+    }
+
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
     const apiUrl = method === "PUT" ? `http://localhost:3002/api/ownerInfo` : "http://localhost:3002/api/ownerInfo";
 
@@ -119,8 +143,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-function fillFormWithUserData(data) {
-  console.log(data);
+function fillFormWithUserData(data = {}) {
   document.getElementById("fullName").value = data.fullName || "";
   document.getElementById("phoneNumber").value = data.phoneNumber || "";
   document.getElementById("email").value = data.email || "";
@@ -150,16 +173,24 @@ function fillFormWithUserData(data) {
 
 document.getElementById("avatarURL").addEventListener("change", function (event) {
   const file = event.target.files[0];
+
   if (file) {
+    if (file.size > 2 * 1024 * 1024) {
+      setError("avatarURL", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
+      return (hasError = true);
+    } else if (file && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      setError("avatarURL", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
+      event.target.value = "";
+      document.getElementById("file-chosen1").textContent = "فایلی انتخاب نشده";
+      return (hasError = true);
+    }
     const reader = new FileReader();
     reader.onload = function (e) {
       document.getElementById("avatarImage").src = e.target.result;
-      // document.getElementById("resetImageBtn1").style.display = "inline-block";
       document.getElementById("file-chosen1").textContent = file.name;
     };
     reader.readAsDataURL(file);
   } else {
-    // document.getElementById("resetImageBtn1").style.display = "none";
     document.getElementById("file-chosen1").textContent = "فایلی انتخاب نشده";
   }
 });
@@ -167,15 +198,22 @@ document.getElementById("avatarURL").addEventListener("change", function (event)
 document.getElementById("mainCover").addEventListener("change", function (event) {
   const file = event.target.files[0];
   if (file) {
+    if (file.size > 2 * 1024 * 1024) {
+      setError("mainCover", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
+      return (hasError = true);
+    } else if (file && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      setError("avatarURL", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
+      event.target.value = "";
+      document.getElementById("file-chosen2").textContent = file.name;
+      return (hasError = true);
+    }
     const reader = new FileReader();
     reader.onload = function (e) {
       document.getElementById("mainImage").src = e.target.result;
-      // document.getElementById("resetImageBtn2").style.display = "inline-block";
       document.getElementById("file-chosen2").textContent = file.name;
     };
     reader.readAsDataURL(file);
   } else {
-    // document.getElementById("resetImageBtn2").style.display = "none";
     document.getElementById("file-chosen2").textContent = "فایلی انتخاب نشده";
   }
 });
