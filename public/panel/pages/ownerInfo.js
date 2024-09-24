@@ -108,17 +108,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: method,
         body: formData,
       });
-      const result = await res.json();
+      const response = await res.json();
       if (res.status == 200) {
         showAlert("success", "موفق", result.message);
       } else if (res.status == 201) {
         showAlert("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
       } else if (res.status == 400) {
-        let errorMessage = "";
-
-        Object.keys(result).forEach((key) => {
-          errorMessage += `${result[key]} \n`;
-        });
+        const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
         showAlert("error", "خطا", errorMessage);
       }
     } catch (error) {
@@ -205,6 +201,13 @@ document.getElementById("mainCover").addEventListener("change", function (event)
 
 function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage }) {
   let errors = {};
+
+  //* Trim input fields
+  fullName = fullName ? fullName.trim() : "";
+  phoneNumber = phoneNumber ? phoneNumber.trim() : "";
+  email = email ? email.trim() : "";
+  bio = bio ? bio.trim() : "";
+  summary = summary ? summary.trim() : "";
 
   //* Full Name validation
   if (!fullName) {

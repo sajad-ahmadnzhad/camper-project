@@ -148,16 +148,11 @@ async function scriptImageSelected(camper) {
                     "Content-Type": "application/json",
                   },
                 });
-                const data = await res.json();
+                const response = await res.json();
                 if (res.status == 200) {
                   showAlertWithReload("success", "حذف شد!", "عکس مورد نظر با موفقیت حذف شد");
                 } else if (res.status == 400) {
-                  let errorMessage = "";
-
-                  Object.keys(data).forEach((key) => {
-                    errorMessage += `${data[key]} \n`;
-                  });
-
+                  const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
                   showAlert("error", "خطا", errorMessage);
                   return false;
                 } else {
@@ -324,31 +319,24 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     formDataToSend.append("camperImages", selectedFiles[i]);
   }
 
-  try {
-    const url = isUpdate ? `http://localhost:3002/api/campers/${camperId}` : "http://localhost:3002/api/campers";
-    const method = isUpdate ? "PUT" : "POST";
+  const url = isUpdate ? `http://localhost:3002/api/campers/${camperId}` : "http://localhost:3002/api/campers";
+  const method = isUpdate ? "PUT" : "POST";
 
-    const res = await fetch(url, {
-      method: method,
-      body: formDataToSend,
-    });
-    const data = await res.json();
+  const res = await fetch(url, {
+    method: method,
+    body: formDataToSend,
+  });
 
-    if (res.status === 201 || res.status === 200) {
-      showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
-      return true;
-    } else if (res.status === 400) {
-      let errorMessage = "";
+  const response = await res.json();
 
-      Object.keys(data.errors).forEach((key) => {
-        setError(key, data.errors[key]);
-        errorMessage += `${data.errors[key]} \n`;
-      });
-
-      showAlert("error", "خطا", errorMessage);
-      return false;
-    }
-  } catch (error) {
+  if (res.status === 201 || res.status === 200) {
+    showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
+    return true;
+  } else if (res.status === 400) {
+    const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+    showAlert("error", "خطا", errorMessage);
+    return false;
+  } else {
     showAlert("error", "خطای ارتباطی", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
     return false;
   }
@@ -382,9 +370,13 @@ function removeCamperClickHandler(camperId) {
 }
 
 // validation.js
-
 function validateCamperData({ name, price, description, camperMainImage, multipleImages }, isUpdate = false) {
   let errors = {};
+
+  //* Trim input fields
+  name = name ? name.trim() : "";
+  price = price ? price.trim() : "";
+  description = description ? description.trim() : "";
 
   //* Validate name
   if (!name) {
