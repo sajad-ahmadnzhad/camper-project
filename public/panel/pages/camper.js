@@ -21,7 +21,7 @@ function createOrUpdateCamperModal(camper = null) {
           </div>
           <div class="col-md-12">
             <div class="mb-3">
-            <input value="${priceValue}" type="text" class="form-control" id="price" placeholder="قیمت به تومان" maxlength="10"/> 
+            <input value="${priceValue}" type="text" class="form-control" id="price" placeholder="قیمت به تومان" maxlength="9"/> 
            </div>
           </div>
         </div>
@@ -392,7 +392,7 @@ function validateCamperData({ name, price, description, camperMainImage, multipl
     errors.price = "قیمت الزامی است.";
   } else if (isNaN(price) || price <= 0) {
     errors.price = "قیمت معتبر نیست.";
-  } else if (parseInt(price, 10) < 100) {
+  } else if (parseInt(price, 10) < 90) {
     errors.price = "قیمت کمپر باید حداقل 100 باشد.";
   }
 

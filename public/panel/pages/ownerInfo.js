@@ -27,8 +27,9 @@ document.getElementById("addSocialLink").addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   let isUpdate = false;
-  // const avatarImage = (document.getElementById("avatarURL").value = "");
-  // const mainCoverImage = (document.getElementById("mainCover").value = "");
+  document.getElementById("avatarURL").value = "";
+  document.getElementById("mainCover").value = "";
+
   let initialData = {};
 
   try {
@@ -118,19 +119,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       body: formData,
     });
     const response = await res.json();
+    console.log(response);
     if (res.status == 200) {
-      showAlert("success", "موفق", response.message);
-      enableSubmitButton();
+      showAlertWithReload("success", "موفق", response.message);
     } else if (res.status == 201) {
-      showAlert("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
-      enableSubmitButton();
+      showAlertWithReload("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
     } else if (res.status == 400) {
       const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
-      showAlert("error", "خطا", errorMessage);
-      enableSubmitButton();
+      showAlertWithReload("error", "خطا", errorMessage);
     } else {
-      showAlertWithReload("error", "خطا شبکه", "خطایی از سمت سرور پیش آمده");
-      enableSubmitButton();
+      // showAlertWithReload("error", "خطا شبکه", "خطایی از سمت سرور پیش آمده");
     }
   });
 });
@@ -145,14 +143,15 @@ function fillFormWithUserData(data = {}) {
   document.getElementById("mainImage").src = data.mainCover || "";
 
   const socialLinksContainer = document.getElementById("socialLinksContainer");
+
   socialLinksContainer.innerHTML = "";
   data.socialLinks.forEach((link) => {
     const newInputGroup = document.createElement("div");
-    newInputGroup.classList.add("input-group", "mb-2");
+    newInputGroup.classList.add("social-link-group");
 
     newInputGroup.innerHTML = `
       <input type="url" class="form-control social-link" value="${link}" />
-      <button type="button" class="btn btn-danger remove-social-link">حذف</button>
+      <button type="button" class=" remove-social-link">حذف</button>
     `;
 
     newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {

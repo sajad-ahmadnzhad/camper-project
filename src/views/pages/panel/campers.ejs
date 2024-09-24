@@ -77,16 +77,23 @@
   <div class="card w-100">
     <div class="card-body p-4">
       <h5 class="card-title fw-semibold mb-4">مدیریت کمپرهای ثبت شده</h5>
-
       <!-- Search form -->
-      <div class="row mb-3">
-        <div class="col-md-4 mb-2">
-          <form id="search-form" method="GET" action="/panel/campers">
-            <input type="text" name="search" class="form-control" placeholder="جستجو کمپر" value="<%= query || '' %>" />
+      <div class="row mb-3 d-flex justify-content-between">
+        <div class="col-md-6">
+          <form id="search-form" method="GET" action="/panel/campers" class="w-90 d-flex">
+            <input
+              type="text"
+              name="camper"
+              class="form-control ms-2"
+              style="max-width: 300px"
+              placeholder="جستجو کمپر"
+              value="<%= query?.camper || '' %>"
+            />
+            <button type="submit" class="btn btn-dark-light">جستجو</button>
           </form>
         </div>
-        <div class="col-md-2 text-md-end">
-          <button type="button" class="btn btn-primary w-100 w-md-auto" onclick="createCamperClickHandler()">ثبت کمپر جدید</button>
+        <div class="col-md-2 d-flex justify-content-end mt-2 mt-md-0">
+          <button type="button" class="btn btn-primary form-control p-2 btn-lg" onclick="createCamperClickHandler()">ثبت کمپر جدید</button>
         </div>
       </div>
 

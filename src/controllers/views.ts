@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 const asyncHandler = require("express-async-handler");
+import { Op } from "sequelize";
 
 import CamperModel from "./../models/Camper";
 import pagination from "../utils/pagination";
@@ -10,7 +11,14 @@ export const ownerInfos = asyncHandler(async (req: Request, res: Response, next:
 });
 
 export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const paginatedCampers = await pagination(CamperModel, req.query);
+  const { camper } = req.query;
+
+  const paginatedCampers = camper
+    ? await pagination(CamperModel, req.query, {
+        name: { [Op.like]: `%${camper}%` },
+      })
+    : await pagination(CamperModel, req.query);
+
   const paginationItem = {
     currentPage: paginatedCampers.currentPage,
     totalPages: paginatedCampers.totalPages,
@@ -32,7 +40,7 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     page: "campers",
     campers: parsedCampers,
     pagination: paginationItem,
-    query: req.query.query || "",
+    query: req.query || "",
   });
 });
 
