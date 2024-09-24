@@ -1,25 +1,54 @@
 <style>
   .btn-danger {
-    background-color: #ff6f61; /* رنگ نارنجی بهتر */
-    border: 2px solid #ff6f61; /* بردر هم‌رنگ */
-    border-radius: 8px; /* لبه‌های گرد */
-    padding: 8px 16px; /* فاصله داخلی بیشتر */
+    background-color: #ff6f61;
+    border: 2px solid #ff6f61;
+    border-radius: 8px;
+    padding: 8px 16px;
     color: white;
-    font-weight: bold; /* ضخیم کردن متن */
-    transition: all 0.3s ease; /* انیمیشن تغییرات */
+    font-weight: bold;
+    transition: all 0.3s ease;
     margin-right: 10px;
     margin-left: 10px;
   }
 
   .btn-danger:hover {
-    background-color: #ff4433; /* تغییر رنگ هنگام هاور */
-    border-color: #ff4433; /* تغییر رنگ بردر در حالت هاور */
-    box-shadow: 0 4px 12px rgba(255, 111, 97, 0.3); /* سایه جذاب */
-    transform: scale(1.05); /* کمی بزرگ‌تر شدن دکمه هنگام هاور */
+    background-color: #ff4433;
+    border-color: #ff4433;
+    box-shadow: 0 4px 12px rgba(255, 111, 97, 0.3);
+    transform: scale(1.05);
   }
 
   .btn-danger:focus {
     outline: none;
+  }
+
+  /* استایل جدید برای لینک‌های شبکه اجتماعی */
+  .social-link-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .social-link {
+    flex-grow: 1;
+    border-radius: 4px;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+
+  .remove-social-link {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  .remove-social-link:hover {
+    background-color: #c82333;
   }
 </style>
 
@@ -37,11 +66,17 @@
             </div>
             <div class="mb-3">
               <label for="phoneNumber" class="form-label">شماره تماس</label>
-              <input type="tel" class="form-control" id="phoneNumber" placeholder="شماره تماس" />
+              <input type="tel" class="form-control" id="phoneNumber" placeholder="شماره تماس" maxlength="11" />
             </div>
             <div class="mb-3">
-              <label for="email" class="form-label">ایمیل</label>
-              <input type="email" class="form-control" id="email" placeholder="ایمیل" />
+              <label class="form-label">سوشال مدیا</label>
+              <div id="socialLinksContainer">
+                <div class="social-link-group">
+                  <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
+                  <button type="button" class="btn remove-social-link">حذف</button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="addSocialLink">اضافه کردن لینک</button>
             </div>
           </div>
           <div class="col-md-6">
@@ -50,15 +85,10 @@
               <input type="text" class="form-control" id="bio" placeholder="بیو" />
             </div>
             <div class="mb-3">
-              <label class="form-label">سوشال مدیا</label>
-              <div id="socialLinksContainer">
-                <div class="input-group mb-2">
-                  <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
-                  <button type="button" class="btn btn-danger remove-social-link">حذف</button>
-                </div>
-              </div>
-              <button type="button" class="btn btn-primary" id="addSocialLink">اضافه کردن لینک</button>
+              <label for="email" class="form-label">ایمیل</label>
+              <input type="email" class="form-control" id="email" placeholder="ایمیل" />
             </div>
+
             <div class="mb-3">
               <label for="summary" class="form-label">خلاصه</label>
               <input type="text" class="form-control" id="summary" placeholder="خلاصه‌ای کوتاه" />

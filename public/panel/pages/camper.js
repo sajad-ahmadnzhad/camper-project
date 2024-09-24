@@ -1,3 +1,5 @@
+let selectedFiles = [];
+
 function createOrUpdateCamperModal(camper = null) {
   const nameValue = camper ? camper.name : "";
   const priceValue = camper ? camper.price : "";
@@ -19,8 +21,8 @@ function createOrUpdateCamperModal(camper = null) {
           </div>
           <div class="col-md-12">
             <div class="mb-3">
-              <input value="${priceValue}" type="number" class="form-control" id="price" placeholder="قیمت به تومان" />
-            </div>
+            <input value="${priceValue}" type="text" class="form-control" id="price" placeholder="قیمت به تومان" maxlength="10"/> 
+           </div>
           </div>
         </div>
 
@@ -179,7 +181,7 @@ async function scriptImageSelected(camper) {
     const imagePreviewContainer = document.getElementById("imagePreviewContainer");
     const countChildImage = imagePreviewContainer.childElementCount;
 
-    const files = event.target.files;
+    const files = Array.from(event.target.files);
     clearErrors();
 
     Array.from(imagePreviewContainer.children).forEach((child) => {
@@ -188,16 +190,21 @@ async function scriptImageSelected(camper) {
       }
     });
 
-    // بررسی تعداد تصاویر برای جلوگیری از انتخاب بیش از ۳ تصویر
     if (files.length > 3 || files.length + countChildImage > 3) {
       setError("formFiles", "شما فقط می‌توانید ۳ تصویر انتخاب کنید.");
       event.target.value = "";
       return;
     }
 
-    // اضافه کردن تصاویر جدید
     if (files.length > 0) {
-      Array.from(files).forEach((file, index) => {
+      files.forEach((file, index) => {
+        if (file.size > 2 * 1024 * 1024) {
+          setError("formFiles", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
+          return;
+        }
+
+        selectedFiles.push(file);
+
         const reader = new FileReader();
         reader.onload = function (e) {
           const imgContainer = document.createElement("div");
@@ -216,6 +223,7 @@ async function scriptImageSelected(camper) {
           removeBtn.innerHTML = "&times;";
 
           removeBtn.onclick = function () {
+            selectedFiles.splice(index, 1);
             imgContainer.remove();
           };
 
@@ -282,7 +290,7 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
   const multipleImages = document.getElementById("formFiles").files;
 
   //* Validate form data using the external validation function
-  const formData = { name, price, description, camperMainImage, multipleImages };
+  const formData = { name, price, description, camperMainImage, multipleImages: selectedFiles };
   const errors = validateCamperData(formData, isUpdate);
 
   let hasError = false;
@@ -312,8 +320,8 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     formDataToSend.append("camperMainImage", camperMainImage);
   }
 
-  for (let i = 0; i < multipleImages.length; i++) {
-    formDataToSend.append("camperImages", multipleImages[i]);
+  for (let i = 0; i < selectedFiles.length; i++) {
+    formDataToSend.append("camperImages", selectedFiles[i]);
   }
 
   try {

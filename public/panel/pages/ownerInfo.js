@@ -2,11 +2,11 @@ document.getElementById("addSocialLink").addEventListener("click", () => {
   const container = document.getElementById("socialLinksContainer");
 
   const newInputGroup = document.createElement("div");
-  newInputGroup.classList.add("input-group", "mb-2");
+  newInputGroup.classList.add("social-link-group");
 
   newInputGroup.innerHTML = `
     <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
-    <button type="button" class="btn btn-danger remove-social-link">حذف</button>
+    <button type="button" class="btn remove-social-link">حذف</button>
   `;
 
   container.appendChild(newInputGroup);
