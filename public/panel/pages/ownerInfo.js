@@ -16,24 +16,7 @@ document.getElementById("addSocialLink").addEventListener("click", () => {
   });
 });
 
-function setError(fieldId, errorMessage) {
-  const field = document.getElementById(fieldId);
 
-  if (field.parentNode.querySelector(".text-danger")) {
-    return;
-  }
-
-  const errorSpan = document.createElement("span");
-  errorSpan.className = "text-danger";
-  errorSpan.textContent = errorMessage;
-
-  errorSpan.style.display = "block";
-  errorSpan.style.marginTop = "5px";
-  errorSpan.style.fontSize = "16px";
-
-  field.parentNode.appendChild(errorSpan);
-}
-let hasError = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   let initialData = {};
@@ -88,7 +71,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       formData.append("cover", mainCoverFileInput);
     }
 
-    console.log(hasError);
     if (hasError) {
       return false;
     }
@@ -101,43 +83,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: method,
         body: formData,
       });
-      console.log(res.status);
       const result = await res.json();
-      console.log(result);
       if (res.status == 200) {
-        Swal.fire({
-          icon: "success",
-          title: "موفق",
-          text: result.message,
-          confirmButtonText: "باشه",
-        });
+        showAlert("success", "موفق", result.message);
       } else if (res.status == 201) {
-        Swal.fire({
-          icon: "success",
-          title: "موفق",
-          text: "اطلاعات مالک با موفقیت ثبت شد",
-          confirmButtonText: "باشه",
-        });
+        showAlert("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
       } else if (res.status == 400) {
         let errorMessage = "";
-
+        
         Object.keys(result).forEach((key) => {
           errorMessage += `${result[key]} \n`;
         });
-
-        Swal.fire({
-          icon: "error",
-          title: "خطا",
-          text: errorMessage,
-        });
+        showAlert("error", "خطا", errorMessage);
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "خطای ارتباطی",
-        text: error.message,
-      });
-
+      showAlert("error", "خطای ارتباطی", errorMessage);
       return false;
     }
   });
@@ -218,13 +178,3 @@ document.getElementById("mainCover").addEventListener("change", function (event)
   }
 });
 
-function resetImage(imageId, defaultSrc, chosenTextId, resetButtonId) {
-  document.getElementById(imageId).src = defaultSrc;
-  document.getElementById(chosenTextId).textContent = "فایلی انتخاب نشده";
-  document.getElementById(resetButtonId).style.display = "none";
-}
-// function resetImage(imageId, defaultSrc, chosenTextId, resetButtonId) {
-//   document.getElementById(imageId).src = defaultSrc;
-//   document.getElementById(chosenTextId).textContent = "فایلی انتخاب نشده";
-//   document.getElementById(resetButtonId).style.display = "none";
-// }

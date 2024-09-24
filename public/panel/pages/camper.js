@@ -5,7 +5,7 @@ function createOrUpdateCamperModal(camper = null) {
   const mainImageSrc = camper ? camper.mainImage : "/assets/images/no-image.jpg";
 
   const confirmButtonText = camper ? "بروزرسانی کمپر" : "ثبت کمپر";
-  // const images
+
   Swal.fire({
     html: `
     <div class="card-body p-4">
@@ -119,7 +119,7 @@ async function scriptImageSelected(camper) {
       img.style.width = "100px";
       img.style.height = "100px";
 
-      const removeBtn = document.createElement("button");
+      const removeBtn = document.createElement("a");
       removeBtn.classList.add("btn", "btn-danger", "btn-sm", "position-absolute");
       removeBtn.style.top = "5px";
       removeBtn.style.right = "5px";
@@ -147,31 +147,13 @@ async function scriptImageSelected(camper) {
               })
                 .then((res) => {
                   if (res.status == 200) {
-                    Swal.fire({
-                      title: "حذف شد!",
-                      text: "عکس مورد نظر با موفقیت حذف شد",
-                      icon: "success",
-                      showConfirmButton: false,
-                      timer: 1500,
-                      timerProgressBar: true,
-                    }).then(() => {
-                      imgContainer.remove();
-                      window.location.reload();
-                    });
+                    showAlertWithReload("success", "حذف شد!", "عکس مورد نظر با موفقیت حذف شد");
                   } else {
-                    Swal.fire({
-                      title: "خطا",
-                      text: "حذف تصویر با خطا مواجه شد",
-                      icon: "error",
-                    });
+                    showAlert("error", "خطا", "حذف تصویر با خطا مواجه شد");
                   }
                 })
                 .catch((err) => {
-                  Swal.fire({
-                    title: "خطا",
-                    text: "از سمت سرور خطایی رخ داده است",
-                    icon: "error",
-                  });
+                  showAlert("error", "خطا", "از سمت سرور خطایی رخ داده است");
                 });
             }
           });
@@ -282,12 +264,12 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
   const description = document.getElementById("description").value;
-  const profileImage = document.getElementById("mainImage").files[0];
+  const camperMainImage = document.getElementById("mainImage").files[0];
   const multipleImages = document.getElementById("formFiles").files;
 
   let hasError = false;
 
-  // اعتبارسنجی ورودی‌ها
+
   if (!name) {
     setError("name", "نام کمپر الزامی است.");
     hasError = true;
@@ -303,31 +285,22 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     hasError = true;
   }
 
-  if (hasError) {
-    return false;
-  }
-
-  const formData = new FormData();
-
-  // فقط فیلدهای تغییر کرده را ارسال کن
-  if (!camperId || name !== originalCamper.name) {
-    formData.append("name", name);
-  }
-  if (!camperId || price !== originalCamper.price) {
-    formData.append("price", parseInt(price, 10));
-  }
-  if (!camperId || description !== originalCamper.description) {
-    formData.append("description", description);
-  }
-  if (profileImage && profileImage.size > 2 * 1024 * 1024) {
+  if (camperMainImage && camperMainImage.size > 2 * 1024 * 1024) {
     setError("mainImage", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
     hasError = true;
   }
-  if (profileImage) {
-    formData.append("camperMainImage", profileImage);
+
+  if (!isUpdate && !camperMainImage) {
+    setError("mainImage", "عکس کمپر الزامی است.");
+    hasError = true;
   }
 
-  // بررسی و اضافه کردن تصاویر جدید
+  if (!isUpdate && !multipleImages.length) {
+    setError("formFiles", "تصاویر کمپر الزامی است.");
+    hasError = true;
+  }
+
+  const formData = new FormData();
   if (multipleImages.length > 0) {
     for (let i = 0; i < multipleImages.length; i++) {
       if (multipleImages[i].size > 2 * 1024 * 1024) {
@@ -337,6 +310,31 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
       formData.append("camperImages", multipleImages[i]);
     }
   }
+
+
+  if (hasError) {
+    return false;
+  }
+
+
+  if (!camperId || name !== originalCamper.name) {
+    formData.append("name", name);
+  }
+  if (!camperId || price !== originalCamper.price) {
+    formData.append("price", parseInt(price, 10));
+  }
+  if (!camperId || description !== originalCamper.description) {
+    formData.append("description", description);
+  }
+
+
+
+
+  if (camperMainImage) {
+    formData.append("camperMainImage", camperMainImage);
+  }
+
+
 
   if (hasError) {
     return false;
@@ -353,17 +351,7 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     const data = await res.json();
 
     if (res.status == 201 || res.status == 200) {
-      Swal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!",
-        showConfirmButton: false,
-        timer: 1500,
-        timerProgressBar: true,
-      }).then(() => {
-        // پس از نمایش مودال، صفحه ریلود شود
-        window.location.reload();
-      });
+      showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
       return true;
     } else if (res.status == 400) {
       let errorMessage = "";
@@ -372,47 +360,18 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
         errorMessage += `${data[key]} \n`;
       });
 
-      Swal.fire({
-        icon: "error",
-        title: "خطا",
-        text: errorMessage,
-      });
-
+      showAlert("error", "خطا", errorMessage);
       return false;
     }
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "خطای ارتباطی",
-      text: "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.",
-    });
+    showAlert("error", "خطای ارتباطی", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
 
     return false;
   }
 }
 
-function setError(fieldId, errorMessage) {
-  const field = document.getElementById(fieldId);
 
-  if (field.parentNode.querySelector(".text-danger")) {
-    return;
-  }
 
-  const errorSpan = document.createElement("span");
-  errorSpan.className = "text-danger";
-  errorSpan.textContent = errorMessage;
-
-  errorSpan.style.display = "block";
-  errorSpan.style.marginTop = "5px";
-  errorSpan.style.fontSize = "16px";
-
-  field.parentNode.appendChild(errorSpan);
-}
-
-function clearErrors() {
-  const errorSpans = document.querySelectorAll(".text-danger");
-  errorSpans.forEach((span) => span.remove());
-}
 
 function handleFormErrors(errors) {
   Object.entries(errors).forEach(([field, message]) => {
@@ -434,16 +393,7 @@ function removeCamperClickHandler(camperId) {
     if (result.isConfirmed) {
       fetch(`http://localhost:3002/api/campers/${camperId}`, { method: "DELETE" }).then((res) => {
         if (res.status == 200) {
-          Swal.fire({
-            title: "حذف شد!",
-            text: "کمپر با موفقیت حذف شد.",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-          }).then(() => {
-            window.location.reload();
-          });
+          showAlertWithReload("success", "موفق", "کمپر با موفقیت حذف شد");
         }
       });
     }
