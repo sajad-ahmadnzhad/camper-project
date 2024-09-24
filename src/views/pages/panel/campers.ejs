@@ -84,12 +84,14 @@
             <input
               type="text"
               name="camper"
+              id="camper-search"
               class="form-control ms-2"
               style="max-width: 300px"
               placeholder="جستجو کمپر"
               value="<%= query?.camper || '' %>"
             />
             <button type="submit" class="btn btn-dark-light">جستجو</button>
+            <button type="button" id="reset-btn" class="btn btn-light-secondary me-2">بازنشانی</button>
           </form>
         </div>
         <div class="col-md-2 d-flex justify-content-end mt-2 mt-md-0">
@@ -162,3 +164,13 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById("search-form").addEventListener("submit", function (event) {
+    const input = document.getElementById("camper-search");
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", function () {
+    window.location = "/panel/campers";
+  });
+</script>
