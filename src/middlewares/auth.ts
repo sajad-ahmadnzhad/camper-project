@@ -18,11 +18,16 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       ACCESS_TOKEN_SECRET_KEY as string
     );
 
-    const admin = await AdminModel.findOne({ where: { id: checkToken.id } });
+    const admin = await AdminModel.findOne({
+      where: { id: checkToken.id },
+      attributes: ["id", "username", "createdAt", "updatedAt"],
+    });
 
     if (!admin) {
       throw httpErrors.NotFound("مدیری پیدا نشد");
     }
+
+    (req as any).user = admin.dataValues;
 
     next();
   } catch (error) {

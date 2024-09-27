@@ -8,12 +8,14 @@ export const createCamperSchema = Joi.object({
     "string.max": "نام کمپر حداکثر باید 100 حرف داشته باشد.",
     "any.required": "نام کمپر اجبار می باشد."
   }),
-  price: Joi.number().integer().min(100).required().messages({
+  price: Joi.number().integer().min(100).max(999999999).positive().required().messages({
     "number.base": "قیمت کمپر باید یک عدد باشد.",
     "number.empty": "قیمت کمپر نمی تواند خالی باشد.",
     "number.min": "قیمت کمپر باید از 100 به بالا باشد.",
     "number.integer": "قیمت کمپر باید عدد صحیح باشد.",
     "any.required": "قیمت کمپر اجباری می باشد.",
+    "number.max": "قیمت باید حداکثر 9 رقم داشته باشد.",
+    'number.positive': 'قیمت باید یک عدد مثبت باشد.',
   }),
   description: Joi.string().trim().max(1000).min(5).required().messages({
     "string.base": "توضیحات کمپر باید یک رشته باشد.",
@@ -31,11 +33,13 @@ export const updateCamperSchema = Joi.object({
     "string.min": "نام کمپر حداقل باید 5 حرف داشته باشد.",
     "string.max": "نام کمپر حداکثر باید 100 حرف داشته باشد.",
   }),
-  price: Joi.number().integer().min(100).optional().messages({
+  price: Joi.number().integer().min(100).max(999999999).positive().optional().messages({
     "number.base": "قیمت کمپر باید یک عدد باشد.",
     "number.empty": "قیمت کمپر نمی تواند خالی باشد.",
     "number.min": "قیمت کمپر باید از 100 به بالا باشد.",
     "number.integer": "قیمت کمپر باید عدد صحیح باشد.",
+    'number.max': 'قیمت باید حداکثر 9 رقم داشته باشد.',
+    'number.positive': 'قیمت باید یک عدد مثبت باشد.',
   }),
   description: Joi.string().trim().max(1000).min(5).optional().messages({
     "string.base": "توضیحات کمپر باید یک رشته باشد.",
