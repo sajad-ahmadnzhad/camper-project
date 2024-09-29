@@ -1,4 +1,11 @@
-import { User } from "../../modules/auth/entities/user.entity";
+import AdminModel from "../models/Admin";
+
+interface User {
+  id: number;
+  username: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 declare global {
   namespace Express {

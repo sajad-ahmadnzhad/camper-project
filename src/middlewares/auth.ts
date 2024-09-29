@@ -27,7 +27,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       throw httpErrors.NotFound("مدیری پیدا نشد");
     }
 
-    (req as any).user = admin.dataValues;
+    req.user = admin.dataValues;
 
     next();
   } catch (error) {
