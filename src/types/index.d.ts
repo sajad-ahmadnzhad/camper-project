@@ -1,4 +1,4 @@
-import AdminModel from "../models/Admin";
+import "../models/Admin";
 
 interface User {
   id: number;

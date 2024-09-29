@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import OwnerInfoModel from "../models/OwnerInfo";
+import SocialModel from "../models/Social";
 import httpErrors from "http-errors";
 import { deleteFile, uploadFile } from "../utils/s3";
 import httpStatus from "http-status";
@@ -112,6 +113,42 @@ export const update = async (
     );
 
     res.json({ message: "اطلاعات مالک با موفقیت بروزرسانی شد." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createSocial = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { platform } = req.body;
+
+    const existingSocial = await SocialModel.findOne({
+      where: { platform },
+    });
+
+    if (existingSocial) {
+      throw new httpErrors.BadRequest("این شبکه اجتماعی از قبل ساخته شده است.");
+    }
+
+    const newSocial = await SocialModel.create(req.body);
+
+    res.json(newSocial);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateSocial = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { platform } = req.body;
   } catch (error) {
     next(error);
   }
