@@ -4,11 +4,7 @@ import httpErrors from "http-errors";
 import { deleteFile, uploadFile } from "../utils/s3";
 import httpStatus from "http-status";
 
-export const getOne = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getOne = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const ownerInfo = await OwnerInfoModel.findOne();
 
@@ -18,11 +14,7 @@ export const getOne = async (
   }
 };
 
-export const create = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { body } = req;
 
@@ -64,11 +56,7 @@ export const create = async (
   }
 };
 
-export const update = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const update = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { body } = req;
 
@@ -88,8 +76,7 @@ export const update = async (
       const path = `/avatar/${Date.now()}--${avatar[0].originalname}`;
       const uploadedAvatar = await uploadFile(avatar[0].buffer, path);
       avatarLocation = uploadedAvatar.Location;
-      if (ownerInfo.dataValues.avatarURL)
-        await deleteFile(ownerInfo.dataValues.avatarURL);
+      if (ownerInfo.dataValues.avatarURL) await deleteFile(ownerInfo.dataValues.avatarURL);
     }
 
     let coverLocation: null | string = null;
@@ -97,8 +84,7 @@ export const update = async (
       const path = `/cover/${Date.now()}--${cover[0].originalname}`;
       const uploadedCover = await uploadFile(cover[0].buffer, path);
       coverLocation = uploadedCover.Location;
-      if (ownerInfo.dataValues.mainCover)
-        await deleteFile(ownerInfo.dataValues.mainCover);
+      if (ownerInfo.dataValues.mainCover) await deleteFile(ownerInfo.dataValues.mainCover);
     }
 
     await OwnerInfoModel.update(

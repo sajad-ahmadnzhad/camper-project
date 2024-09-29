@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { about, blog, campers, contact, login, ownerInfos, resume, works } from "../controllers/views";
+import { about, campersPanel, campers, contact, login, ownerInfos, resume, works } from "../controllers/views";
 import redirectAuthMiddleware from "./../middlewares/redirectAuth";
 
 const router = Router();
 
 router.get("/panel", redirectAuthMiddleware, ownerInfos);
-router.get("/panel/campers", redirectAuthMiddleware, campers);
+router.get("/panel/campers", redirectAuthMiddleware, campersPanel);
 
 router.get("/login", redirectAuthMiddleware, login);
 
 router.get("/", about);
-router.get("/blog", blog);
+router.get("/campers", campers);
 router.get("/contact", contact);
 router.get("/resume", resume);
 router.get("/works", works);

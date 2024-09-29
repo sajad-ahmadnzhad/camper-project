@@ -263,7 +263,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 .block-quote::before {
-  background-image: url(../icons/icon-quote.svg);
+  /* background-image: url(../icons/icon-quote.svg); */
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -2183,7 +2183,7 @@ button:focus {
 .review-item {
   display: flex;
   background-color: #F7F9FA;
-  background-image: url(../icons/icon-quote.svg);
+  /* background-image: url(../icons/icon-quote.svg); */
   background-repeat: no-repeat;
   background-position: right 1.875rem top 1.875rem;
   border-radius: 20px;

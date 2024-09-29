@@ -1,11 +1,11 @@
 <header class="header box">
   <div class="header__left">
     <div class="header__photo">
-      <img class="header__photo-img" src="assets/img/main-photo.svg" alt="Ronald Robertson" />
+      <img class="header__photo-img" src="<%- ownerInfo?.avatarURL ? ownerInfo?.avatarURL : "assets/img/main-photo.svg" %>" alt="Ronald Robertson" />
     </div>
     <div class="header__base-info">
-      <h4 class="title titl--h4">مصطفی معماری</h4>
-      <div class="status">برنامه نویس خلاق</div>
+      <h4 class="title titl--h4"><%- ownerInfo?.fullName ? ownerInfo?.fullName : "" %></h4>
+      <div class="status"><%- ownerInfo?.summary ? ownerInfo?.summary : "" %></div>
       <ul class="header__social">
         <li>
           <a href="https://www.facebook.com/"><i class="font-icon icon-facebook1"></i></a>
@@ -21,12 +21,12 @@
   </div>
   <div class="header__right">
     <ul class="header__contact">
-      <li><span class="overhead">ایمیل</span>mostafamemari@gmail.com</li>
-      <li><span class="overhead">تلفن</span>09388366510</li>
+      <li><span class="overhead">ایمیل</span><%- ownerInfo?.email ? ownerInfo?.email : "" %></li>
+      <li><span class="overhead">تلفن</span><%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : "" %></li>
     </ul>
-    <ul class="header__contact">
+    <!-- <ul class="header__contact">
       <li><span class="overhead">تولد</span>2 شهریور 1378</li>
       <li><span class="overhead">مکان تولد</span>شهریار ایران</li>
-    </ul>
+    </ul> -->
   </div>
 </header>

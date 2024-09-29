@@ -1,171 +1,118 @@
+<style>
+  .avatar-container {
+    display: inline-block;
+    position: relative;
+    width: 84px;
+    height: 84px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e0e0e0;
+  }
+  .avatar {
+    display: block;
+    border-radius: 15px;
+  }
+  .review-item__caption {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /* محدود به 2 خط */
+    line-clamp: 2; /* برای مرورگرهای پشتیبانی کننده */
+    max-width: 100%;
+  }
+</style>
+
 <div class="col-12 col-md-12 col-lg-10">
   <div class="box box-content">
     <!-- About -->
     <div class="pb-0 pb-sm-2">
       <h1 class="title title--h1 first-title title__separate">درباره ی من</h1>
-      <p>
-        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در
-        ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد
-      </p>
-      <p>
-        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در
-        ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای
-        زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد
-      </p>
+      <p><%- ownerInfo?.bio ? ownerInfo.bio : "توضیحاتی وجود ندارد" %></p>
     </div>
 
-    <!-- What -->
-    <div class="mt-1">
-      <h2 class="title title--h3">کاری که انجام می دهم</h2>
-      <div class="row">
-        <!-- Case Item -->
-        <div class="col-12 col-lg-6">
-          <div class="case-item">
-            <img class="case-item__icon" src="assets/icons/icon-design.svg" alt="" />
-            <div>
-              <h3 class="title title--h4">طراحی وب</h3>
-              <p class="case-item__caption">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Case Item -->
-        <div class="col-12 col-lg-6">
-          <div class="case-item">
-            <img class="case-item__icon" src="assets/icons/icon-dev.svg" alt="" />
-            <div>
-              <h3 class="title title--h4">توسعه وب</h3>
-              <p class="case-item__caption">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Case Item -->
-        <div class="col-12 col-lg-6">
-          <div class="case-item">
-            <img class="case-item__icon" src="assets/icons/icon-app.svg" alt="" />
-            <div>
-              <h3 class="title title--h4">برنامه های موبایل</h3>
-              <p class="case-item__caption">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Case Item -->
-        <div class="col-12 col-lg-6">
-          <div class="case-item">
-            <img class="case-item__icon" src="assets/icons/icon-photo.svg" alt="" />
-            <div>
-              <h3 class="title title--h4">عکاسی</h3>
-              <p class="case-item__caption">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Testimonials -->
     <div class="mt-2">
-      <h2 class="title title--h3">نظرات</h2>
+      <h2 class="title title--h1 first-title title__separate">جدیدترین کمپر ها</h2>
       <div class="swiper-container js-carousel-review">
         <div class="swiper-wrapper">
-          <!-- Item review -->
+          <% if (campers.length) { %> <% campers.map(camper => { %>
           <div class="swiper-slide review-item">
-            <svg class="avatar avatar--80" viewBox="0 0 84 84">
-              <g class="avatar__hexagon">
-                <image xlink:href="assets/img/avatar-2.jpg" height="100%" width="100%" />
-              </g>
+            <svg class="avatar avatar--80" viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg">
+              <rect width="84" height="84" fill="none" stroke="none" />
+              <image xlink:href="<%- camper.mainImage %>" width="84" height="84" preserveAspectRatio="xMidYMid slice" />
             </svg>
             <div class="review-item__textbox">
-              <h4 class="title title--h5">علی نیازی</h4>
-              <p class="review-item__caption">فلسیا برای ایجاد هویت شرکتی استخدام شد. ما از کار انجام شده بسیار راضی بودیم.</p>
+              <h4 class="title title--h5"><%- camper.name %></h4>
+              <p class="review-item__caption">
+                <%- camper.description.length > 77 ? camper.description.substring(0, 77) + '...' : camper.description %>
+              </p>
             </div>
           </div>
-
-          <!-- Item review -->
-          <div class="swiper-slide review-item">
-            <svg class="avatar avatar--80" viewBox="0 0 84 84">
-              <g class="avatar__hexagon">
-                <image xlink:href="assets/img/avatar-3.jpg" height="100%" width="100%" />
-              </g>
-            </svg>
-            <div class="review-item__textbox">
-              <h4 class="title title--h5">ملیکا خلیلیان</h4>
-              <p class="review-item__caption">با تشکر از مهارت فلسیا ما طراحی داریم که می توانیم به آن افتخار کنیم</p>
-            </div>
-          </div>
-
-          <!-- Item review -->
-          <div class="swiper-slide review-item">
-            <svg class="avatar avatar--80" viewBox="0 0 84 84">
-              <g class="avatar__hexagon">
-                <image xlink:href="assets/img/avatar-4.jpg" height="100%" width="100%" />
-              </g>
-            </svg>
-            <div class="review-item__textbox">
-              <h4 class="title title--h5">ملیکا خلیلیان</h4>
-              <p class="review-item__caption">فلسیا برای ایجاد هویت شرکتی استخدام شد. ما از کار انجام شده بسیار راضی بودیم</p>
-            </div>
-          </div>
-
-          <!-- Item review -->
-          <div class="swiper-slide review-item">
-            <svg class="avatar avatar--80" viewBox="0 0 84 84">
-              <g class="avatar__hexagon">
-                <image xlink:href="assets/img/avatar-5.jpg" height="100%" width="100%" />
-              </g>
-            </svg>
-            <div class="review-item__textbox">
-              <h4 class="title title--h5">علی نیازی</h4>
-              <p class="review-item__caption">با تشکر از مهارت فلسیا ما طراحی داریم که می توانیم به آن افتخار کنیم</p>
-            </div>
-          </div>
+          <% }) %> <% } else { %>
+          <p>هیچ کامپی موجود نیست</p>
+          <% } %>
         </div>
 
         <div class="swiper-pagination"></div>
       </div>
     </div>
 
-    <!-- Clients -->
-    <div class="mt-4">
-      <h2 class="title title--h3">مشتری ها</h2>
+    <h2 class="title title--h3">فرم تماس</h2>
 
-      <div class="swiper-container js-carousel-clients">
-        <div class="swiper-wrapper">
-          <!-- Item client -->
-          <div class="swiper-slide">
-            <a href="#"><img src="assets/img/logo-1.svg" alt="Logo" /></a>
-          </div>
-
-          <!-- Item client -->
-          <div class="swiper-slide">
-            <a href="#"><img src="assets/img/logo-2.svg" alt="Logo" /></a>
-          </div>
-
-          <!-- Item client -->
-          <div class="swiper-slide">
-            <a href="#"><img src="assets/img/logo-3.svg" alt="Logo" /></a>
-          </div>
-
-          <!-- Item client -->
-          <div class="swiper-slide">
-            <a href="#"><img src="assets/img/logo-4.svg" alt="Logo" /></a>
-          </div>
-
-          <!-- Item client -->
-          <div class="swiper-slide">
-            <a href="#"><img src="assets/img/logo-1.svg" alt="Logo" /></a>
-          </div>
-
-          <!-- Item client -->
-          <div class="swiper-slide">
-            <a href="#"><img src="assets/img/logo-2.svg" alt="Logo" /></a>
-          </div>
+    <form id="contact-form" class="contact-form" data-toggle="validator">
+      <div class="row">
+        <div class="form-group col-12 col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            id="nameContact"
+            name="nameContact"
+            placeholder="نام و نام خانوادگی"
+            required="required"
+            autocomplete="on"
+            oninvalid="setCustomValidity('پر کردن این فیلد ضروری است.')"
+            onkeyup="setCustomValidity('')"
+          />
+          <div class="help-block with-errors"></div>
         </div>
-
-        <div class="swiper-pagination"></div>
+        <div class="form-group col-12 col-md-6">
+          <input
+            type="email"
+            class="form-control"
+            id="emailContact"
+            name="emailContact"
+            placeholder="ایمیل"
+            required="required"
+            autocomplete="on"
+            oninvalid="setCustomValidity('ایمیل نادرست است')"
+            onkeyup="setCustomValidity('')"
+          />
+          <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group col-12 col-md-12">
+          <textarea
+            class="textarea form-control"
+            id="messageContact"
+            name="messageContact"
+            placeholder="پیام..."
+            rows="4"
+            required="required"
+            oninvalid="setCustomValidity('فیلد را پر کنید')"
+            onkeyup="setCustomValidity('')"
+          ></textarea>
+          <div class="help-block with-errors"></div>
+        </div>
       </div>
-    </div>
+      <div class="row">
+        <div class="col-12 col-md-6 order-2 order-md-1 text-center text-md-left">
+          <div id="validator-contact" class="hidden"></div>
+        </div>
+        <div class="col-12 col-md-6 order-1 order-md-2 text-left">
+          <button type="submit" class="btn"><i class="font-icon icon-send"></i> پیام بفرستید</button>
+        </div>
+      </div>
+    </form>
   </div>
 
   <!-- Footer -->
