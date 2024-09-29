@@ -25,6 +25,6 @@ const Social = db.define("Social", {
   },
 });
 
-Social.belongsTo(OwnerInfoModel);
+// Social.belongsTo(OwnerInfoModel);
 
 export default Social;

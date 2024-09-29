@@ -46,6 +46,6 @@ const OwnerInfo = db.define(
   { timestamps: true, version: false }
 );
 
-OwnerInfo.hasOne(Social, { onDelete: "CASCADE" });
+// OwnerInfo.hasOne(Social, { onDelete: "CASCADE" });
 
 export default OwnerInfo;

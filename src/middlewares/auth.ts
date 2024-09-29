@@ -22,7 +22,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       throw httpErrors.NotFound("مدیری پیدا نشد");
     }
 
-    // req.user = admin.dataValues;
+    (req as any).user = admin.dataValues;
 
     next();
   } catch (error) {

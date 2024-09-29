@@ -79,8 +79,6 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     description: camper.dataValues.description,
   }));
 
-  console.log(parsedCampers);
-
   res.render("pages/website/campers.ejs", {
     page: "campers",
     ownerInfo: ownerInfo?.dataValues,
