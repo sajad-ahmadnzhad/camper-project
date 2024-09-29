@@ -41,14 +41,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       isUpdate = true;
     }
   } catch (error) {
-    console.log("User does not exist or error fetching data", error);
+    console.log("User does not exist or error fetching data", error.message);
   }
 
   document.querySelector("form").addEventListener("submit", async (e) => {
     disableSubmitButton();
 
     e.preventDefault();
-
     clearErrors();
 
     const fullName = document.getElementById("fullName").value;
@@ -57,17 +56,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const bio = document.getElementById("bio").value;
     const summary = document.getElementById("summary").value;
 
-    //* Validate form data using the external validation function
     const formDataValue = { fullName, phoneNumber, email, bio, summary };
     const errors = validateOwnerInfo(formDataValue, isUpdate);
 
-    let hasError = false;
     Object.keys(errors).forEach((field) => {
       setError(field, errors[field]);
       hasError = true;
     });
 
+    console.log(hasError);
     if (hasError) {
+      enableSubmitButton();
       return false;
     }
 
@@ -107,28 +106,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       formData.append("cover", mainCoverFileInput);
     }
 
-    if (hasError) {
-      return false;
-    }
+    if (hasError) return false;
 
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
-    const apiUrl = method === "PUT" ? `http://localhost:3002/api/ownerInfo` : "http://localhost:3002/api/ownerInfo";
+    const apiUrl = `http://localhost:3002/api/ownerInfo`;
 
-    const res = await fetch(apiUrl, {
-      method: method,
-      body: formData,
-    });
-    const response = await res.json();
-    console.log(response);
-    if (res.status == 200) {
-      showAlertWithReload("success", "موفق", response.message);
-    } else if (res.status == 201) {
-      showAlertWithReload("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
-    } else if (res.status == 400) {
-      const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
-      showAlertWithReload("error", "خطا", errorMessage);
-    } else {
-      // showAlertWithReload("error", "خطا شبکه", "خطایی از سمت سرور پیش آمده");
+    try {
+      const res = await fetch(apiUrl, {
+        method: method,
+        body: formData,
+      });
+
+      const response = await res.json();
+
+      if (res.status === 200) {
+        showAlertWithReload("success", "موفق", response.message || "عملیات با موفقیت انجام شد");
+      } else if (res.status === 201) {
+        showAlertWithReload("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
+      } else if (res.status === 400) {
+        const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+        showAlert("error", "خطا", errorMessage);
+      } else if (res.status >= 500 && res.status < 600) {
+        showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً مجدداً تلاش کنید.");
+      } else {
+        showAlert("error", "خطا شبکه", "خطایی از سمت سرور پیش آمده");
+      }
+    } catch (error) {
+      showAlert("error", "خطای شبکه", "یک خطای ناشناخته رخ داده است: " + error.message);
     }
   });
 });

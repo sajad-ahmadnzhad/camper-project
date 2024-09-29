@@ -90,7 +90,11 @@ function createOrUpdateCamperModal(camper = null) {
     confirmButtonText: "ثبت کمپر",
     cancelButtonText: "منصرف شدم",
     preConfirm: () => {
-      return submitCamperData((isUpdate = !!camper ? true : false), camper?.id, (originalCamper = !!camper ? camper : {}));
+      return submitCamperData(
+        (isUpdate = !!camper ? true : false),
+        camper?.id,
+        (originalCamper = !!camper ? camper : {})
+      );
     },
     didOpen: () => scriptImageSelected(camper),
   });
@@ -148,18 +152,21 @@ async function scriptImageSelected(camper) {
                     "Content-Type": "application/json",
                   },
                 });
+
                 const response = await res.json();
-                if (res.status == 200) {
+
+                if (res.status === 200) {
                   showAlertWithReload("success", "حذف شد!", "عکس مورد نظر با موفقیت حذف شد");
-                } else if (res.status == 400) {
+                } else if (res.status === 400) {
                   const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
                   showAlert("error", "خطا", errorMessage);
-                  return false;
+                } else if (res.status >= 500 && res.status < 600) {
+                  showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً دوباره امتحان کنید.");
                 } else {
                   showAlert("error", "خطا", "بروزرسانی کمپر با خطا مواجه شد");
                 }
               } catch (error) {
-                showAlert("error", "خطا", error.message);
+                showAlert("error", "خطا", "یک خطای غیرمنتظره رخ داده است: " + error.message);
               }
             }
           });
@@ -322,22 +329,30 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
   const url = isUpdate ? `http://localhost:3002/api/campers/${camperId}` : "http://localhost:3002/api/campers";
   const method = isUpdate ? "PUT" : "POST";
 
-  const res = await fetch(url, {
-    method: method,
-    body: formDataToSend,
-  });
+  try {
+    const res = await fetch(url, {
+      method: method,
+      body: formDataToSend,
+    });
 
-  const response = await res.json();
+    const response = await res.json();
 
-  if (res.status === 201 || res.status === 200) {
-    showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
-    return true;
-  } else if (res.status === 400) {
-    const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
-    showAlert("error", "خطا", errorMessage);
-    return false;
-  } else {
-    showAlert("error", "خطای ارتباطی", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
+    if (res.status === 201 || res.status === 200) {
+      showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
+      return true;
+    } else if (res.status === 400) {
+      const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+      showAlert("error", "خطا", errorMessage);
+      return false;
+    } else if (res.status >= 500 && res.status < 600) {
+      showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً دوباره امتحان کنید.");
+      return false;
+    } else {
+      showAlert("error", "خطای ارتباطی", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
+      return false;
+    }
+  } catch (error) {
+    showAlert("error", "خطای ناشناخته", "یک خطای غیرمنتظره رخ داده است. لطفاً مجدداً تلاش کنید.");
     return false;
   }
 }
@@ -360,16 +375,32 @@ function removeCamperClickHandler(camperId) {
     cancelButtonText: "لغو",
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch(`http://localhost:3002/api/campers/${camperId}`, { method: "DELETE" }).then((res) => {
-        if (res.status == 200) {
-          showAlertWithReload("success", "موفق", "کمپر با موفقیت حذف شد");
-        }
-      });
+      try {
+        fetch(`http://localhost:3002/api/campers/${camperId}`, { method: "DELETE" })
+          .then(async (res) => {
+            const response = await res.json();
+
+            if (res.status === 200) {
+              showAlertWithReload("success", "موفق", "کمپر با موفقیت حذف شد");
+            } else if (res.status === 400) {
+              const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+              showAlert("error", "خطا", errorMessage);
+            } else if (res.status >= 500 && res.status < 600) {
+              showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً دوباره امتحان کنید.");
+            } else {
+              showAlert("error", "خطای ارتباطی", "عملیات حذف با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
+            }
+          })
+          .catch((error) => {
+            showAlert("error", "خطای ناشناخته", "یک خطای غیرمنتظره رخ داده است. لطفاً مجدداً تلاش کنید.");
+          });
+      } catch (error) {
+        showAlert("error", "خطای ناشناخته", "یک خطای غیرمنتظره رخ داده است. لطفاً مجدداً تلاش کنید.");
+      }
     }
   });
 }
 
-// validation.js
 function validateCamperData({ name, price, description, camperMainImage, multipleImages }, isUpdate = false) {
   let errors = {};
 
