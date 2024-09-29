@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 const asyncHandler = require("express-async-handler");
 import { Op } from "sequelize";
+import OwnerInfoModel from "../models/OwnerInfo";
 
 import CamperModel from "./../models/Camper";
 import pagination from "../utils/pagination";
@@ -10,7 +11,7 @@ export const ownerInfos = asyncHandler(async (req: Request, res: Response, next:
   res.render("pages/panel/ownerInfos.ejs", { page: "owner-infos" });
 });
 
-export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+export const campersPanel = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { camper } = req.query;
 
   const paginatedCampers = camper
@@ -51,18 +52,52 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 });
 
 export const about = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.user);
-  res.render("pages/website/about.ejs", { page: "" });
+  const ownerInfo = await OwnerInfoModel.findOne();
+  const paginatedCampers = await pagination(CamperModel, { limit: 4 });
+
+  const parsedCampers = paginatedCampers.data.map((camper: any) => ({
+    id: camper.dataValues.id,
+    name: camper.dataValues.name,
+    mainImage: camper.dataValues.mainImage,
+    images: camper.dataValues.images,
+    price: camper.dataValues.price,
+    description: camper.dataValues.description,
+  }));
+
+  res.render("pages/website/about.ejs", { page: "", ownerInfo: ownerInfo?.dataValues, campers: parsedCampers });
 });
-export const blog = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.render("pages/website/blog.ejs", { page: "blog" });
+export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const ownerInfo = await OwnerInfoModel.findOne();
+  const paginatedCampers = await pagination(CamperModel, { limit: 10 });
+
+  const parsedCampers = paginatedCampers.data.map((camper: any) => ({
+    id: camper.dataValues.id,
+    name: camper.dataValues.name,
+    mainImage: camper.dataValues.mainImage,
+    images: camper.dataValues.images,
+    price: camper.dataValues.price,
+    description: camper.dataValues.description,
+  }));
+
+  console.log(parsedCampers);
+
+  res.render("pages/website/campers.ejs", {
+    page: "campers",
+    ownerInfo: ownerInfo?.dataValues,
+    campers: parsedCampers,
+  });
 });
 export const contact = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.render("pages/website/contact.ejs", { page: "contact" });
+  const ownerInfo = await OwnerInfoModel.findOne();
+  res.render("pages/website/contact.ejs", { page: "contact", ownerInfo: ownerInfo?.dataValues });
 });
 export const resume = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.render("pages/website/resume.ejs", { page: "resume" });
+  const ownerInfo = await OwnerInfoModel.findOne();
+  console.log(ownerInfo?.dataValues);
+  res.render("pages/website/resume.ejs", { page: "resume", ownerInfo: ownerInfo?.dataValues });
 });
 export const works = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.render("pages/website/works.ejs", { page: "works" });
+  const ownerInfo = await OwnerInfoModel.findOne();
+  console.log(ownerInfo?.dataValues);
+  res.render("pages/website/works.ejs", { page: "works", ownerInfo: ownerInfo?.dataValues });
 });

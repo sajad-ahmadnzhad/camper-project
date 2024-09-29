@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="fa">
   <!-- Mirrored from sajadkhalaj.ir/about.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 15 Sep 2024 14:24:20 GMT -->
@@ -39,8 +42,18 @@
     <link rel="stylesheet" type="text/css" href="assets/styles/style-rtl-demo.css" />
     <link rel="stylesheet" type="text/css" href="assets/styles/style-rtl.css" />
     <link rel="stylesheet" type="text/css" href="assets/demo/style-demo.css" />
+
   </head>
   <body>
+    <style>
+      .text-limited {
+       display: -webkit-box;
+       -webkit-box-orient: vertical;
+       -webkit-line-clamp: 2;
+       overflow: hidden;
+       text-overflow: ellipsis;
+}
+  </style>
     <!-- Preloader -->
     <div class="preloader">
       <div class="preloader__wrap">
@@ -55,7 +68,7 @@
     <main class="main">
       <!-- Header Image -->
       <div class="header-image">
-        <div class="js-parallax" style="background-image: url(assets/img/image_header.jpg)"></div>
+        <div class="js-parallax" style="background-image: url('<%- ownerInfo?.mainCover ? ownerInfo.mainCover : "assets/img/image_header.jpg" %>')"></div>
       </div>
 
       <div class="container gutter-top">

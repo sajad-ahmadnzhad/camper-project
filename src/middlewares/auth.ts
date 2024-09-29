@@ -8,15 +8,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const { accessToken } = req.cookies;
 
     if (!accessToken) {
-      throw httpErrors.Forbidden(
-        "این مسیر محافظت شده است لطفا برای دسترسی به این مسیر اول وارد شوید."
-      );
+      throw httpErrors.Forbidden("این مسیر محافظت شده است لطفا برای دسترسی به این مسیر اول وارد شوید.");
     }
     const { ACCESS_TOKEN_SECRET_KEY } = process.env;
-    const checkToken: any = jwt.verify(
-      accessToken,
-      ACCESS_TOKEN_SECRET_KEY as string
-    );
+    const checkToken: any = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY as string);
 
     const admin = await AdminModel.findOne({
       where: { id: checkToken.id },
@@ -27,7 +22,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       throw httpErrors.NotFound("مدیری پیدا نشد");
     }
 
-    req.user = admin.dataValues;
+    // req.user = admin.dataValues;
 
     next();
   } catch (error) {
