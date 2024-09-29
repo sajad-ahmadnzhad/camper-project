@@ -51,6 +51,7 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 });
 
 export const about = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.user);
   res.render("pages/website/about.ejs", { page: "" });
 });
 export const blog = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
