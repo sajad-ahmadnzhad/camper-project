@@ -8,6 +8,7 @@ import httpStatus from "http-status";
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { username, password } = req.body;
+    const oneMonths = 30 * 60 * 24 * 60 * 1000;
 
     const existingAdmin = await AdminModel.findOne();
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET_KEY as string;
@@ -19,12 +20,18 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         throw new httpErrors.Unauthorized("اطلاعات وارد شده نادرست می باشد.");
       }
       const accessToken = generateToken({ id }, accessTokenSecret);
-      res.cookie("accessToken", accessToken, { httpOnly: true, secure: true });
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: oneMonths,
+      });
       return res.json({ message: "ورود موفقیت آمیز بود." });
     }
 
     if (existingAdmin) {
-      throw new httpErrors.BadRequest("احراز هویت فقط برای مدیران انجام می شود.");
+      throw new httpErrors.BadRequest(
+        "احراز هویت فقط برای مدیران انجام می شود."
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,8 +43,14 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = registeredAdmin.dataValues;
 
     const accessToken = generateToken({ id }, accessTokenSecret);
-    res.cookie("accessToken", accessToken, { httpOnly: true, secure: true });
-    res.status(httpStatus.CREATED).json({ message: "ثبت نام موفقیت آمیز بود." });
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: oneMonths,
+    });
+    res
+      .status(httpStatus.CREATED)
+      .json({ message: "ثبت نام موفقیت آمیز بود." });
   } catch (error) {
     next(error);
   }

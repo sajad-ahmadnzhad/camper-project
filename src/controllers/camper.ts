@@ -3,11 +3,16 @@ import CamperModel from "./../models/Camper";
 import httpStatus from "http-status";
 import httpErrors from "http-errors";
 import pagination from "../utils/pagination";
+import db from "../configs/db";
 import { Op } from "sequelize";
 import compressImage from "../utils/compressImage";
 import { deleteFile, uploadFile } from "../utils/s3";
 
-export const create = async (req: Request, res: Response, next: NextFunction) => {
+export const create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { body } = req;
     const { camperMainImage, camperImages } =
@@ -21,7 +26,9 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
     }
 
     //* Compress images
-    const compressImagesBuffer = await Promise.all(camperImages.map(compressImage));
+    const compressImagesBuffer = await Promise.all(
+      camperImages.map(compressImage)
+    );
 
     //* Compress main image
     const compressMainImageBuffer = await compressImage(camperMainImage[0]);
@@ -33,7 +40,9 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
     });
 
     //* Get images location
-    const imagesLocations = (await Promise.all(imagesPromises)).map((image) => image?.Location);
+    const imagesLocations = (await Promise.all(imagesPromises)).map(
+      (image) => image?.Location
+    );
 
     //* Upload main image to s3
     const path = `/campers/${Date.now()}--${camperMainImage[0].originalname}`;
@@ -52,7 +61,11 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const getAll = async (req: Request, res: Response, next: NextFunction) => {
+export const getAll = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const paginatedCampers = await pagination(CamperModel, req.query);
 
@@ -62,7 +75,11 @@ export const getAll = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const remove = async (req: Request, res: Response, next: NextFunction) => {
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     if (!Number(req.params.id)) {
       throw new httpErrors.BadRequest("آیدی کمپر اجباری و باید عدد باشد.");
@@ -80,7 +97,10 @@ export const remove = async (req: Request, res: Response, next: NextFunction) =>
       where: { id: req.params.id },
     });
 
-    const camperImages = [...camper.dataValues.images, camper.dataValues.mainImage];
+    const camperImages = [
+      ...camper.dataValues.images,
+      camper.dataValues.mainImage,
+    ];
 
     camperImages.forEach(deleteFile);
 
@@ -90,7 +110,11 @@ export const remove = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const update = async (req: Request, res: Response, next: NextFunction) => {
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { body } = req;
     const { id } = req.params;
@@ -115,7 +139,9 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
     const countImages = camper.dataValues.images.length + camperImages?.length;
 
     if (camperImages && countImages > 3) {
-      throw new httpErrors.BadRequest("تعداد عکس های آپلود شده به حد مجاز رسیده است.");
+      throw new httpErrors.BadRequest(
+        "تعداد عکس های آپلود شده به حد مجاز رسیده است."
+      );
     }
 
     let mainImageLocation: null | string = null;
@@ -130,7 +156,9 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
 
     const imagesLocation: string[] = [];
     if (camperImages) {
-      const compressImagesBuffer = await Promise.all(camperImages.map(compressImage));
+      const compressImagesBuffer = await Promise.all(
+        camperImages.map(compressImage)
+      );
 
       //* Upload images to s3
       const imagesPromises = compressImagesBuffer.map((buffer, i) => {
@@ -159,7 +187,11 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const getOne = async (req: Request, res: Response, next: NextFunction) => {
+export const getOne = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     if (!Number(req.params.id)) {
       throw new httpErrors.BadRequest("آیدی کمپر اجباری و باید عدد باشد.");
@@ -179,7 +211,11 @@ export const getOne = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const search = async (req: Request, res: Response, next: NextFunction) => {
+export const search = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { camper } = req.query;
 
@@ -193,7 +229,11 @@ export const search = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const newest = async (req: Request, res: Response, next: NextFunction) => {
+export const newest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const count = Number.parseInt(req.query.count as string) || 10;
 
@@ -208,7 +248,12 @@ export const newest = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const removeImage = async (req: Request, res: Response, next: NextFunction) => {
+export const removeImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const transaction = await db.transaction();
   try {
     const { id } = req.params;
     const { image } = req.body;
@@ -231,17 +276,21 @@ export const removeImage = async (req: Request, res: Response, next: NextFunctio
       throw new httpErrors.NotFound("عکس مورد نظر در سیستم یافت نشد.");
     }
 
-    if(camper.dataValues.images.length == 1) {
-      throw new httpErrors.BadRequest('حداقل یک تصویر باید در گالری باشد.')
+    if (camper.dataValues.images.length == 1) {
+      throw new httpErrors.BadRequest("حداقل یک تصویر باید در گالری باشد.");
     }
 
-    const images = camper.dataValues.images.filter((img: string) => img !== image);
+    const images = camper.dataValues.images.filter(
+      (img: string) => img !== image
+    );
 
-    await camper.update({ images });
+    await camper.update({ images }, { transaction });
     await deleteFile(image);
 
+    await transaction.commit();
     res.json({ message: "عکس مورد نظر با موفقیت حذف شد." });
   } catch (error) {
+    await transaction.rollback();
     next(error);
   }
 };
