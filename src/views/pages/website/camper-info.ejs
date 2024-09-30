@@ -1,0 +1,73 @@
+<style>
+  .gallery-post {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-left: 12px;
+  }
+
+  .gallery-post__images {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .gallery-post__item {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 768px) {
+    .gallery-post__images {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+</style>
+
+<div class="col-12 col-md-12 col-lg-10">
+  <div class="box box-content">
+    <div class="pb-3">
+      <header class="header-post">
+        <h1 class="title title--h1"><%- camper.name %></h1>
+        <div class="gallery-post">
+          <div class="gallery-post__images">
+            <% camper.images.forEach(function(image) { %>
+            <img class="gallery-post__item cover lazyload" src="<%- image %>" data-zoom alt="" />
+            <% }) %>
+            <img
+              class="gallery-post__item cover lazyload"
+              src="data:image/jpeg;base64,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"
+              data-zoom
+              alt=""
+            />
+          </div>
+          <div class="gallery-post__caption"></div>
+        </div>
+
+        <div class="caption-post">
+          <p><%- camper.description %></p>
+        </div>
+      </header>
+
+      <footer class="footer-post">
+        <a class="footer-post__share" href="http://facebook.com/"
+          ><i class="font-icon icon-facebook"></i><span>فیس بوک</span></a
+        >
+        <a class="footer-post__share" href="http://twitter.com/"
+          ><i class="font-icon icon-twitter"></i><span>توییتر</span></a
+        >
+        <a class="footer-post__share" href="http://linkedin.com/"
+          ><i class="font-icon icon-linkedin"></i><span>لینکدین</span></a
+        >
+      </footer>
+    </div>
+  </div>
+</div>

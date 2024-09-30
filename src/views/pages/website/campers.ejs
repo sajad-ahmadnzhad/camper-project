@@ -1,5 +1,3 @@
-<style></style>
-
 <div class="col-12 col-md-12 col-lg-10">
   <div class="box box-content">
     <div class="pb-2">
@@ -11,7 +9,7 @@
       <article class="news-item box">
         <div class="news-item__image-wrap overlay overlay--45">
           <div class="news-item__date">قیمت<span><%- camper.price %> تومان</span></div>
-          <a class="news-item__link" href="single-post.html"></a>
+          <a class="news-item__link" href="/camper?id=<%- camper.id %>"></a>
           <img class="cover lazyload" src="<%- camper.mainImage %>" alt="" />
         </div>
         <div class="news-item__caption">
@@ -24,7 +22,41 @@
       <% } %>
     </div>
 
+    <div class="d-flex justify-content-between mt-4">
+      <!-- Previous Page Button -->
+      <% if (pagination.currentPage > 1) { %>
+      <form method="GET" action="/campers" id="pagination-form-prev" style="cursor: pointer">
+        <input type="hidden" name="page" value="<%= pagination.currentPage - 1 %>" />
+        <input type="hidden" name="query" value="<%= query || '' %>" />
+        <button type="submit" class="btn btn-outline-primary">صفحه قبل</button>
+      </form>
+      <% } %>
+      <!---->
+      <% if (pagination.totalPages ){ %>
+      <span>صفحه <%= pagination.currentPage %> از <%= pagination.totalPages %></span>
+      <% } %>
+      <!-- Next Page Button -->
+      <% if (pagination.currentPage < pagination.totalPages) { %>
+      <form method="GET" action="/campers" id="pagination-form-next" style="cursor: pointer">
+        <input type="hidden" name="page" value="<%= pagination.currentPage + 1 %>" />
+        <input type="hidden" name="query" value="<%= query || '' %>" />
+        <button type="submit" class="btn btn-outline-primary">صفحه بعد</button>
+      </form>
+      <% } %>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">© 1399 ملیکا خلیلیان</footer>
   </div>
 </div>
+
+<script>
+  document.getElementById("search-form").addEventListener("submit", function (event) {
+    const input = document.getElementById("camper-search");
+    input.value = input.value.trim();
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", function () {
+    window.location = "/panel/campers";
+  });
+</script>

@@ -163,7 +163,7 @@ async function scriptImageSelected(camper) {
                 } else if (res.status >= 500 && res.status < 600) {
                   showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً دوباره امتحان کنید.");
                 } else {
-                  showAlert("error", "خطا", "بروزرسانی کمپر با خطا مواجه شد");
+                  showAlert("error", "خطا", "حذف کمپر با خطا مواجه شد");
                 }
               } catch (error) {
                 showAlert("error", "خطا", "یک خطای غیرمنتظره رخ داده است: " + error.message);
