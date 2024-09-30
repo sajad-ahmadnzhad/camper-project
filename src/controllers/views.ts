@@ -68,7 +68,13 @@ export const about = asyncHandler(async (req: Request, res: Response, next: Next
 });
 export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const ownerInfo = await OwnerInfoModel.findOne();
-  const paginatedCampers = await pagination(CamperModel, { limit: 10 });
+  const paginatedCampers = await pagination(CamperModel, { ...req.query, limit: 10 });
+
+  const paginationItem = {
+    currentPage: paginatedCampers.currentPage,
+    totalPages: paginatedCampers.totalPages,
+    totalItems: paginatedCampers.totalItems,
+  };
 
   const parsedCampers = paginatedCampers.data.map((camper: any) => ({
     id: camper.dataValues.id,
@@ -83,6 +89,19 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     page: "campers",
     ownerInfo: ownerInfo?.dataValues,
     campers: parsedCampers,
+    pagination: paginationItem,
+    query: req.query || "",
+  });
+});
+export const camperInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.query;
+  const ownerInfo = await OwnerInfoModel.findOne();
+  const camper = await CamperModel.findOne({ where: { id } });
+
+  res.render("pages/website/camper-info.ejs", {
+    page: "camper-info",
+    ownerInfo: ownerInfo?.dataValues,
+    camper,
   });
 });
 export const contact = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

@@ -1,0 +1,67 @@
+<style>
+  .gallery-post {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-left: 12px;
+  }
+
+  .gallery-post__images {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .gallery-post__item {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 768px) {
+    .gallery-post__images {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+</style>
+
+<div class="col-12 col-md-12 col-lg-10">
+  <div class="box box-content">
+    <div class="pb-3">
+      <header class="header-post">
+        <h1 class="title title--h1"><%- camper.name %></h1>
+        <div class="gallery-post">
+          <div class="gallery-post__images">
+            <% camper.images.forEach(function(image) { %>
+            <img class="gallery-post__item cover lazyload" src="<%- image %>" data-zoom alt="" />
+            <% }) %>
+          </div>
+          <div class="gallery-post__caption"></div>
+        </div>
+
+        <div class="caption-post">
+          <p><%- camper.description %></p>
+        </div>
+      </header>
+
+      <footer class="footer-post">
+        <a class="footer-post__share" href="http://facebook.com/"
+          ><i class="font-icon icon-facebook"></i><span>فیس بوک</span></a
+        >
+        <a class="footer-post__share" href="http://twitter.com/"
+          ><i class="font-icon icon-twitter"></i><span>توییتر</span></a
+        >
+        <a class="footer-post__share" href="http://linkedin.com/"
+          ><i class="font-icon icon-linkedin"></i><span>لینکدین</span></a
+        >
+      </footer>
+    </div>
+  </div>
+</div>
