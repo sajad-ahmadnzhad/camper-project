@@ -64,7 +64,12 @@ export const about = asyncHandler(async (req: Request, res: Response, next: Next
     description: camper.dataValues.description,
   }));
 
-  res.render("pages/website/about.ejs", { page: "", ownerInfo: ownerInfo?.dataValues, campers: parsedCampers });
+  res.render("pages/website/about.ejs", {
+    page: "",
+    ownerInfo: ownerInfo?.dataValues,
+    campers: parsedCampers,
+    isLogin: !!(req as any).user,
+  });
 });
 export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const ownerInfo = await OwnerInfoModel.findOne();
@@ -74,6 +79,7 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     currentPage: paginatedCampers.currentPage,
     totalPages: paginatedCampers.totalPages,
     totalItems: paginatedCampers.totalItems,
+    isLogin: !!(req as any).user,
   };
 
   const parsedCampers = paginatedCampers.data.map((camper: any) => ({
@@ -91,6 +97,7 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     campers: parsedCampers,
     pagination: paginationItem,
     query: req.query || "",
+    isLogin: !!(req as any).user,
   });
 });
 export const camperInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -102,6 +109,7 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
     page: "camper-info",
     ownerInfo: ownerInfo?.dataValues,
     camper,
+    isLogin: !!(req as any).user,
   });
 });
 export const contact = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

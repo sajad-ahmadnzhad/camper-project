@@ -87,12 +87,52 @@
 
             <div class="mb-3">
               <label for="email" class="form-label">ایمیل</label>
-              <input type="email" class="form-control" id="email" placeholder="ایمیل" />
+              <input type="text" class="form-control" id="email" placeholder="ایمیل" />
             </div>
           </div>
           <div class="mb-3">
             <label for="bio" class="form-label">بیو</label>
-            <textarea class="form-control" name="bio" id="bio" placeholder="بیو" rows="6" cols="50"></textarea>
+            <div id="editor-container">
+              <textarea
+                class="form-control"
+                name="bio"
+                id="bio"
+                placeholder="بیو"
+                rows="6"
+                cols="50"
+                style="display: none"
+              ></textarea>
+              <!-- Loader -->
+              <div id="loader" style="text-align: center; margin-top: 20px">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="xMidYMid"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="32"
+                    stroke-width="8"
+                    stroke="#1d3f72"
+                    stroke-dasharray="50.26548245743669 50.26548245743669"
+                    fill="none"
+                    stroke-linecap="round"
+                  >
+                    <animateTransform
+                      attributeName="transform"
+                      type="rotate"
+                      repeatCount="indefinite"
+                      dur="1s"
+                      values="0 50 50;360 50 50"
+                      keyTimes="0;1"
+                    />
+                  </circle>
+                </svg>
+              </div>
+            </div>
           </div>
 
           <div class="row">
@@ -188,15 +228,3 @@
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
-<script>
-  CKEDITOR.replace("bio", {
-    contentsLangDirection: "rtl",
-    language: "fa",
-    toolbar: [
-      { name: "basicstyles", items: ["Bold", "Italic", "Underline"] },
-      { name: "paragraph", items: ["BulletedList", "NumberedList"] },
-      { name: "styles", items: ["Format", "FontSize"] },
-      { name: "clipboard", items: ["Undo", "Redo"] },
-    ],
-  });
-</script>

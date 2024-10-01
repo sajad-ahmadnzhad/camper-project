@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import httpErrors from "http-errors";
 import AdminModel from "../models/Admin";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { accessToken } = req.cookies;
 
-    if (!accessToken) {
-      throw httpErrors.Forbidden("این مسیر محافظت شده است لطفا برای دسترسی به این مسیر اول وارد شوید.");
-    }
+    if (!accessToken) return next();
+
     const { ACCESS_TOKEN_SECRET_KEY } = process.env;
     const checkToken: any = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY as string);
 
@@ -18,9 +16,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       attributes: ["id", "username", "createdAt", "updatedAt"],
     });
 
-    if (!admin) {
-      throw httpErrors.NotFound("مدیری پیدا نشد");
-    }
+    if (!admin) return next();
 
     //@ts-ignore
     req.user = admin.dataValues;
