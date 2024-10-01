@@ -1,8 +1,11 @@
 <header class="header box">
   <div class="header__left">
     <div class="header__photo">
-      <img class="header__photo-img" src="<%- ownerInfo?.avatarURL ? ownerInfo?.avatarURL : "assets/img/main-photo.svg" %>" alt="Ronald Robertson" />
+      <img class="header__photo-img" style="width: 150px; height: 150px; object-fit: cover" src="<%=
+      ownerInfo?.avatarURL ? ownerInfo.avatarURL : 'assets/img/main-photo.svg' %>" alt="<%- ownerInfo?.fullName ?
+      ownerInfo?.fullName : "" %>" />
     </div>
+
     <div class="header__base-info">
       <h4 class="title titl--h4"><%- ownerInfo?.fullName ? ownerInfo?.fullName : "" %></h4>
       <div class="status"><%- ownerInfo?.summary ? ownerInfo?.summary : "" %></div>

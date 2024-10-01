@@ -11,6 +11,7 @@ import {
   camperInfo,
 } from "../controllers/views";
 import redirectAuthMiddleware from "./../middlewares/redirectAuth";
+import checkLogin from "./../middlewares/checkLogin";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get("/panel/campers", redirectAuthMiddleware, campersPanel);
 
 router.get("/login", redirectAuthMiddleware, login);
 
-router.get("/", about);
+router.get("/", checkLogin, about);
 router.get("/camper", camperInfo);
 router.get("/campers", campers);
 router.get("/contact", contact);

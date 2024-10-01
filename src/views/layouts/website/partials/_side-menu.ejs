@@ -8,7 +8,9 @@
         <a class="<%= page === 'campers' ? 'active' : '' %>" href="/campers"><i class="icon-book-open"></i>کمپرها</a>
       </li>
       <li class="nav__item">
-        <a class="<%= page === 'contact' ? 'active' : '' %>" href="/login"><i class="icon-lock"></i>ورود مدیران</a>
+        <a class="<%= page === 'contact' ? 'active' : '' %>" href="<%- isLogin ? '/panel' : '/login' %>""
+          ><i class="<%- isLogin ? 'icon-settings' : 'icon-lock' %>"></i><%- isLogin ? "ورود به پنل" : "ورود مدیران"%></a
+        >
       </li>
     </ul>
   </div>

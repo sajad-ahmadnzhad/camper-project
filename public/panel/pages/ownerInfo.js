@@ -42,11 +42,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       hasError = true;
     });
 
-    if (hasError) {
-      enableSubmitButton();
-      return false;
-    }
-
     const socialLinks = Array.from(document.querySelectorAll(".social-link"))
       .map((input) => input.value)
       .filter((value) => value !== "");
@@ -60,7 +55,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       summary: document.getElementById("summary").value,
       socialLinks: socialLinks,
     };
-    console.log(formData);
 
     for (const key in currentData) {
       if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
@@ -78,13 +72,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mainCoverFileInput = document.getElementById("mainCover").files[0];
 
     if (avatarFileInput) {
-      formData.append("avatar", avatarFileInput);
+      if (avatarFileInput.size > 2 * 1024 * 1024) {
+        hasError = true;
+      } else if (avatarFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+        hasError = true;
+      }
     }
     if (mainCoverFileInput) {
-      formData.append("cover", mainCoverFileInput);
+      if (mainCoverFileInput.size > 2 * 1024 * 1024) {
+        hasError = true;
+      } else if (mainCoverFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+        hasError = true;
+      }
     }
 
-    if (hasError) return false;
+    if (avatarFileInput) formData.append("avatar", avatarFileInput);
+    if (mainCoverFileInput) formData.append("cover", mainCoverFileInput);
+
+    if (hasError) {
+      enableSubmitButton();
+      return false;
+    }
 
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
     const apiUrl = `http://localhost:3002/api/ownerInfo`;
@@ -145,10 +153,26 @@ function fillFormWithUserData(data = {}) {
   document.getElementById("fullName").value = data.fullName || "";
   document.getElementById("phoneNumber").value = data.phoneNumber || "";
   document.getElementById("email").value = data.email || "";
-  document.getElementById("bio").value = data.bio || "";
+  const bio = (document.getElementById("bio").value = data.bio || "");
   document.getElementById("summary").value = data.summary || "";
   document.getElementById("avatarImage").src = data.avatarURL || "";
   document.getElementById("mainImage").src = data.mainCover || "";
+
+  document.getElementById("bio").value = bio;
+
+  CKEDITOR.replace("bio", {
+    contentsLangDirection: "rtl",
+    language: "fa",
+    toolbar: [
+      { name: "basicstyles", items: ["Bold", "Italic", "Underline"] },
+      { name: "paragraph", items: ["BulletedList", "NumberedList"] },
+      { name: "styles", items: ["Format", "FontSize"] },
+      { name: "clipboard", items: ["Undo", "Redo"] },
+    ],
+  });
+
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("bio").style.display = "block";
 
   const socialLinksContainer = document.getElementById("socialLinksContainer");
 

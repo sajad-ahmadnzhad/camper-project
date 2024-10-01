@@ -60,7 +60,18 @@
               </h4>
               <div
                 class="review-item__caption"
-                style="color: black; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+                style="
+                  color: black;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: normal;
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  text-overflow: ellipsis;
+                "
               >
                 <%- camper.description.length > 77 ? camper.description.substring(0, 77) + '...' : camper.description %>
               </div>
