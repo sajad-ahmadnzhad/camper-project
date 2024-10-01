@@ -107,6 +107,88 @@ function updateCamperClickHandler(camperEncode) {
   const camper = JSON.parse(decodeURIComponent(camperEncode));
   createOrUpdateCamperModal(camper);
 }
+function showInfoCamperClickHandler(camperEncode) {
+  const camper = JSON.parse(decodeURIComponent(camperEncode));
+  const nameValue = camper ? camper.name : "";
+  const priceValue = camper ? camper.price : "";
+  const descriptionValue = camper ? camper.description : "";
+  const mainImageSrc = camper ? camper.mainImage : "/assets/images/no-image.jpg";
+
+  Swal.fire({
+    html: `
+  <div class="card-body p-4">
+    <h5 class="card-title fw-bold mb-4 text-center">جزئیات کمپر</h5>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">نام کمپر</label>
+          <p class="form-control-static">${nameValue}</p>
+        </div>
+      </div>
+      
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">قیمت به تومان</label>
+          <p class="form-control-static">${priceValue}</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mb-3 w-100">
+          <div class="profile-cards">
+            <label class="form-label fw-bold">تصاویر</label>
+            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3">
+              ${camper.images
+                .map(
+                  (image) =>
+                    `<div class="position-relative m-2">
+                      <img src="${image}" class="img-thumbnail camper-image" style="width: 100px; height: 100px; object-fit: cover;">
+                    </div>`
+                )
+                .join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-12 mx-auto">
+        <div class="container">
+          <div class="mb-3 text-center">
+            <div class="profile-card mx-auto">
+              <div class="text-center mb-3">
+                <img
+                  id="avatarImage"
+                  src="${mainImageSrc}"
+                  alt="Profile Image"
+                  class="profile-image img-thumbnail"
+                  style="width: 150px; height: 150px; object-fit: cover;"
+                />
+              </div>
+              <label class="form-label fw-bold">تصویر پروفایل</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label fw-bold">توضیحات</label>
+        <p class="form-control-static">${descriptionValue ? descriptionValue : "بدون توضیحات"}</p>
+      </div>
+    </div>
+  </div>
+      `,
+    showCancelButton: false,
+    showCloseButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "بازگشت به لیست",
+  });
+}
 
 async function scriptImageSelected(camper) {
   const resetImageBtn = document.getElementById("resetImageBtn");
@@ -181,7 +263,8 @@ async function scriptImageSelected(camper) {
 
   document.getElementById("formFiles").addEventListener("change", function (event) {
     const imagePreviewContainer = document.getElementById("imagePreviewContainer");
-    const countChildImage = imagePreviewContainer.childElementCount;
+    const countChildImage = imagePreviewContainer.querySelectorAll(".camper-image").length;
+    selectedFiles = [];
 
     const files = Array.from(event.target.files);
     clearErrors();
@@ -191,11 +274,11 @@ async function scriptImageSelected(camper) {
         child.remove();
       }
     });
-
     if (files.length > 3 || files.length + countChildImage > 3) {
       setError("formFiles", "شما فقط می‌توانید ۳ تصویر انتخاب کنید.");
       event.target.value = "";
-      return;
+      selectedFiles = [];
+      return false;
     }
 
     if (files.length > 0) {
@@ -236,6 +319,7 @@ async function scriptImageSelected(camper) {
         reader.readAsDataURL(file);
       });
     }
+    console.log(selectedFiles);
   });
 
   document.getElementById("mainImage").addEventListener("change", function (event) {
@@ -307,7 +391,6 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
 
   const formDataToSend = new FormData();
 
-  // Append the necessary fields based on updates
   if (!camperId || name !== originalCamper.name) {
     formDataToSend.append("name", name);
   }
@@ -325,6 +408,8 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
   for (let i = 0; i < selectedFiles.length; i++) {
     formDataToSend.append("camperImages", selectedFiles[i]);
   }
+  console.log(selectedFiles);
+  console.log(formDataToSend);
 
   const url = isUpdate ? `http://localhost:3002/api/campers/${camperId}` : "http://localhost:3002/api/campers";
   const method = isUpdate ? "PUT" : "POST";
@@ -334,7 +419,7 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
       method: method,
       body: formDataToSend,
     });
-
+    console.log(res);
     const response = await res.json();
 
     if (res.status === 201 || res.status === 200) {
@@ -432,8 +517,8 @@ function validateCamperData({ name, price, description, camperMainImage, multipl
     errors.description = "توضیحات الزامی است.";
   } else if (description.length < 5) {
     errors.description = "توضیحات حداقل باید 5 حرف داشته باشد.";
-  } else if (description.length > 1000) {
-    errors.description = "توضیحات حداکثر باید 1000 حرف داشته باشد.";
+  } else if (description.length > 10000) {
+    errors.description = "توضیحات حداکثر باید 10000 حرف داشته باشد.";
   }
 
   //* Validate main image

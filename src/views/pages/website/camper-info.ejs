@@ -30,6 +30,13 @@
       gap: 20px;
     }
   }
+  .header-post .title--h1 {
+    word-wrap: break-word; /* اجازه می‌دهد که کلمات بلند به خط بعدی بروند */
+    overflow-wrap: break-word; /* پشتیبانی بهتر برای کلمات */
+    white-space: normal; /* از پیش‌فرض no-wrap جلوگیری می‌کند و اجازه می‌دهد که متن به خط بعدی برود */
+    overflow: hidden; /* پنهان کردن متن اضافی */
+    text-overflow: ellipsis; /* اگر لازم بود، از سه‌نقطه برای قطع کردن استفاده می‌کند */
+  }
 </style>
 
 <div class="col-12 col-md-12 col-lg-10">
@@ -43,7 +50,7 @@
             <img class="gallery-post__item cover lazyload" src="<%- image %>" data-zoom alt="" />
             <% }) %>
           </div>
-          <div class="gallery-post__caption"></div>
+          <div class="gallery-post__caption">برای مشاهده تصویر در اندازه بزرگتر، کلیک کنید</div>
         </div>
 
         <div class="caption-post">

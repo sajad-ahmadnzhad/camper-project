@@ -81,17 +81,18 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="bio" class="form-label">بیو</label>
-              <input type="text" class="form-control" id="bio" placeholder="بیو" />
+              <label for="summary" class="form-label">خلاصه</label>
+              <input type="text" class="form-control" id="summary" placeholder="خلاصه‌ای کوتاه" />
             </div>
+
             <div class="mb-3">
               <label for="email" class="form-label">ایمیل</label>
               <input type="email" class="form-control" id="email" placeholder="ایمیل" />
             </div>
 
             <div class="mb-3">
-              <label for="summary" class="form-label">خلاصه</label>
-              <input type="text" class="form-control" id="summary" placeholder="خلاصه‌ای کوتاه" />
+              <label for="bio" class="form-label">بیو</label>
+              <textarea class="form-control" name="bio" id="bio" placeholder="بیو" rows="6" cols="50"></textarea>
             </div>
           </div>
 
@@ -107,7 +108,12 @@
                       class="profile-image img-thumbnail"
                       style="width: 150px; height: 150px"
                     />
-                    <button type="button" class="btn btn-danger w-60 m-auto mt-2" id="avatarImageBtn" style="display: none">
+                    <button
+                      type="button"
+                      class="btn btn-danger w-60 m-auto mt-2"
+                      id="avatarImageBtn"
+                      style="display: none"
+                    >
                       حذف تصویر
                     </button>
                   </div>
@@ -116,7 +122,13 @@
                     <label for="avatarURL" class="btn btn-primary">انتخاب فایل</label>
                     <br />
                     <span id="file-chosen1">فایلی انتخاب نشده</span>
-                    <input class="form-control" type="file" accept=".jpg, .png, .jpeg" id="avatarURL" style="display: none" />
+                    <input
+                      class="form-control"
+                      type="file"
+                      accept=".jpg, .png, .jpeg"
+                      id="avatarURL"
+                      style="display: none"
+                    />
                   </div>
                 </div>
               </div>
@@ -134,14 +146,27 @@
                       style="width: 150px; height: 150px"
                     />
                     <!-- اضافه کردن دکمه حذف با آی‌دی resetImageBtn2 -->
-                    <button type="button" class="btn btn-danger w-60 m-auto mt-2" id="mainImageBtn" style="display: none">حذف تصویر</button>
+                    <button
+                      type="button"
+                      class="btn btn-danger w-60 m-auto mt-2"
+                      id="mainImageBtn"
+                      style="display: none"
+                    >
+                      حذف تصویر
+                    </button>
                   </div>
                   <label for="mainCover" class="form-label">تصویر زمینه</label>
                   <div class="custom-file-upload text-center">
                     <label for="mainCover" class="btn btn-primary">انتخاب فایل</label>
                     <br />
                     <span id="file-chosen2">فایلی انتخاب نشده</span>
-                    <input class="form-control" type="file" accept=".jpg, .png, .jpeg" id="mainCover" style="display: none" />
+                    <input
+                      class="form-control"
+                      type="file"
+                      accept=".jpg, .png, .jpeg"
+                      id="mainCover"
+                      style="display: none"
+                    />
                   </div>
                 </div>
               </div>

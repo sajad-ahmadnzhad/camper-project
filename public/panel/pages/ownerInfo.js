@@ -46,9 +46,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.querySelector("form").addEventListener("submit", async (e) => {
     disableSubmitButton();
-
     e.preventDefault();
     clearErrors();
+    hasError = false;
 
     const fullName = document.getElementById("fullName").value;
     const phoneNumber = document.getElementById("phoneNumber").value;
@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       hasError = true;
     });
 
-    console.log(hasError);
     if (hasError) {
       enableSubmitButton();
       return false;
