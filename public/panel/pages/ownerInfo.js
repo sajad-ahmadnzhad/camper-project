@@ -74,14 +74,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (avatarFileInput) {
       if (avatarFileInput.size > 2 * 1024 * 1024) {
         hasError = true;
-      } else if (avatarFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      } else if (avatarFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
         hasError = true;
       }
     }
     if (mainCoverFileInput) {
       if (mainCoverFileInput.size > 2 * 1024 * 1024) {
         hasError = true;
-      } else if (mainCoverFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      } else if (mainCoverFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
         hasError = true;
       }
     }
