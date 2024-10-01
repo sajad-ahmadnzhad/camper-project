@@ -9,6 +9,7 @@ function createOrUpdateCamperModal(camper = null) {
   const confirmButtonText = camper ? "بروزرسانی کمپر" : "ثبت کمپر";
 
   Swal.fire({
+    width: "550px",
     html: `
     <div class="card-body p-4">
       <h5 class="card-title fw-semibold mb-4">${confirmButtonText}</h5>
@@ -107,8 +108,102 @@ function updateCamperClickHandler(camperEncode) {
   const camper = JSON.parse(decodeURIComponent(camperEncode));
   createOrUpdateCamperModal(camper);
 }
+function showInfoCamperClickHandler(camperEncode) {
+  const camper = JSON.parse(decodeURIComponent(camperEncode));
+  const nameValue = camper ? camper.name : "";
+  const priceValue = camper ? camper.price : "";
+  const descriptionValue = camper ? camper.description : "";
+  const mainImageSrc = camper ? camper.mainImage : "/assets/images/no-image.jpg";
+
+  Swal.fire({
+    width: "550px",
+    html: `
+  <div class="card-body p-4">
+    <h5 class="card-title fw-bold mb-4 text-center">جزئیات کمپر</h5>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">نام کمپر</label>
+          <p class="form-control-static">${nameValue}</p>
+        </div>
+      </div>
+      
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">قیمت</label>
+          <p class="form-control-static">${priceValue.toLocaleString("fa-IR")} تومان</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mb-3 w-100">
+          <div class="profile-cards">
+            <label class="form-label fw-bold">تصاویر</label>
+            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3">
+              ${camper.images
+                .map(
+                  (image) =>
+                    `<div class="position-relative m-2">
+                      <img src="${image}" class="img-thumbnail camper-image" style="width: 100px; height: 100px; object-fit: cover;">
+                    </div>`
+                )
+                .join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-12 mx-auto">
+        <div class="container">
+          <div class="mb-3 text-center">
+            <div class="profile-card mx-auto">
+              <div class="text-center mb-3">
+                <img
+                  id="avatarImage"
+                  src="${mainImageSrc}"
+                  alt="Profile Image"
+                  class="profile-image img-thumbnail"
+                  style="width: 150px; height: 150px; object-fit: cover;"
+                />
+              </div>
+              <label class="form-label fw-bold">تصویر پروفایل</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label fw-bold">توضیحات</label>
+        <p class="form-control-static">${descriptionValue ? descriptionValue : "بدون توضیحات"}</p>
+      </div>
+    </div>
+  </div>
+      `,
+    showCancelButton: false,
+    showCloseButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "بازگشت به لیست",
+  });
+}
 
 async function scriptImageSelected(camper) {
+  CKEDITOR.replace("description", {
+    contentsLangDirection: "rtl",
+    language: "fa",
+    toolbar: [
+      { name: "basicstyles", items: ["Bold", "Italic", "Underline"] },
+      { name: "paragraph", items: ["BulletedList", "NumberedList"] },
+      { name: "styles", items: ["Format", "FontSize"] },
+      { name: "clipboard", items: ["Undo", "Redo"] },
+    ],
+  });
+
   const resetImageBtn = document.getElementById("resetImageBtn");
   resetImageBtn.style.display = "none";
 
@@ -181,7 +276,8 @@ async function scriptImageSelected(camper) {
 
   document.getElementById("formFiles").addEventListener("change", function (event) {
     const imagePreviewContainer = document.getElementById("imagePreviewContainer");
-    const countChildImage = imagePreviewContainer.childElementCount;
+    const countChildImage = imagePreviewContainer.querySelectorAll(".camper-image").length;
+    selectedFiles = [];
 
     const files = Array.from(event.target.files);
     clearErrors();
@@ -191,11 +287,11 @@ async function scriptImageSelected(camper) {
         child.remove();
       }
     });
-
     if (files.length > 3 || files.length + countChildImage > 3) {
       setError("formFiles", "شما فقط می‌توانید ۳ تصویر انتخاب کنید.");
       event.target.value = "";
-      return;
+      selectedFiles = [];
+      return false;
     }
 
     if (files.length > 0) {
@@ -236,6 +332,7 @@ async function scriptImageSelected(camper) {
         reader.readAsDataURL(file);
       });
     }
+    console.log(selectedFiles);
   });
 
   document.getElementById("mainImage").addEventListener("change", function (event) {
@@ -287,9 +384,10 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
 
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
-  const description = document.getElementById("description").value;
+  // const description = document.getElementById("description").value;
+  const description = CKEDITOR.instances.description.getData();
   const camperMainImage = document.getElementById("mainImage").files[0];
-  const multipleImages = document.getElementById("formFiles").files;
+  // const multipleImages = document.getElementById("formFiles").files;
 
   //* Validate form data using the external validation function
   const formData = { name, price, description, camperMainImage, multipleImages: selectedFiles };
@@ -307,7 +405,6 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
 
   const formDataToSend = new FormData();
 
-  // Append the necessary fields based on updates
   if (!camperId || name !== originalCamper.name) {
     formDataToSend.append("name", name);
   }
@@ -334,7 +431,7 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
       method: method,
       body: formDataToSend,
     });
-
+    console.log(res);
     const response = await res.json();
 
     if (res.status === 201 || res.status === 200) {
@@ -426,14 +523,14 @@ function validateCamperData({ name, price, description, camperMainImage, multipl
   } else if (parseInt(price, 10) < 90) {
     errors.price = "قیمت کمپر باید حداقل 100 باشد.";
   }
-
+  const strippeddescription = description.replace(/<[^>]*>/g, "");
   //* Validate description
-  if (!description) {
+  if (!strippeddescription) {
     errors.description = "توضیحات الزامی است.";
-  } else if (description.length < 5) {
+  } else if (strippeddescription.length < 5) {
     errors.description = "توضیحات حداقل باید 5 حرف داشته باشد.";
-  } else if (description.length > 1000) {
-    errors.description = "توضیحات حداکثر باید 1000 حرف داشته باشد.";
+  } else if (strippeddescription.length > 10000) {
+    errors.description = "توضیحات حداکثر باید 10000 حرف داشته باشد.";
   }
 
   //* Validate main image

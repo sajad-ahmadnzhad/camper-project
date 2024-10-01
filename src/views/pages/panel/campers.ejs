@@ -95,7 +95,9 @@
           </form>
         </div>
         <div class="col-md-2 d-flex justify-content-end mt-2 mt-md-0">
-          <button type="button" class="btn btn-primary form-control p-2 btn-lg" onclick="createCamperClickHandler()">ثبت کمپر جدید</button>
+          <button type="button" class="btn btn-primary form-control p-2 btn-lg" onclick="createCamperClickHandler()">
+            ثبت کمپر جدید
+          </button>
         </div>
       </div>
 
@@ -122,12 +124,20 @@
               <td class="border-bottom-0"><%= camper.price.toLocaleString('fa-IR') %> تومان</td>
               <td class="border-bottom-0 text-center">
                 <button
+                  class="btn btn-success btn-sm"
+                  onclick="showInfoCamperClickHandler('<%- encodeURIComponent(JSON.stringify(camper)) %>')"
+                >
+                  جزئیات
+                </button>
+                <button
                   class="btn btn-warning btn-sm"
                   onclick="updateCamperClickHandler('<%- encodeURIComponent(JSON.stringify(camper)) %>')"
                 >
                   ویرایش
                 </button>
-                <button class="btn btn-danger btn-sm" onclick="removeCamperClickHandler('<%= camper.id %>')">حذف</button>
+                <button class="btn btn-danger btn-sm" onclick="removeCamperClickHandler('<%= camper.id %>')">
+                  حذف
+                </button>
               </td>
             </tr>
             <% }) %> <% } else { %>
@@ -164,6 +174,13 @@
     </div>
   </div>
 </div>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
+  integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 
 <script>
   document.getElementById("search-form").addEventListener("submit", function (event) {

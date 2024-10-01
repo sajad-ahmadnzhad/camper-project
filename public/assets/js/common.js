@@ -87,27 +87,29 @@ $(document).ready(function () {
     -------------------------------------------------------------------*/
 
   // Testimonials
-  $(".js-carousel-review").each(function () {
-    var carousel = new Swiper(".js-carousel-review", {
-      slidesPerView: 2, // Default for larger screens
-      spaceBetween: 30,
-      speed: 300,
-      grabCursor: true,
-      watchOverflow: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
+  var carousel = new Swiper(".js-carousel-review", {
+    slidesPerView: 2,
+    spaceBetween: 30,
+    speed: 300,
+    grabCursor: true,
+    watchOverflow: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    autoplay: {
+      delay: 5000,
+    },
+    breakpoints: {
+      770: {
+        slidesPerView: 1,
+        spaceBetween: 20,
       },
-      autoplay: {
-        delay: 5000,
+      1024: {
+        slidesPerView: 2,
+        spaceBetween: 30,
       },
-      breakpoints: {
-        580: {
-          slidesPerView: 1, // Show only 1 camper for mobile
-          spaceBetween: 20,
-        },
-      },
-    });
+    },
   });
 
   // Clients
