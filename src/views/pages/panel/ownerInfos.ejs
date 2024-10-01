@@ -89,11 +89,10 @@
               <label for="email" class="form-label">ایمیل</label>
               <input type="email" class="form-control" id="email" placeholder="ایمیل" />
             </div>
-
-            <div class="mb-3">
-              <label for="bio" class="form-label">بیو</label>
-              <textarea class="form-control" name="bio" id="bio" placeholder="بیو" rows="6" cols="50"></textarea>
-            </div>
+          </div>
+          <div class="mb-3">
+            <label for="bio" class="form-label">بیو</label>
+            <textarea class="form-control" name="bio" id="bio" placeholder="بیو" rows="6" cols="50"></textarea>
           </div>
 
           <div class="row">
@@ -183,3 +182,21 @@
     </div>
   </div>
 </div>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
+  integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script>
+  CKEDITOR.replace("bio", {
+    contentsLangDirection: "rtl",
+    language: "fa",
+    toolbar: [
+      { name: "basicstyles", items: ["Bold", "Italic", "Underline"] },
+      { name: "paragraph", items: ["BulletedList", "NumberedList"] },
+      { name: "styles", items: ["Format", "FontSize"] },
+      { name: "clipboard", items: ["Undo", "Redo"] },
+    ],
+  });
+</script>

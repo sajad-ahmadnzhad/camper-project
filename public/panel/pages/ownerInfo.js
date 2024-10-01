@@ -1,31 +1,9 @@
 const submitButton = document.getElementById("submit-ownerInfos");
-function disableSubmitButton() {
-  submitButton.innerText = "ارسال اطلاعات...";
-  submitButton.disabled = true;
-}
-function enableSubmitButton() {
-  submitButton.innerText = "ثبت تغییرات";
-  submitButton.disabled = false;
-}
-document.getElementById("addSocialLink").addEventListener("click", () => {
-  const container = document.getElementById("socialLinksContainer");
-
-  const newInputGroup = document.createElement("div");
-  newInputGroup.classList.add("social-link-group");
-
-  newInputGroup.innerHTML = `
-    <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
-    <button type="button" class="btn remove-social-link">حذف</button>
-  `;
-
-  container.appendChild(newInputGroup);
-
-  newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
-    this.parentElement.remove();
-  });
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const preloader = document.getElementById("preloader");
+  preloader.style.display = "none";
+
   let isUpdate = false;
   document.getElementById("avatarURL").value = "";
   document.getElementById("mainCover").value = "";
@@ -53,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fullName = document.getElementById("fullName").value;
     const phoneNumber = document.getElementById("phoneNumber").value;
     const email = document.getElementById("email").value;
-    const bio = document.getElementById("bio").value;
+    const bio = CKEDITOR.instances.bio.getData();
     const summary = document.getElementById("summary").value;
 
     const formDataValue = { fullName, phoneNumber, email, bio, summary };
@@ -78,10 +56,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       fullName: document.getElementById("fullName").value,
       phoneNumber: document.getElementById("phoneNumber").value,
       email: document.getElementById("email").value,
-      bio: document.getElementById("bio").value,
+      bio: CKEDITOR.instances.bio.getData(),
       summary: document.getElementById("summary").value,
       socialLinks: socialLinks,
     };
+    console.log(formData);
 
     for (const key in currentData) {
       if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
@@ -133,6 +112,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       showAlert("error", "خطای شبکه", "یک خطای ناشناخته رخ داده است: " + error.message);
     }
+  });
+});
+
+function disableSubmitButton() {
+  submitButton.innerText = "ارسال اطلاعات...";
+  submitButton.disabled = true;
+}
+function enableSubmitButton() {
+  submitButton.innerText = "ثبت تغییرات";
+  submitButton.disabled = false;
+}
+document.getElementById("addSocialLink").addEventListener("click", () => {
+  const container = document.getElementById("socialLinksContainer");
+
+  const newInputGroup = document.createElement("div");
+  newInputGroup.classList.add("social-link-group");
+
+  newInputGroup.innerHTML = `
+    <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
+    <button type="button" class="btn remove-social-link">حذف</button>
+  `;
+
+  container.appendChild(newInputGroup);
+
+  newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
+    this.parentElement.remove();
   });
 });
 
@@ -231,12 +236,13 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarI
     errors.fullName = "نام حداکثر باید 100 حرف داشته باشد.";
   }
 
-  //* Bio validation
-  if (!bio) {
+  const strippedBio = bio.replace(/<[^>]*>/g, "");
+
+  if (!strippedBio) {
     errors.bio = "بیوگرافی نمی تواند خالی باشد.";
-  } else if (bio.length < 10) {
+  } else if (strippedBio.length < 10) {
     errors.bio = "بیوگرافی حداقل باید 10 حرف داشته باشد.";
-  } else if (bio.length > 1000) {
+  } else if (strippedBio.length > 1000) {
     errors.bio = "بیوگرافی حداکثر باید 1000 حرف داشته باشد.";
   }
 

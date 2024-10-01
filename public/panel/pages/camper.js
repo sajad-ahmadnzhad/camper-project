@@ -9,6 +9,7 @@ function createOrUpdateCamperModal(camper = null) {
   const confirmButtonText = camper ? "بروزرسانی کمپر" : "ثبت کمپر";
 
   Swal.fire({
+    width: "550px",
     html: `
     <div class="card-body p-4">
       <h5 class="card-title fw-semibold mb-4">${confirmButtonText}</h5>
@@ -115,6 +116,7 @@ function showInfoCamperClickHandler(camperEncode) {
   const mainImageSrc = camper ? camper.mainImage : "/assets/images/no-image.jpg";
 
   Swal.fire({
+    width: "550px",
     html: `
   <div class="card-body p-4">
     <h5 class="card-title fw-bold mb-4 text-center">جزئیات کمپر</h5>
@@ -129,8 +131,8 @@ function showInfoCamperClickHandler(camperEncode) {
       
       <div class="col-md-12">
         <div class="mb-3">
-          <label class="form-label fw-bold">قیمت به تومان</label>
-          <p class="form-control-static">${priceValue}</p>
+          <label class="form-label fw-bold">قیمت</label>
+          <p class="form-control-static">${priceValue.toLocaleString("fa-IR")} تومان</p>
         </div>
       </div>
     </div>
@@ -191,6 +193,17 @@ function showInfoCamperClickHandler(camperEncode) {
 }
 
 async function scriptImageSelected(camper) {
+  CKEDITOR.replace("description", {
+    contentsLangDirection: "rtl",
+    language: "fa",
+    toolbar: [
+      { name: "basicstyles", items: ["Bold", "Italic", "Underline"] },
+      { name: "paragraph", items: ["BulletedList", "NumberedList"] },
+      { name: "styles", items: ["Format", "FontSize"] },
+      { name: "clipboard", items: ["Undo", "Redo"] },
+    ],
+  });
+
   const resetImageBtn = document.getElementById("resetImageBtn");
   resetImageBtn.style.display = "none";
 
@@ -371,9 +384,10 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
 
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
-  const description = document.getElementById("description").value;
+  // const description = document.getElementById("description").value;
+  const description = CKEDITOR.instances.description.getData();
   const camperMainImage = document.getElementById("mainImage").files[0];
-  const multipleImages = document.getElementById("formFiles").files;
+  // const multipleImages = document.getElementById("formFiles").files;
 
   //* Validate form data using the external validation function
   const formData = { name, price, description, camperMainImage, multipleImages: selectedFiles };
@@ -408,8 +422,6 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
   for (let i = 0; i < selectedFiles.length; i++) {
     formDataToSend.append("camperImages", selectedFiles[i]);
   }
-  console.log(selectedFiles);
-  console.log(formDataToSend);
 
   const url = isUpdate ? `http://localhost:3002/api/campers/${camperId}` : "http://localhost:3002/api/campers";
   const method = isUpdate ? "PUT" : "POST";
@@ -511,13 +523,13 @@ function validateCamperData({ name, price, description, camperMainImage, multipl
   } else if (parseInt(price, 10) < 90) {
     errors.price = "قیمت کمپر باید حداقل 100 باشد.";
   }
-
+  const strippeddescription = description.replace(/<[^>]*>/g, "");
   //* Validate description
-  if (!description) {
+  if (!strippeddescription) {
     errors.description = "توضیحات الزامی است.";
-  } else if (description.length < 5) {
+  } else if (strippeddescription.length < 5) {
     errors.description = "توضیحات حداقل باید 5 حرف داشته باشد.";
-  } else if (description.length > 10000) {
+  } else if (strippeddescription.length > 10000) {
     errors.description = "توضیحات حداکثر باید 10000 حرف داشته باشد.";
   }
 

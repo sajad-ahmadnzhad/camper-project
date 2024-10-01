@@ -41,7 +41,7 @@
     <!-- About -->
     <div class="pb-0 pb-sm-2">
       <h1 class="title title--h1 first-title title__separate">درباره ی من</h1>
-      <p><%- ownerInfo?.bio ? ownerInfo.bio : "توضیحاتی وجود ندارد" %></p>
+      <%- ownerInfo?.bio ? ownerInfo.bio : "توضیحاتی وجود ندارد" %>
     </div>
 
     <div class="mt-2">
@@ -58,12 +58,12 @@
               <h4 class="title title--h5" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
                 <%- camper.name %>
               </h4>
-              <p
+              <div
                 class="review-item__caption"
                 style="color: black; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
               >
                 <%- camper.description.length > 77 ? camper.description.substring(0, 77) + '...' : camper.description %>
-              </p>
+              </div>
             </div>
           </a>
           <% }) %> <% } else { %>
