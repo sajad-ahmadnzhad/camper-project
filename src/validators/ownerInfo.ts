@@ -15,12 +15,15 @@ export const createOwnerInfoSchema = Joi.object({
     "string.max": "بیوگرافی حداکثر باید 1000 حرف داشته باشد.",
     "any.required": "بیوگرافی اجباری می باشد.",
   }),
-  phoneNumber: Joi.string().pattern(/^09\d{9}$/).required().messages({
-    "string.base": "شماره تلفن باید یک رشته باشد.",
-    "string.empty": "شماره تلفن نمی تواند خالی باشد.",
-    "any.required": "شماره تلفن اجباری می باشد.",
-    "string.pattern.base":"شماره موبایل وارد شده نادرست می باشد."
-  }),
+  phoneNumber: Joi.string()
+    .pattern(/^09\d{9}$/)
+    .required()
+    .messages({
+      "string.base": "شماره تلفن باید یک رشته باشد.",
+      "string.empty": "شماره تلفن نمی تواند خالی باشد.",
+      "any.required": "شماره تلفن اجباری می باشد.",
+      "string.pattern.base": "شماره موبایل وارد شده نادرست می باشد.",
+    }),
   email: Joi.string().email().optional().messages({
     "string.base": "ایمیل باید یک رشته باشد.",
     "string.empty": "ایمیل نمی تواند خالی باشد.",
@@ -80,11 +83,19 @@ export const updateOwnerInfoSchema = Joi.object({
     "string.min": "خلاصه حداقل باید 5 حرف داشته باشد.",
     "string.max": "خلاصه حداکثر باید 30 حرف داشته باشد.",
   }),
-  socialLinks: Joi.array()
-    .items(
-      Joi.string().messages({
-        "string.base": "لینک شبکه اجتماعی باید یک رشته باشد.",
-        "string.empty": "لینک شبکه اجتماعی نمی تواند خالی باشد.",
+  socialLinks: Joi.alternatives()
+    .try(
+      Joi.array().items(
+        Joi.string().messages({
+          "string.base": "لینک شبکه اجتماعی باید یک رشته باشد.",
+          "string.empty": "لینک شبکه اجتماعی نمی تواند خالی باشد.",
+        })
+      ),
+      Joi.string().custom((value) => {
+        if (value === "[]") {
+          return [];
+        }
+        return value;
       })
     )
     .optional()

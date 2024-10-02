@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
         if (key === "socialLinks") {
           if (currentData[key].length === 0) {
+            formData.append(key, JSON.stringify([]));
           } else {
             currentData[key].forEach((link, index) => {
               formData.append(`socialLinks[${index}]`, link);
