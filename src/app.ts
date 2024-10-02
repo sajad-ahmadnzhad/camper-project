@@ -14,6 +14,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "express-flash";
+import checkLogin from "./middlewares/checkLogin";
 
 const app = express();
 
@@ -45,7 +46,7 @@ app.use("/api/campers", camperRouter);
 app.use("/api/ownerInfo", ownerInfoRouter);
 app.use("/api/auth", authRouter);
 
-app.use(notFoundMiddleware);
+app.use(checkLogin, notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 app.listen(PORT, () => {

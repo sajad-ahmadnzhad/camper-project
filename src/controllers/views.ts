@@ -112,17 +112,3 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
     isLogin: !!(req as any).user,
   });
 });
-export const contact = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const ownerInfo = await OwnerInfoModel.findOne();
-  res.render("pages/website/contact.ejs", { page: "contact", ownerInfo: ownerInfo?.dataValues });
-});
-export const resume = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const ownerInfo = await OwnerInfoModel.findOne();
-  console.log(ownerInfo?.dataValues);
-  res.render("pages/website/resume.ejs", { page: "resume", ownerInfo: ownerInfo?.dataValues });
-});
-export const works = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const ownerInfo = await OwnerInfoModel.findOne();
-  console.log(ownerInfo?.dataValues);
-  res.render("pages/website/works.ejs", { page: "works", ownerInfo: ownerInfo?.dataValues });
-});

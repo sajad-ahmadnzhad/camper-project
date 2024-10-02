@@ -44,6 +44,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (req.path === "/login") {
       return res.redirect("/panel");
     }
+    //@ts-ignore
+    req.user = admin.dataValues;
 
     next();
   } catch (error) {

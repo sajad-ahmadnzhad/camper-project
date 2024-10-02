@@ -1,15 +1,5 @@
 import { Router } from "express";
-import {
-  about,
-  campersPanel,
-  campers,
-  contact,
-  login,
-  ownerInfos,
-  resume,
-  works,
-  camperInfo,
-} from "../controllers/views";
+import { about, campersPanel, campers, login, ownerInfos, camperInfo } from "../controllers/views";
 import redirectAuthMiddleware from "./../middlewares/redirectAuth";
 import checkLogin from "./../middlewares/checkLogin";
 
@@ -21,10 +11,7 @@ router.get("/panel/campers", redirectAuthMiddleware, campersPanel);
 router.get("/login", redirectAuthMiddleware, login);
 
 router.get("/", checkLogin, about);
-router.get("/camper", camperInfo);
-router.get("/campers", campers);
-router.get("/contact", contact);
-router.get("/resume", resume);
-router.get("/works", works);
+router.get("/camper", checkLogin, camperInfo);
+router.get("/campers", checkLogin, campers);
 
 export default router;
