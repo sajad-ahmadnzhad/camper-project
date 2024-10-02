@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   } catch (error) {
     console.log("User does not exist or error fetching data", error.message);
+    console.log(error);
   }
 
   document.querySelector("form").addEventListener("submit", async (e) => {
@@ -101,13 +102,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (!hasError) {
-      const formData = new FormData();
       if (avatarFileInput) formData.append("avatar", avatarFileInput);
       if (mainCoverFileInput) formData.append("cover", mainCoverFileInput);
     } else {
       enableSubmitButton();
       return false;
     }
+
+    console.log(formData);
 
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
     const apiUrl = `http://localhost:3002/api/ownerInfo`;
@@ -193,22 +195,22 @@ function fillFormWithUserData(data = {}) {
 
   const socialLinksContainer = document.getElementById("socialLinksContainer");
 
-  socialLinksContainer.innerHTML = "";
-  data.socialLinks.forEach((link) => {
-    const newInputGroup = document.createElement("div");
-    newInputGroup.classList.add("social-link-group");
+  // socialLinksContainer.innerHTML = "";
+  // data.socialLinks.forEach((link) => {
+  //   const newInputGroup = document.createElement("div");
+  //   newInputGroup.classList.add("social-link-group");
 
-    newInputGroup.innerHTML = `
-      <input type="url" class="form-control social-link" value="${link}" />
-      <button type="button" class=" remove-social-link">حذف</button>
-    `;
+  //   newInputGroup.innerHTML = `
+  //     <input type="url" class="form-control social-link" value="${link}" />
+  //     <button type="button" class=" remove-social-link">حذف</button>
+  //   `;
 
-    newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
-      this.parentElement.remove();
-    });
+  //   newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
+  //     this.parentElement.remove();
+  //   });
 
-    socialLinksContainer.appendChild(newInputGroup);
-  });
+  //   socialLinksContainer.appendChild(newInputGroup);
+  // });
 }
 
 document.getElementById("avatarURL").addEventListener("change", function (event) {
