@@ -36,19 +36,24 @@ export const createOwnerInfoSchema = Joi.object({
     "string.max": "خلاصه حداکثر باید 30 حرف داشته باشد.",
     "any.required": "خلاصه اجباری می باشد.",
   }),
-  socialLinks: Joi.array()
-    .items(
-      Joi.string().messages({
-        "string.base": "لینک شبکه اجتماعی باید یک رشته باشد.",
-        "string.empty": "لینک شبکه اجتماعی نمی تواند خالی باشد.",
-      })
-    )
-    .optional()
-    .default([])
-    .messages({
-      "array.base": "لینک های شبکه اجتماعی باید یک آرایه باشد.",
-      "array.empty": "لینک های شبکه اجتماعی نمی تواند خالی باشد.",
-    }),
+  instagram: Joi.string().max(100).optional().messages({
+    "string.base": "لینک اینستاگرام باید یک رشته باشد.",
+    "string.empty": "لینک اینستاگرام نمی تواند خالی باشد.",
+    "string.max": "لینک اینستاگرام حداکثر باید 100 حرف داشته باشد.",
+    "any.required": "لینک اینستاگرام اجباری می باشد.",
+  }),
+  telegram: Joi.string().max(100).optional().messages({
+    "string.base": "لینک تلگرام باید یک رشته باشد.",
+    "string.empty": "لینک تلگرام نمی تواند خالی باشد.",
+    "string.max": "لینک تلگرام حداکثر باید 30 حرف داشته باشد.",
+    "any.required": "لینک تلگرام اجباری می باشد.",
+  }),
+  whatsapp: Joi.string().max(100).optional().messages({
+    "string.base": "لینک واتساپ باید یک رشته باشد.",
+    "string.empty": "لینک واتساپ نمی تواند خالی باشد.",
+    "string.max": "لینک واتساپ حداکثر باید 30 حرف داشته باشد.",
+    "any.required": "لینک واتساپ اجباری می باشد.",
+  }),
 });
 
 export const updateOwnerInfoSchema = Joi.object({
@@ -83,25 +88,22 @@ export const updateOwnerInfoSchema = Joi.object({
     "string.min": "خلاصه حداقل باید 5 حرف داشته باشد.",
     "string.max": "خلاصه حداکثر باید 30 حرف داشته باشد.",
   }),
-  socialLinks: Joi.alternatives()
-    .try(
-      Joi.array().items(
-        Joi.string().messages({
-          "string.base": "لینک شبکه اجتماعی باید یک رشته باشد.",
-          "string.empty": "لینک شبکه اجتماعی نمی تواند خالی باشد.",
-        })
-      ),
-      Joi.string().custom((value) => {
-        if (value === "[]") {
-          return [];
-        }
-        return value;
-      })
-    )
-    .optional()
-    .default([])
-    .messages({
-      "array.base": "لینک های شبکه اجتماعی باید یک آرایه باشد.",
-      "array.empty": "لینک های شبکه اجتماعی نمی تواند خالی باشد.",
-    }),
+  instagram: Joi.string().max(100).optional().messages({
+    "string.base": "لینک اینستاگرام باید یک رشته باشد.",
+    "string.empty": "لینک اینستاگرام نمی تواند خالی باشد.",
+    "string.max": "لینک اینستاگرام حداکثر باید 100 حرف داشته باشد.",
+    "any.required": "لینک اینستاگرام اجباری می باشد.",
+  }),
+  telegram: Joi.string().max(100).optional().messages({
+    "string.base": "لینک تلگرام باید یک رشته باشد.",
+    "string.empty": "لینک تلگرام نمی تواند خالی باشد.",
+    "string.max": "لینک تلگرام حداکثر باید 30 حرف داشته باشد.",
+    "any.required": "لینک تلگرام اجباری می باشد.",
+  }),
+  whatsapp: Joi.string().max(100).optional().messages({
+    "string.base": "لینک واتساپ باید یک رشته باشد.",
+    "string.empty": "لینک واتساپ نمی تواند خالی باشد.",
+    "string.max": "لینک واتساپ حداکثر باید 30 حرف داشته باشد.",
+    "any.required": "لینک واتساپ اجباری می باشد.",
+  }),
 });

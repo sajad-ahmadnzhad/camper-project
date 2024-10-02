@@ -24,7 +24,6 @@ const OwnerInfo = db.define(
       allowNull: false,
       unique: true,
     },
-    socialLinks: DataTypes.JSON,
     avatarURL: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -40,6 +39,18 @@ const OwnerInfo = db.define(
     summary: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    instagram: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    telegram: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    whatsapp: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   { timestamps: true, version: false }
