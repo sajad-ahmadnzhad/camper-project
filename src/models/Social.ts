@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../configs/db";
-import OwnerInfoModel from "./OwnerInfo";
 
 const Social = db.define("Social", {
   id: {
@@ -24,7 +23,5 @@ const Social = db.define("Social", {
     allowNull: false,
   },
 });
-
-// Social.belongsTo(OwnerInfoModel);
 
 export default Social;

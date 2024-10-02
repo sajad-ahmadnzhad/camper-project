@@ -9,6 +9,7 @@ import path from "path";
 import ownerInfoRouter from "./routes/ownerInfo";
 import viewsRouter from "./routes/views";
 import authRouter from "./routes/auth";
+import socialRouter from "./routes/social";
 import expressEjsLayouts from "express-ejs-layouts";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -45,6 +46,7 @@ app.use("/", viewsRouter);
 app.use("/api/campers", camperRouter);
 app.use("/api/ownerInfo", ownerInfoRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/social", socialRouter);
 
 app.use(checkLogin, notFoundMiddleware);
 app.use(errorHandlerMiddleware);

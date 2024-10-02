@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../configs/db";
-import Social from "./Social";
 
 const OwnerInfo = db.define(
   "OwnerInfo",
@@ -45,7 +44,5 @@ const OwnerInfo = db.define(
   },
   { timestamps: true, version: false }
 );
-
-// OwnerInfo.hasOne(Social, { onDelete: "CASCADE" });
 
 export default OwnerInfo;
