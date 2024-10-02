@@ -90,3 +90,29 @@ export const getOne = async (
     next(error);
   }
 };
+
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    if (!Number(id)) {
+      throw new httpErrors.BadRequest("آیدی ارسال شده نامعبتر می باشد.");
+    }
+
+    const social = await SocialModel.findOne({ where: { id } });
+
+    if (!social) {
+      throw new httpErrors.NotFound("شبکه اجتماعی پیدا نشد.");
+    }
+
+    await SocialModel.destroy({ where: { id } });
+
+    res.json({ message: "شبکه اجتماعی با موفقیت حذف شد."});
+  } catch (error) {
+    next(error);
+  }
+};
