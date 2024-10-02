@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const fullName = document.getElementById("fullName").value;
     const phoneNumber = document.getElementById("phoneNumber").value;
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const bio = CKEDITOR.instances.bio.getData();
     const summary = document.getElementById("summary").value;
 
@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const currentData = {
       fullName: document.getElementById("fullName").value,
       phoneNumber: document.getElementById("phoneNumber").value,
-      email: document.getElementById("email").value,
-      bio: CKEDITOR.instances.bio.getData(),
+      email: document.getElementById("email").value.trim(),
+      bio: CKEDITOR.instances.bio.getData().trim(),
       summary: document.getElementById("summary").value,
       socialLinks: socialLinks,
     };
@@ -59,37 +59,51 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const key in currentData) {
       if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
         if (key === "socialLinks") {
-          currentData[key].forEach((link, index) => {
-            formData.append(`socialLinks[${index}]`, link);
-          });
+          if (currentData[key].length === 0) {
+          } else {
+            currentData[key].forEach((link, index) => {
+              formData.append(`socialLinks[${index}]`, link);
+            });
+          }
         } else {
           formData.append(key, currentData[key]);
         }
       }
     }
 
-    const avatarFileInput = document.getElementById("avatarURL").files[0];
-    const mainCoverFileInput = document.getElementById("mainCover").files[0];
+    // return false;
+
+    const avatarInputElement = document.getElementById("avatarURL");
+    const mainCoverInputElement = document.getElementById("mainCover");
+
+    const avatarFileInput = avatarInputElement.files[0];
+    const mainCoverFileInput = mainCoverInputElement.files[0];
 
     if (avatarFileInput) {
       if (avatarFileInput.size > 2 * 1024 * 1024) {
+        avatarInputElement.value = "";
         hasError = true;
-      } else if (avatarFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
+      } else if (!["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
+        avatarInputElement.value = "";
         hasError = true;
       }
     }
+
     if (mainCoverFileInput) {
       if (mainCoverFileInput.size > 2 * 1024 * 1024) {
+        mainCoverInputElement.value = "";
         hasError = true;
-      } else if (mainCoverFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
+      } else if (!["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
+        mainCoverInputElement.value = "";
         hasError = true;
       }
     }
 
-    if (avatarFileInput) formData.append("avatar", avatarFileInput);
-    if (mainCoverFileInput) formData.append("cover", mainCoverFileInput);
-
-    if (hasError) {
+    if (!hasError) {
+      const formData = new FormData();
+      if (avatarFileInput) formData.append("avatar", avatarFileInput);
+      if (mainCoverFileInput) formData.append("cover", mainCoverFileInput);
+    } else {
       enableSubmitButton();
       return false;
     }
@@ -111,8 +125,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         showAlertWithReload("success", "موفق", "اطلاعات مالک با موفقیت ثبت شد");
       } else if (res.status === 400) {
         const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+        enableSubmitButton();
         showAlert("error", "خطا", errorMessage);
       } else if (res.status >= 500 && res.status < 600) {
+        enableSubmitButton();
         showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً مجدداً تلاش کنید.");
       } else {
         showAlert("error", "خطا شبکه", "خطایی از سمت سرور پیش آمده");
@@ -241,7 +257,7 @@ document.getElementById("mainCover").addEventListener("change", function (event)
   }
 });
 
-function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarImage, mainCoverImage }, isUpdate) {
+function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary }, isUpdate) {
   let errors = {};
 
   //* Trim input fields
@@ -279,7 +295,9 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, avatarI
   }
 
   //* Email validation
-  if (email && !/\S+@\S+\.\S+/.test(email)) {
+  if (!email) {
+    errors.email = "ایمیل نمی تواند خالی باشد.";
+  } else if (email && !/\S+@\S+\.\S+/.test(email)) {
     errors.email = "ایمیل نادرست می باشد.";
   }
 

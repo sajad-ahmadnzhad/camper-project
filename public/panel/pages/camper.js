@@ -60,7 +60,7 @@ function createOrUpdateCamperModal(camper = null) {
                       حذف تصویر
                       </button>
                   </div>
-                  <label for="mainImage" class="form-label">تصویر پروفایل</label>
+                  <label for="mainImage" class="form-label">تصویر اصلی</label>
                   <div class="custom-file-upload text-center">
                     <label for="mainImage" class="btn btn-primary">انتخاب فایل</label>
                     <br />
@@ -169,7 +169,7 @@ function showInfoCamperClickHandler(camperEncode) {
                   style="width: 150px; height: 150px; object-fit: cover;"
                 />
               </div>
-              <label class="form-label fw-bold">تصویر پروفایل</label>
+              <label class="form-label fw-bold">تصویر اصلی</label>
             </div>
           </div>
         </div>

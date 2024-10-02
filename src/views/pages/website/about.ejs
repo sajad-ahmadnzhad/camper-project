@@ -73,7 +73,9 @@
                   text-overflow: ellipsis;
                 "
               >
-                <%- camper.description.length > 77 ? camper.description.substring(0, 77) + '...' : camper.description %>
+                <%- camper.description.replace(/(<([^>]+)>)/gi, "").length > 77 ?
+                camper.description.replace(/(<([^>]+)>)/gi, "").substring(0, 77) + '...' :
+                camper.description.replace(/(<([^>]+)>)/gi, "") %>
               </div>
             </div>
           </a>
