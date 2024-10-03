@@ -1,10 +1,15 @@
 <div class="col-12 col-md-12 col-lg-10">
   <div class="box box-content">
     <div class="pb-3">
+      <a class="footer-post__share" href="javascript:void(0);" id="back-button">
+        <i class="fa fa-arrow-right"></i>
+        <span>بازگشت به لیست کمپرها</span>
+      </a>
       <header class="header-post">
         <h1 class="title title--h1"><%- camper.name %></h1>
         <div class="gallery-post">
           <div class="gallery-post__images">
+            <img class="gallery-post__item cover lazyload" src="<%- camper.mainImage %>" data-zoom alt="" />
             <% camper.images.forEach(function(image) { %>
             <img class="gallery-post__item cover lazyload" src="<%- image %>" data-zoom alt="" />
             <% }) %>
@@ -17,7 +22,7 @@
       <footer class="footer-post">
         <a
           class="footer-post__share"
-          href="https://telegram.com/<%- ownerInfo.telegram %>"
+          href="https://t.me/<%- ownerInfo.telegram %>"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -46,3 +51,16 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById("back-button").addEventListener("click", function () {
+    var referrer = document.referrer;
+    console.log(referrer);
+
+    if (referrer.includes("/campers")) {
+      window.history.back();
+    } else {
+      window.location.href = "/campers";
+    }
+  });
+</script>
