@@ -9,7 +9,7 @@ import pagination from "../utils/pagination";
 //* panel
 export const ownerInfos = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.locals.layout = "layouts/panel/main.ejs";
-  res.render("pages/panel/ownerInfos.ejs", { page: "owner-infos" });
+  res.render("pages/panel/ownerInfos.ejs", { page: "owner-infos", apiKey: process.env.API_KEY });
 });
 
 export const campersPanel = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +43,7 @@ export const campersPanel = asyncHandler(async (req: Request, res: Response, nex
     campers: parsedCampers || {},
     pagination: paginationItem,
     query: req.query || "",
+    apiKey: process.env.API_KEY,
   });
 });
 
@@ -64,6 +65,7 @@ export const about = asyncHandler(async (req: Request, res: Response, next: Next
     ownerInfo: ownerInfo?.dataValues || {},
     campers: parsedCampers || {},
     isLogin: !!(req as any).user,
+    apiKey: process.env.API_KEY,
   });
 });
 export const campers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -93,6 +95,7 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     pagination: paginationItem,
     query: req.query || "",
     isLogin: !!(req as any).user,
+    apiKey: process.env.API_KEY,
   });
 });
 export const camperInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -105,6 +108,7 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
     ownerInfo: ownerInfo?.dataValues || {},
     camper,
     isLogin: !!(req as any).user,
+    apiKey: process.env.API_KEY,
   });
 });
 
@@ -112,5 +116,5 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
 export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.locals.layout = "layouts/auth/main.ejs";
 
-  res.render("pages/auth/login.ejs", { page: "login" });
+  res.render("pages/auth/login.ejs", { page: "login", apiKey: process.env.API_KEY });
 });

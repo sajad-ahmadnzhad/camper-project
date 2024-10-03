@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("mainCover").value = "";
 
   try {
-    const response = await fetch(`http://localhost:3002/api/ownerInfo`);
+    const response = await fetch(`${apiKey}/api/ownerInfo`);
     const data = (await response.json()) || {};
 
     if (response.ok) {
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
-    const apiUrl = `http://localhost:3002/api/ownerInfo`;
+    const apiUrl = `${apiKey}/api/ownerInfo`;
 
     try {
       const res = await fetch(apiUrl, {
@@ -221,17 +221,10 @@ document.getElementById("mainCover").addEventListener("change", function (event)
 
 const socialLinksContainer = document.getElementById("socialLinksContainer");
 
-function validateOwnerInfo({
-  fullName,
-  phoneNumber,
-  email,
-  bio,
-  summary,
-  telegram,
-  instagram,
-  avatarFileInput,
-  mainCoverFileInput,
-}) {
+function validateOwnerInfo(
+  { fullName, phoneNumber, email, bio, summary, telegram, instagram, avatarFileInput, mainCoverFileInput },
+  isUpdate
+) {
   let errors = {};
 
   //* Trim input fields
@@ -296,22 +289,22 @@ function validateOwnerInfo({
   }
 
   //* Avatar File
-  if (!avatarFileInput) {
+  if (!isUpdate && !avatarFileInput) {
     errors.avatarURL = "تصویر پروفایل نمی تواند خالی باشد.";
   } else {
-    if (avatarFileInput.size > 2 * 1024 * 1024) {
+    if (avatarFileInput && avatarFileInput.size > 2 * 1024 * 1024) {
       errors.avatarURL = "حجم تصویر پروفایل نباید بیشتر از ۲ مگابایت باشد.";
-    } else if (!["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
+    } else if (avatarFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
       errors.avatarURL = "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.";
     }
   }
 
   //* Main Cover File
-  if (!mainCoverFileInput) {
+  if (!isUpdate && !mainCoverFileInput) {
     errors.mainCover = "تصویر زمینه نمی تواند خالی باشد.";
-  } else if (mainCoverFileInput.size > 2 * 1024 * 1024) {
-    errors.avatarURL = "حجم تصویر زمینه نباید بیشتر از ۲ مگابایت باشد.";
-  } else if (!["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
+  } else if (mainCoverFileInput && mainCoverFileInput.size > 2 * 1024 * 1024) {
+    errors.mainCover = "حجم تصویر زمینه نباید بیشتر از ۲ مگابایت باشد.";
+  } else if (mainCoverFileInput && !["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
     errors.mainCover = "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.";
   }
 

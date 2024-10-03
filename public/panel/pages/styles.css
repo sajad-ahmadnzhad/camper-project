@@ -94,56 +94,7 @@
 .footer-post__share:hover {
   color: #007bff; 
 }
-.btn-danger {
-  background-color: #ff6f61;
-  border: 2px solid #ff6f61;
-  border-radius: 8px;
-  padding: 8px 16px;
-  color: white;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  margin-right: 10px;
-  margin-left: 10px;
-}
 
-.btn-danger:hover {
-  background-color: #ff4433;
-  border-color: #ff4433;
-  box-shadow: 0 4px 12px rgba(255, 111, 97, 0.3);
-  transform: scale(1.05);
-}
-
-.btn-danger:focus {
-  outline: none;
-}
-
-.social-link-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.social-link {
-  flex-grow: 1;
-  border-radius: 4px;
-  padding: 8px;
-  border: 1px solid #ddd;
-}
-
-.remove-social-link {
-  background-color: #dc3545;
-  border: none;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.remove-social-link:hover {
-  background-color: #c82333;
-}
 
 /************************ PANEL / CAMPERS *************************/
 .table .camper-name {
@@ -186,7 +137,7 @@
   transform: scale(1.05);
 }
 
-.btn {
+/* .btn {
   font-size: 14px;
   padding: 5px 10px;
   border-radius: 0.25rem;
@@ -213,11 +164,10 @@
   text-align: center;
 }
 
-/* استایل متن برای حالت "هیچ کمپی وجود ندارد" */
 .table tbody tr td[colspan="5"] {
   font-size: 16px;
   color: #6c757d;
-}
+} */
 /************************ WEBSITE / ABOUT *************************/
 .avatar-container {
   display: inline-block;

@@ -36,7 +36,7 @@ function createOrUpdateCamperModal(camper = null) {
                   <label for="formFiles" class="btn btn-primary">انتخاب تصاویر</label>
                   <input class="form-control" type="file" accept=".jpg, .png, .jpeg" id="formFiles" multiple style="display: none" />
                 </div>
-                <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3"></div>
+                <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3 justify-content-center align-items-center"></div>
               </div>
             </div>
           </div>
@@ -142,16 +142,17 @@ function showInfoCamperClickHandler(camperEncode) {
         <div class="mb-3 w-100">
           <div class="profile-cards">
             <label class="form-label fw-bold">تصاویر</label>
-            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3">
-              ${camper.images
-                .map(
-                  (image) =>
-                    `<div class="position-relative m-2">
-                      <img src="${image}" class="img-thumbnail camper-image" style="width: 100px; height: 100px; object-fit: cover;">
-                    </div>`
-                )
-                .join("")}
-            </div>
+              <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3 justify-content-center align-items-center">
+                ${camper.images
+                  .map(
+                    (image) =>
+                      `<div class="position-relative m-2">
+                        <img src="${image}" class="img-thumbnail camper-image" style="width: 100px; height: 100px; object-fit: cover;">
+                      </div>`
+                  )
+                  .join("")}
+              </div>
+
           </div>
         </div>
       </div>
@@ -240,7 +241,7 @@ async function scriptImageSelected(camper) {
           }).then(async (result) => {
             if (result.isConfirmed) {
               try {
-                const res = await fetch(`http://localhost:3002/api/campers/remove-image/${camper.id}`, {
+                const res = await fetch(`${apiKey}/api/campers/remove-image/${camper.id}`, {
                   method: "DELETE",
                   body: JSON.stringify({ image: camper.images[index] }),
                   headers: {
@@ -423,7 +424,7 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     formDataToSend.append("camperImages", selectedFiles[i]);
   }
 
-  const url = isUpdate ? `http://localhost:3002/api/campers/${camperId}` : "http://localhost:3002/api/campers";
+  const url = isUpdate ? `${apiKey}/api/campers/${camperId}` : `${apiKey}/api/campers`;
   const method = isUpdate ? "PUT" : "POST";
 
   try {
@@ -473,7 +474,7 @@ function removeCamperClickHandler(camperId) {
   }).then((result) => {
     if (result.isConfirmed) {
       try {
-        fetch(`http://localhost:3002/api/campers/${camperId}`, { method: "DELETE" })
+        fetch(`${apiKey}/api/campers/${camperId}`, { method: "DELETE" })
           .then(async (res) => {
             const response = await res.json();
 
