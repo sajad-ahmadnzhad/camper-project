@@ -42,13 +42,9 @@ const OwnerInfo = db.define(
     },
     instagram: {
       type: DataTypes.STRING,
-      allowNull: true
-    },
-    telegram: {
-      type: DataTypes.STRING,
       allowNull: true,
     },
-    whatsapp: {
+    telegram: {
       type: DataTypes.STRING,
       allowNull: true,
     },

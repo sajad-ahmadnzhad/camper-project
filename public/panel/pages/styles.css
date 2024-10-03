@@ -26,3 +26,123 @@
   border-radius: 10px;
   object-fit: cover;
 }
+
+/* website */
+.gallery-post {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin-left: 12px;
+}
+
+.gallery-post__images {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.gallery-post__item {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .gallery-post__images {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+.header-post .title--h1 {
+  word-wrap: break-word; /* اجازه می‌دهد که کلمات بلند به خط بعدی بروند */
+  overflow-wrap: break-word; /* پشتیبانی بهتر برای کلمات */
+  white-space: normal; /* از پیش‌فرض no-wrap جلوگیری می‌کند و اجازه می‌دهد که متن به خط بعدی برود */
+  overflow: hidden; /* پنهان کردن متن اضافی */
+  text-overflow: ellipsis; /* اگر لازم بود، از سه‌نقطه برای قطع کردن استفاده می‌کند */
+}
+.footer-post {
+  display: flex;
+  justify-content: center; /* تراز وسط برای آیکون‌ها و متن‌ها */
+  gap: 40px; /* فاصله بین هر لینک */
+}
+
+.footer-post__share {
+  display: flex;
+  align-items: center; /* هم‌ترازی عمودی آیکون و متن */
+  text-decoration: none;
+  color: #000; /* رنگ متن و آیکون */
+}
+.footer-post__share span {
+  margin-right: 6px;
+}
+
+.footer-post__share i {
+  font-size: 24px; /* اندازه بزرگتر آیکون‌ها */
+  margin-right: 10px; /* فاصله بین آیکون و متن */
+}
+
+.footer-post__share span {
+  font-size: 14px; /* اندازه متن */
+}
+
+.footer-post__share:hover {
+  color: #007bff; /* تغییر رنگ هنگام هاور شدن */
+}
+/* panel */
+.btn-danger {
+  background-color: #ff6f61;
+  border: 2px solid #ff6f61;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: white;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.btn-danger:hover {
+  background-color: #ff4433;
+  border-color: #ff4433;
+  box-shadow: 0 4px 12px rgba(255, 111, 97, 0.3);
+  transform: scale(1.05);
+}
+
+.btn-danger:focus {
+  outline: none;
+}
+
+/* استایل جدید برای لینک‌های شبکه اجتماعی */
+.social-link-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.social-link {
+  flex-grow: 1;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.remove-social-link {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.remove-social-link:hover {
+  background-color: #c82333;
+}

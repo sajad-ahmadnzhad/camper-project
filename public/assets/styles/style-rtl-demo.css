@@ -1858,7 +1858,7 @@ button:focus {
   align-items: baseline;
   color: #3B4B5E;
   font-size: 0.875rem;
-  margin: 0 1.125rem;
+  /* margin: 0 1.125rem; */
 }
 .footer-post__share > * {
   min-width: 0;

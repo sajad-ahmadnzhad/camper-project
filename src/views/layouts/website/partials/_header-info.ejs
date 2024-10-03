@@ -1,3 +1,14 @@
+<style>
+  .header__contact a {
+    color: inherit; /* از رنگ پیش‌فرض متن استفاده می‌کند */
+    text-decoration: none; /* خط زیر متن را حذف می‌کند */
+  }
+
+  .header__contact a:hover {
+    text-decoration: underline; /* خط زیر متن هنگام هاور */
+  }
+</style>
+
 <header class="header box">
   <div class="header__left">
     <div class="header__photo">
@@ -11,13 +22,31 @@
       <div class="status"><%- ownerInfo?.summary ? ownerInfo?.summary : "" %></div>
       <ul class="header__social">
         <li>
-          <a href="https://www.facebook.com/"><i class="font-icon icon-facebook1"></i></a>
+          <a
+            class="footer-post__share"
+            href="https://telegram.com/<%- ownerInfo.telegram %>"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fa fa-telegram"></i
+          ></a>
         </li>
         <li>
-          <a href="https://www.twitter.com/"><i class="font-icon icon-twitter1"></i></a>
+          <a
+            class="footer-post__share"
+            href="https://instagram.com/<%- ownerInfo.instagram %>"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fa fa-instagram"></i
+          ></a>
         </li>
         <li>
-          <a href="https://www.instagram.com/"><i class="font-icon icon-instagram1"></i></a>
+          <a
+            class="footer-post__share"
+            href="https://wa.me/<%- ownerInfo.phoneNumber.replace(/^0/, '') %>"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fa fa-whatsapp"></i
+          ></a>
         </li>
       </ul>
     </div>
@@ -25,11 +54,17 @@
   <div class="header__right">
     <ul class="header__contact">
       <li><span class="overhead">ایمیل</span><%- ownerInfo?.email ? ownerInfo?.email : "" %></li>
-      <li><span class="overhead">تلفن</span><%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : "" %></li>
+
+      <li>
+        <span class="overhead">تلفن</span
+        ><a href="tel:<%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : '' %>"
+          ><%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : "" %></a
+        >
+      </li>
     </ul>
     <!-- <ul class="header__contact">
-      <li><span class="overhead">تولد</span>2 شهریور 1378</li>
-      <li><span class="overhead">مکان تولد</span>شهریار ایران</li>
+      <li><span class="overhead">تلگرام</span></li>
+      <li><span class="overhead">اینستاگرام</span></li>
     </ul> -->
   </div>
 </header>

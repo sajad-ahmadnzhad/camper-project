@@ -23,6 +23,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-whatsapp:before {
+  content: "\ea93";
+}
+.icon-telegram:before {
+  content: "\ea95";
+}
 .icon-send:before {
   content: "\ea2f";
 }

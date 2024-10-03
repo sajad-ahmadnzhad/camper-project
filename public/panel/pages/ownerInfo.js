@@ -34,8 +34,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const email = document.getElementById("email").value.trim();
     const bio = CKEDITOR.instances.bio.getData();
     const summary = document.getElementById("summary").value;
+    const telegram = document.getElementById("telegram").value;
+    const instagram = document.getElementById("instagram").value;
 
-    const formDataValue = { fullName, phoneNumber, email, bio, summary };
+    const formDataValue = { fullName, phoneNumber, email, bio, summary, telegram, instagram };
     const errors = validateOwnerInfo(formDataValue, isUpdate);
 
     Object.keys(errors).forEach((field) => {
@@ -43,33 +45,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       hasError = true;
     });
 
-    const socialLinks = Array.from(document.querySelectorAll(".social-link"))
-      .map((input) => input.value)
-      .filter((value) => value !== "");
+    // const socialLinks = Array.from(document.querySelectorAll(".social-link"))
+    //   .map((input) => input.value)
+    //   .filter((value) => value !== "");
 
     const formData = new FormData();
     const currentData = {
-      fullName: document.getElementById("fullName").value,
-      phoneNumber: document.getElementById("phoneNumber").value,
+      fullName: document.getElementById("fullName").value.trim(),
+      phoneNumber: document.getElementById("phoneNumber").value.trim(),
       email: document.getElementById("email").value.trim(),
       bio: CKEDITOR.instances.bio.getData().trim(),
-      summary: document.getElementById("summary").value,
-      socialLinks: socialLinks,
+      summary: document.getElementById("summary").value.trim(),
+      telegram: document.getElementById("telegram").value.trim(),
+      instagram: document.getElementById("instagram").value.trim(),
     };
 
     for (const key in currentData) {
       if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
-        if (key === "socialLinks") {
-          if (currentData[key].length === 0) {
-            formData.append(key, JSON.stringify([]));
-          } else {
-            currentData[key].forEach((link, index) => {
-              formData.append(`socialLinks[${index}]`, link);
-            });
-          }
-        } else {
-          formData.append(key, currentData[key]);
-        }
+        formData.append(key, currentData[key]);
       }
     }
 
@@ -108,8 +101,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       enableSubmitButton();
       return false;
     }
-
-    console.log(formData);
 
     const method = Object.keys(initialData).length > 0 ? "PUT" : "POST";
     const apiUrl = `http://localhost:3002/api/ownerInfo`;
@@ -150,23 +141,6 @@ function enableSubmitButton() {
   submitButton.innerText = "ثبت تغییرات";
   submitButton.disabled = false;
 }
-document.getElementById("addSocialLink").addEventListener("click", () => {
-  const container = document.getElementById("socialLinksContainer");
-
-  const newInputGroup = document.createElement("div");
-  newInputGroup.classList.add("social-link-group");
-
-  newInputGroup.innerHTML = `
-    <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
-    <button type="button" class="btn remove-social-link">حذف</button>
-  `;
-
-  container.appendChild(newInputGroup);
-
-  newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
-    this.parentElement.remove();
-  });
-});
 
 function fillFormWithUserData(data = {}) {
   document.getElementById("fullName").value = data.fullName || "";
@@ -174,6 +148,8 @@ function fillFormWithUserData(data = {}) {
   document.getElementById("email").value = data.email || "";
   const bio = (document.getElementById("bio").value = data.bio || "");
   document.getElementById("summary").value = data.summary || "";
+  document.getElementById("telegram").value = data.telegram || "";
+  document.getElementById("instagram").value = data.instagram || "";
   document.getElementById("avatarImage").src = data.avatarURL || "";
   document.getElementById("mainImage").src = data.mainCover || "";
 
@@ -192,25 +168,6 @@ function fillFormWithUserData(data = {}) {
 
   document.getElementById("loader").style.display = "none";
   document.getElementById("bio").style.display = "block";
-
-  const socialLinksContainer = document.getElementById("socialLinksContainer");
-
-  // socialLinksContainer.innerHTML = "";
-  // data.socialLinks.forEach((link) => {
-  //   const newInputGroup = document.createElement("div");
-  //   newInputGroup.classList.add("social-link-group");
-
-  //   newInputGroup.innerHTML = `
-  //     <input type="url" class="form-control social-link" value="${link}" />
-  //     <button type="button" class=" remove-social-link">حذف</button>
-  //   `;
-
-  //   newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
-  //     this.parentElement.remove();
-  //   });
-
-  //   socialLinksContainer.appendChild(newInputGroup);
-  // });
 }
 
 document.getElementById("avatarURL").addEventListener("change", function (event) {
@@ -260,7 +217,7 @@ document.getElementById("mainCover").addEventListener("change", function (event)
   }
 });
 
-function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary }, isUpdate) {
+function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, telegram, instagram }) {
   let errors = {};
 
   //* Trim input fields
@@ -279,6 +236,7 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary }, isUpd
     errors.fullName = "نام حداکثر باید 100 حرف داشته باشد.";
   }
 
+  //* bio validation
   const strippedBio = bio.replace(/<[^>]*>/g, "");
 
   if (!strippedBio) {
@@ -304,6 +262,19 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary }, isUpd
     errors.email = "ایمیل نادرست می باشد.";
   }
 
+  //* telegram validation
+  if (!telegram) {
+    errors.telegram = "آیدی تلگرام نمی تواند خالی باشد.";
+  } else if (telegram.length > 30) {
+    errors.bio = "آیدی تلگرام حداکثر باید 30 حرف داشته باشد.";
+  }
+  //* instagram validation
+  if (!instagram) {
+    errors.instagram = "آیدی اینستاگرام نمی تواند خالی باشد.";
+  } else if (instagram.length > 100) {
+    errors.bio = "آیدی اینستاگرام حداکثر باید 100 حرف داشته باشد.";
+  }
+
   //* Summary validation
   if (!summary) {
     errors.summary = "خلاصه نمی تواند خالی باشد.";
@@ -315,3 +286,56 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary }, isUpd
 
   return errors;
 }
+
+const socialLinksContainer = document.getElementById("socialLinksContainer");
+
+// document.getElementById("addSocialLink").addEventListener("click", () => {
+//   const container = document.getElementById("socialLinksContainer");
+
+//   const newInputGroup = document.createElement("div");
+//   newInputGroup.classList.add("social-link-group");
+
+//   newInputGroup.innerHTML = `
+//     <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
+//     <button type="button" class="btn remove-social-link">حذف</button>
+//   `;
+
+//   container.appendChild(newInputGroup);
+
+//   newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
+//     this.parentElement.remove();
+//   });
+// });
+
+// for (const key in currentData) {
+//   if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
+//     if (key === "socialLinks") {
+//       if (currentData[key].length === 0) {
+//         formData.append(key, "");
+//       } else {
+//         currentData[key].forEach((link, index) => {
+//           formData.append(`socialLinks[${index}]`, link);
+//         });
+//       }
+//     } else {
+//       formData.append(key, currentData[key]);
+//     }
+//   }
+// }
+
+// socialLinksContainer.innerHTML = "";
+// data.socialLinks.forEach((link) => {
+//   const newInputGroup = document.createElement("div");
+//   newInputGroup.classList.add("social-link-group");
+
+//   newInputGroup.innerHTML = `
+//     <input type="url" class="form-control social-link" value="${link}" />
+//     <button type="button" class=" remove-social-link">حذف</button>
+//   `;
+
+//   newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
+//     this.parentElement.remove();
+//   });
+
+//   socialLinksContainer.appendChild(newInputGroup);
+// });
