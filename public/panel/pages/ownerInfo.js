@@ -263,15 +263,11 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, telegra
   }
 
   //* telegram validation
-  if (!telegram) {
-    errors.telegram = "آیدی تلگرام نمی تواند خالی باشد.";
-  } else if (telegram.length > 30) {
+  if (telegram.length > 30) {
     errors.bio = "آیدی تلگرام حداکثر باید 30 حرف داشته باشد.";
   }
   //* instagram validation
-  if (!instagram) {
-    errors.instagram = "آیدی اینستاگرام نمی تواند خالی باشد.";
-  } else if (instagram.length > 100) {
+  if (instagram.length > 100) {
     errors.bio = "آیدی اینستاگرام حداکثر باید 100 حرف داشته باشد.";
   }
 

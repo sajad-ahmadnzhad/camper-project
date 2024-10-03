@@ -1,11 +1,11 @@
 <style>
   .header__contact a {
-    color: inherit; /* از رنگ پیش‌فرض متن استفاده می‌کند */
-    text-decoration: none; /* خط زیر متن را حذف می‌کند */
+    color: inherit;
+    text-decoration: none;
   }
 
   .header__contact a:hover {
-    text-decoration: underline; /* خط زیر متن هنگام هاور */
+    text-decoration: underline;
   }
 </style>
 
@@ -54,17 +54,17 @@
   <div class="header__right">
     <ul class="header__contact">
       <li><span class="overhead">ایمیل</span><%- ownerInfo?.email ? ownerInfo?.email : "" %></li>
-
       <li>
-        <span class="overhead">تلفن</span
-        ><a href="tel:<%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : '' %>"
-          ><%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : "" %></a
-        >
+        <span class="overhead">تلفن</span>
+        <%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : "" %>
       </li>
     </ul>
-    <!-- <ul class="header__contact">
-      <li><span class="overhead">تلگرام</span></li>
-      <li><span class="overhead">اینستاگرام</span></li>
-    </ul> -->
+    <ul class="header__contact d-flex justify-content-center align-items-center">
+      <li>
+        <a href="tel:<%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : '' %>">
+          <button class="btn btn-primary">تماس بگیرید</button>
+        </a>
+      </li>
+    </ul>
   </div>
 </header>

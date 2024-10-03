@@ -6,6 +6,7 @@ import OwnerInfoModel from "../models/OwnerInfo";
 import CamperModel from "./../models/Camper";
 import pagination from "../utils/pagination";
 
+//* panel
 export const ownerInfos = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   res.locals.layout = "layouts/panel/main.ejs";
   res.render("pages/panel/ownerInfos.ejs", { page: "owner-infos" });
@@ -45,12 +46,7 @@ export const campersPanel = asyncHandler(async (req: Request, res: Response, nex
   });
 });
 
-export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.locals.layout = "layouts/auth/main.ejs";
-
-  res.render("pages/auth/login.ejs", { page: "login" });
-});
-
+//* website
 export const about = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const ownerInfo = await OwnerInfoModel.findOne();
   const paginatedCampers = await pagination(CamperModel, { limit: 4 });
@@ -111,4 +107,11 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
     camper,
     isLogin: !!(req as any).user,
   });
+});
+
+//* auth
+export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  res.locals.layout = "layouts/auth/main.ejs";
+
+  res.render("pages/auth/login.ejs", { page: "login" });
 });
