@@ -61,12 +61,12 @@
       data-header-position="fixed"
     >
       <!-- Sidebar Start -->
-      <%-include("./sidebar.ejs")%>
+      <%-include("./partials/_sidebar.ejs")%>
       <!--  Sidebar End -->
       <!--  Main wrapper -->
       <div class="body-wrapper">
         <!--  Header Start -->
-        <%-include("./header.ejs")%>
+        <%-include("./partials/_header.ejs")%>
         <!--  Header End -->
         <div class="container-fluid">
           <!--  Row 1 -->
@@ -78,6 +78,13 @@
     <script>
       const apiKey = "<%= apiKey %>";
     </script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
+      integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
     <script src="/assets/libs/fontawesome/fontawesome.js"></script>
     <script src="/panel/assets/libs/sweetalert2/sweetalert2.js"></script>
