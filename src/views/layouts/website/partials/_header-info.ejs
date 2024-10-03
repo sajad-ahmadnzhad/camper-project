@@ -8,12 +8,11 @@
     text-decoration: underline;
   }
 </style>
-
 <header class="header box">
   <div class="header__left">
     <div class="header__photo">
       <img class="header__photo-img" style="width: 150px; height: 150px; object-fit: cover" data-zoom src="<%=
-      ownerInfo?.avatarURL ? ownerInfo.avatarURL : 'assets/img/main-photo.svg' %>" alt="<%- ownerInfo?.fullName ?
+      ownerInfo?.avatarURL ? ownerInfo.avatarURL : '/assets/images/no-image.jpg' %>" alt="<%- ownerInfo?.fullName ?
       ownerInfo?.fullName : "" %>" />
     </div>
 
@@ -21,50 +20,56 @@
       <h4 class="title titl--h4"><%- ownerInfo?.fullName ? ownerInfo?.fullName : "" %></h4>
       <div class="status"><%- ownerInfo?.summary ? ownerInfo?.summary : "" %></div>
       <ul class="header__social">
+        <% if(ownerInfo?.telegram) { %>
         <li>
           <a
             class="footer-post__share"
-            href="https://telegram.com/<%- ownerInfo.telegram %>"
+            href="https://t.me/<%- ownerInfo?.telegram %>"
             target="_blank"
             rel="noopener noreferrer"
             ><i class="fa fa-telegram"></i
           ></a>
         </li>
+        <% } %> <% if(ownerInfo?.instagram) { %>
         <li>
           <a
             class="footer-post__share"
-            href="https://instagram.com/<%- ownerInfo.instagram %>"
+            href="https://instagram.com/<%- ownerInfo?.instagram %>"
             target="_blank"
             rel="noopener noreferrer"
             ><i class="fa fa-instagram"></i
           ></a>
         </li>
+        <%}%> <% if(ownerInfo?.phoneNumber) { %>
         <li>
           <a
             class="footer-post__share"
-            href="https://wa.me/<%- ownerInfo.phoneNumber.replace(/^0/, '') %>"
+            href="https://wa.me/<%- ownerInfo?.phoneNumber?.replace(/^0/, '') %>"
             target="_blank"
             rel="noopener noreferrer"
             ><i class="fa fa-whatsapp"></i
           ></a>
         </li>
+        <%} %>
       </ul>
     </div>
   </div>
   <div class="header__right">
     <ul class="header__contact">
-      <li><span class="overhead">ایمیل</span><%- ownerInfo?.email ? ownerInfo?.email : "" %></li>
       <li>
+        <span class="overhead">ایمیل</span><%- ownerInfo?.email ? ownerInfo?.email : "" %>
         <span class="overhead">تلفن</span>
         <%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : "" %>
       </li>
     </ul>
     <ul class="header__contact d-flex justify-content-center align-items-center">
+      <% if(ownerInfo?.phoneNumber) { %>
       <li>
         <a href="tel:<%- ownerInfo?.phoneNumber ? ownerInfo?.phoneNumber : '' %>">
           <button class="btn btn-primary">تماس بگیرید</button>
         </a>
       </li>
+      <%} %>
     </ul>
   </div>
 </header>

@@ -6,48 +6,57 @@
         <span>بازگشت به لیست کمپرها</span>
       </a>
       <header class="header-post">
-        <h1 class="title title--h1"><%- camper.name %></h1>
+        <h1 class="title title--h1"><%- camper?.name %></h1>
         <div class="gallery-post">
           <div class="gallery-post__images">
-            <img class="gallery-post__item cover lazyload" src="<%- camper.mainImage %>" data-zoom alt="" />
-            <% camper.images.forEach(function(image) { %>
+            <% if(camper?.mainImage) { %>
+            <img class="gallery-post__item cover lazyload" src="<%- camper?.mainImage %>" data-zoom alt="" />
+            <% } %>
+            <!---->
+            <% if(camper?.images) { %> <% camper?.images.forEach(function(image) { %>
             <img class="gallery-post__item cover lazyload" src="<%- image %>" data-zoom alt="" />
-            <% }) %>
+            <% }) %> <%} %>
           </div>
           <div class="gallery-post__caption">برای مشاهده تصویر در اندازه بزرگتر، کلیک کنید</div>
         </div>
       </header>
-      <div class="caption-post"><%- camper.description %></div>
+      <div class="caption-post"><%- camper?.description %></div>
 
+      <% if(ownerInfo?.telegram || ownerInfo?.instagram || ownerInfo?.phoneNumber) { %>
       <footer class="footer-post">
+        <% if(ownerInfo?.telegram ) { %>
         <a
           class="footer-post__share"
-          href="https://t.me/<%- ownerInfo.telegram %>"
+          href="https://t.me/<%- ownerInfo?.telegram %>"
           target="_blank"
           rel="noopener noreferrer"
         >
           <i class="fa fa-telegram"></i>
           <span>تلگرام</span>
         </a>
+        <%} %> <% if(ownerInfo?.instagram ) { %>
         <a
           class="footer-post__share"
-          href="https://instagram.com/<%- ownerInfo.instagram %>"
+          href="https://instagram.com/<%- ownerInfo?.instagram %>"
           target="_blank"
           rel="noopener noreferrer"
         >
           <i class="fa fa-instagram"></i>
           <span>اینستاگرام</span>
         </a>
+        <%} %> <% if(ownerInfo?.phoneNumber ) { %>
         <a
           class="footer-post__share"
-          href="https://wa.me/<%- ownerInfo.phoneNumber.replace(/^0/, '') %>"
+          href="https://wa.me/<%- ownerInfo?.phoneNumber?.replace(/^0/, '') %>"
           target="_blank"
           rel="noopener noreferrer"
         >
           <i class="fa fa-whatsapp"></i>
           <span>واتس‌اپ</span>
         </a>
+        <%} %>
       </footer>
+      <% } %>
     </div>
   </div>
 </div>
@@ -55,7 +64,6 @@
 <script>
   document.getElementById("back-button").addEventListener("click", function () {
     var referrer = document.referrer;
-    console.log(referrer);
 
     if (referrer.includes("/campers")) {
       window.history.back();

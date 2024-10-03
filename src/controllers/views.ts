@@ -40,7 +40,7 @@ export const campersPanel = asyncHandler(async (req: Request, res: Response, nex
 
   res.render("pages/panel/campers.ejs", {
     page: "campers",
-    campers: parsedCampers,
+    campers: parsedCampers || {},
     pagination: paginationItem,
     query: req.query || "",
   });
@@ -59,11 +59,10 @@ export const about = asyncHandler(async (req: Request, res: Response, next: Next
     price: camper.dataValues.price,
     description: camper.dataValues.description,
   }));
-
   res.render("pages/website/about.ejs", {
     page: "",
-    ownerInfo: ownerInfo?.dataValues,
-    campers: parsedCampers,
+    ownerInfo: ownerInfo?.dataValues || {},
+    campers: parsedCampers || {},
     isLogin: !!(req as any).user,
   });
 });
@@ -89,8 +88,8 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
 
   res.render("pages/website/campers.ejs", {
     page: "campers",
-    ownerInfo: ownerInfo?.dataValues,
-    campers: parsedCampers,
+    ownerInfo: ownerInfo?.dataValues || {},
+    campers: parsedCampers || {},
     pagination: paginationItem,
     query: req.query || "",
     isLogin: !!(req as any).user,
@@ -103,7 +102,7 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
 
   res.render("pages/website/camper-info.ejs", {
     page: "camper-info",
-    ownerInfo: ownerInfo?.dataValues,
+    ownerInfo: ownerInfo?.dataValues || {},
     camper,
     isLogin: !!(req as any).user,
   });

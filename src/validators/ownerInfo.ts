@@ -8,11 +8,11 @@ export const createOwnerInfoSchema = Joi.object({
     "string.max": "نام حداکثر باید 100 حرف داشته باشد.",
     "any.required": "نام اجباری می باشد.",
   }),
-  bio: Joi.string().max(1000).min(10).required().messages({
+  bio: Joi.string().max(10000).min(10).required().messages({
     "string.base": "بیوگرافی باید یک رشته باشد.",
     "string.empty": "بیوگرافی نمی تواند خالی باشد.",
     "string.min": "بیوگرافی حداقل باید 10 حرف داشته باشد.",
-    "string.max": "بیوگرافی حداکثر باید 1000 حرف داشته باشد.",
+    "string.max": "بیوگرافی حداکثر باید 10000 حرف داشته باشد.",
     "any.required": "بیوگرافی اجباری می باشد.",
   }),
   phoneNumber: Joi.string()
@@ -48,12 +48,6 @@ export const createOwnerInfoSchema = Joi.object({
     "string.max": "لینک تلگرام حداکثر باید 30 حرف داشته باشد.",
     "any.required": "لینک تلگرام اجباری می باشد.",
   }),
-  whatsapp: Joi.string().max(100).optional().messages({
-    "string.base": "لینک واتساپ باید یک رشته باشد.",
-    "string.empty": "لینک واتساپ نمی تواند خالی باشد.",
-    "string.max": "لینک واتساپ حداکثر باید 30 حرف داشته باشد.",
-    "any.required": "لینک واتساپ اجباری می باشد.",
-  }),
 });
 
 export const updateOwnerInfoSchema = Joi.object({
@@ -63,11 +57,11 @@ export const updateOwnerInfoSchema = Joi.object({
     "string.min": "نام حداقل باید 5 حرف داشته باشد.",
     "string.max": "نام حداکثر باید 100 حرف داشته باشد.",
   }),
-  bio: Joi.string().max(1000).min(10).optional().messages({
+  bio: Joi.string().max(10000).min(10).optional().messages({
     "string.base": "بیوگرافی باید یک رشته باشد.",
     "string.empty": "بیوگرافی نمی تواند خالی باشد.",
     "string.min": "بیوگرافی حداقل باید 10 حرف داشته باشد.",
-    "string.max": "بیوگرافی حداکثر باید 1000 حرف داشته باشد.",
+    "string.max": "بیوگرافی حداکثر باید 10000 حرف داشته باشد.",
   }),
   phoneNumber: Joi.string()
     .pattern(/^09\d{9}$/)
@@ -99,11 +93,5 @@ export const updateOwnerInfoSchema = Joi.object({
     "string.empty": "آیدی تلگرام نمی تواند خالی باشد.",
     "string.max": "آیدی تلگرام حداکثر باید 30 حرف داشته باشد.",
     "any.required": "آیدی تلگرام اجباری می باشد.",
-  }),
-  whatsapp: Joi.string().max(100).optional().messages({
-    "string.base": "لینک واتساپ باید یک رشته باشد.",
-    "string.empty": "لینک واتساپ نمی تواند خالی باشد.",
-    "string.max": "لینک واتساپ حداکثر باید 30 حرف داشته باشد.",
-    "any.required": "لینک واتساپ اجباری می باشد.",
   }),
 });

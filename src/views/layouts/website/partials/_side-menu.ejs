@@ -2,15 +2,15 @@
   <div class="sidebar box sticky-column">
     <ul class="nav">
       <li class="nav__item">
-        <a class="<%= page === '' ? 'active' : '' %>" href="/"><i class="icon-user"></i>درباره‌ی ما</a>
+        <a class="<%= page === '' ? 'active' : '' %>" href="/"><i class="fas fa-user fa-2x"></i> درباره‌ی ما</a>
       </li>
       <li class="nav__item">
-        <a class="<%= page === 'campers' ? 'active' : '' %>" href="/campers"><i class="icon-book-open"></i>کمپرها</a>
+        <a class="<%= page === 'campers' ? 'active' : '' %>" href="/campers"><i class="fas fa-book-open fa-2x"></i> کمپرها</a>
       </li>
       <li class="nav__item">
-        <a class="<%= page === 'contact' ? 'active' : '' %>" href="<%- isLogin ? '/panel' : '/login' %>""
-          ><i class="<%- isLogin ? 'icon-settings' : 'icon-lock' %>"></i><%- isLogin ? "ورود به پنل" : "ورود مدیران"%></a
-        >
+        <a class="<%= page === 'contact' ? 'active' : '' %>" href="<%- isLogin ? '/panel' : '/login' %>">
+          <i class="<%- isLogin ? 'fas fa-cog fa-2x' : 'fas fa-lock fa-2x' %>"></i> <%- isLogin ? "ورود به پنل" : "ورود مدیران" %>
+        </a>
       </li>
     </ul>
   </div>

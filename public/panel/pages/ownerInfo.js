@@ -5,22 +5,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   preloader.style.display = "none";
 
   let isUpdate = false;
+  let initialData = {};
+
   document.getElementById("avatarURL").value = "";
   document.getElementById("mainCover").value = "";
 
-  let initialData = {};
-
   try {
     const response = await fetch(`http://localhost:3002/api/ownerInfo`);
+    const data = (await response.json()) || {};
+
     if (response.ok) {
-      const data = await response.json();
-      fillFormWithUserData(data);
-      initialData = data;
-      isUpdate = true;
+      if (data) {
+        fillFormWithUserData(data);
+        initialData = data;
+        isUpdate = true;
+      }
     }
   } catch (error) {
     console.log("User does not exist or error fetching data", error.message);
-    console.log(error);
   }
 
   document.querySelector("form").addEventListener("submit", async (e) => {
@@ -29,15 +31,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearErrors();
     hasError = false;
 
-    const fullName = document.getElementById("fullName").value;
-    const phoneNumber = document.getElementById("phoneNumber").value;
+    const fullName = document.getElementById("fullName").value.trim();
+    const phoneNumber = document.getElementById("phoneNumber").value.trim();
     const email = document.getElementById("email").value.trim();
     const bio = CKEDITOR.instances.bio.getData();
-    const summary = document.getElementById("summary").value;
-    const telegram = document.getElementById("telegram").value;
-    const instagram = document.getElementById("instagram").value;
+    const summary = document.getElementById("summary").value.trim();
+    const telegram = document.getElementById("telegram").value.trim();
+    const instagram = document.getElementById("instagram").value.trim();
 
-    const formDataValue = { fullName, phoneNumber, email, bio, summary, telegram, instagram };
+    const avatarInputElement = document.getElementById("avatarURL");
+    const mainCoverInputElement = document.getElementById("mainCover");
+
+    const avatarFileInput = avatarInputElement.files[0];
+    const mainCoverFileInput = mainCoverInputElement.files[0];
+
+    const formDataValue = {
+      fullName,
+      phoneNumber,
+      email,
+      bio,
+      summary,
+      telegram,
+      instagram,
+      avatarFileInput,
+      mainCoverFileInput,
+    };
     const errors = validateOwnerInfo(formDataValue, isUpdate);
 
     Object.keys(errors).forEach((field) => {
@@ -45,16 +63,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       hasError = true;
     });
 
-    // const socialLinks = Array.from(document.querySelectorAll(".social-link"))
-    //   .map((input) => input.value)
-    //   .filter((value) => value !== "");
-
     const formData = new FormData();
     const currentData = {
       fullName: document.getElementById("fullName").value.trim(),
       phoneNumber: document.getElementById("phoneNumber").value.trim(),
       email: document.getElementById("email").value.trim(),
-      bio: CKEDITOR.instances.bio.getData().trim(),
+      bio: CKEDITOR.instances.bio.getData(),
       summary: document.getElementById("summary").value.trim(),
       telegram: document.getElementById("telegram").value.trim(),
       instagram: document.getElementById("instagram").value.trim(),
@@ -66,38 +80,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    // return false;
-
-    const avatarInputElement = document.getElementById("avatarURL");
-    const mainCoverInputElement = document.getElementById("mainCover");
-
-    const avatarFileInput = avatarInputElement.files[0];
-    const mainCoverFileInput = mainCoverInputElement.files[0];
-
     if (avatarFileInput) {
-      if (avatarFileInput.size > 2 * 1024 * 1024) {
-        avatarInputElement.value = "";
-        hasError = true;
-      } else if (!["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
-        avatarInputElement.value = "";
-        hasError = true;
-      }
     }
 
     if (mainCoverFileInput) {
-      if (mainCoverFileInput.size > 2 * 1024 * 1024) {
-        mainCoverInputElement.value = "";
-        hasError = true;
-      } else if (!["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
-        mainCoverInputElement.value = "";
-        hasError = true;
-      }
     }
 
-    if (!hasError) {
-      if (avatarFileInput) formData.append("avatar", avatarFileInput);
-      if (mainCoverFileInput) formData.append("cover", mainCoverFileInput);
-    } else {
+    if (avatarFileInput) formData.append("avatar", avatarFileInput);
+    if (mainCoverFileInput) formData.append("cover", mainCoverFileInput);
+
+    if (hasError) {
       enableSubmitButton();
       return false;
     }
@@ -143,15 +135,16 @@ function enableSubmitButton() {
 }
 
 function fillFormWithUserData(data = {}) {
-  document.getElementById("fullName").value = data.fullName || "";
-  document.getElementById("phoneNumber").value = data.phoneNumber || "";
-  document.getElementById("email").value = data.email || "";
-  const bio = (document.getElementById("bio").value = data.bio || "");
-  document.getElementById("summary").value = data.summary || "";
-  document.getElementById("telegram").value = data.telegram || "";
-  document.getElementById("instagram").value = data.instagram || "";
-  document.getElementById("avatarImage").src = data.avatarURL || "";
-  document.getElementById("mainImage").src = data.mainCover || "";
+  const bio = (document.getElementById("bio").value = data?.bio || "");
+
+  document.getElementById("fullName").value = data?.fullName || "";
+  document.getElementById("phoneNumber").value = data?.phoneNumber || "";
+  document.getElementById("email").value = data?.email || "";
+  document.getElementById("summary").value = data?.summary || "";
+  document.getElementById("telegram").value = data?.telegram || "";
+  document.getElementById("instagram").value = data?.instagram || "";
+  document.getElementById("avatarImage").src = data?.avatarURL || "/assets/images/no-image.jpg";
+  document.getElementById("mainImage").src = data?.mainCover || "/assets/images/no-image.jpg";
 
   document.getElementById("bio").value = bio;
 
@@ -174,15 +167,20 @@ document.getElementById("avatarURL").addEventListener("change", function (event)
   const file = event.target.files[0];
 
   if (file) {
+    clearError("avatarURL");
+
     if (file.size > 2 * 1024 * 1024) {
-      setError("avatarURL", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
+      setError("avatarURL", "حجم تصویر پروفایل نباید بیشتر از ۲ مگابایت باشد.");
       return (hasError = true);
     } else if (file && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
       setError("avatarURL", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
       event.target.value = "";
       document.getElementById("file-chosen1").textContent = "فایلی انتخاب نشده";
       return (hasError = true);
+    } else {
+      setError("avatarURL", "");
     }
+
     const reader = new FileReader();
     reader.onload = function (e) {
       document.getElementById("avatarImage").src = e.target.result;
@@ -197,6 +195,8 @@ document.getElementById("avatarURL").addEventListener("change", function (event)
 document.getElementById("mainCover").addEventListener("change", function (event) {
   const file = event.target.files[0];
   if (file) {
+    clearError("mainCover");
+
     if (file.size > 2 * 1024 * 1024) {
       setError("mainCover", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
       return (hasError = true);
@@ -205,6 +205,8 @@ document.getElementById("mainCover").addEventListener("change", function (event)
       event.target.value = "";
       document.getElementById("file-chosen2").textContent = file.name;
       return (hasError = true);
+    } else {
+      setError("avatarURL", "");
     }
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -217,7 +219,19 @@ document.getElementById("mainCover").addEventListener("change", function (event)
   }
 });
 
-function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, telegram, instagram }) {
+const socialLinksContainer = document.getElementById("socialLinksContainer");
+
+function validateOwnerInfo({
+  fullName,
+  phoneNumber,
+  email,
+  bio,
+  summary,
+  telegram,
+  instagram,
+  avatarFileInput,
+  mainCoverFileInput,
+}) {
   let errors = {};
 
   //* Trim input fields
@@ -243,8 +257,8 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, telegra
     errors.bio = "بیوگرافی نمی تواند خالی باشد.";
   } else if (strippedBio.length < 10) {
     errors.bio = "بیوگرافی حداقل باید 10 حرف داشته باشد.";
-  } else if (strippedBio.length > 1000) {
-    errors.bio = "بیوگرافی حداکثر باید 1000 حرف داشته باشد.";
+  } else if (strippedBio.length > 10000) {
+    errors.bio = "بیوگرافی حداکثر باید 10000 حرف داشته باشد.";
   }
 
   //* Phone Number validation
@@ -264,11 +278,12 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, telegra
 
   //* telegram validation
   if (telegram.length > 30) {
-    errors.bio = "آیدی تلگرام حداکثر باید 30 حرف داشته باشد.";
+    errors.telegram = "آیدی تلگرام حداکثر باید 30 حرف داشته باشد.";
   }
+
   //* instagram validation
   if (instagram.length > 100) {
-    errors.bio = "آیدی اینستاگرام حداکثر باید 100 حرف داشته باشد.";
+    errors.instagram = "آیدی اینستاگرام حداکثر باید 100 حرف داشته باشد.";
   }
 
   //* Summary validation
@@ -280,58 +295,25 @@ function validateOwnerInfo({ fullName, phoneNumber, email, bio, summary, telegra
     errors.summary = "خلاصه حداکثر باید 30 حرف داشته باشد.";
   }
 
+  //* Avatar File
+  if (!avatarFileInput) {
+    errors.avatarURL = "تصویر پروفایل نمی تواند خالی باشد.";
+  } else {
+    if (avatarFileInput.size > 2 * 1024 * 1024) {
+      errors.avatarURL = "حجم تصویر پروفایل نباید بیشتر از ۲ مگابایت باشد.";
+    } else if (!["image/jpeg", "image/jpg", "image/png"].includes(avatarFileInput.type)) {
+      errors.avatarURL = "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.";
+    }
+  }
+
+  //* Main Cover File
+  if (!mainCoverFileInput) {
+    errors.mainCover = "تصویر زمینه نمی تواند خالی باشد.";
+  } else if (mainCoverFileInput.size > 2 * 1024 * 1024) {
+    errors.avatarURL = "حجم تصویر زمینه نباید بیشتر از ۲ مگابایت باشد.";
+  } else if (!["image/jpeg", "image/jpg", "image/png"].includes(mainCoverFileInput.type)) {
+    errors.mainCover = "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.";
+  }
+
   return errors;
 }
-
-const socialLinksContainer = document.getElementById("socialLinksContainer");
-
-// document.getElementById("addSocialLink").addEventListener("click", () => {
-//   const container = document.getElementById("socialLinksContainer");
-
-//   const newInputGroup = document.createElement("div");
-//   newInputGroup.classList.add("social-link-group");
-
-//   newInputGroup.innerHTML = `
-//     <input type="url" class="form-control social-link" placeholder="لینک شبکه اجتماعی" />
-//     <button type="button" class="btn remove-social-link">حذف</button>
-//   `;
-
-//   container.appendChild(newInputGroup);
-
-//   newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
-//     this.parentElement.remove();
-//   });
-// });
-
-// for (const key in currentData) {
-//   if (JSON.stringify(initialData[key]) !== JSON.stringify(currentData[key])) {
-//     if (key === "socialLinks") {
-//       if (currentData[key].length === 0) {
-//         formData.append(key, "");
-//       } else {
-//         currentData[key].forEach((link, index) => {
-//           formData.append(`socialLinks[${index}]`, link);
-//         });
-//       }
-//     } else {
-//       formData.append(key, currentData[key]);
-//     }
-//   }
-// }
-
-// socialLinksContainer.innerHTML = "";
-// data.socialLinks.forEach((link) => {
-//   const newInputGroup = document.createElement("div");
-//   newInputGroup.classList.add("social-link-group");
-
-//   newInputGroup.innerHTML = `
-//     <input type="url" class="form-control social-link" value="${link}" />
-//     <button type="button" class=" remove-social-link">حذف</button>
-//   `;
-
-//   newInputGroup.querySelector(".remove-social-link").addEventListener("click", function () {
-//     this.parentElement.remove();
-//   });
-
-//   socialLinksContainer.appendChild(newInputGroup);
-// });

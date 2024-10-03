@@ -60,41 +60,40 @@
   }
 }
 .header-post .title--h1 {
-  word-wrap: break-word; /* اجازه می‌دهد که کلمات بلند به خط بعدی بروند */
-  overflow-wrap: break-word; /* پشتیبانی بهتر برای کلمات */
-  white-space: normal; /* از پیش‌فرض no-wrap جلوگیری می‌کند و اجازه می‌دهد که متن به خط بعدی برود */
-  overflow: hidden; /* پنهان کردن متن اضافی */
-  text-overflow: ellipsis; /* اگر لازم بود، از سه‌نقطه برای قطع کردن استفاده می‌کند */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .footer-post {
   display: flex;
-  justify-content: center; /* تراز وسط برای آیکون‌ها و متن‌ها */
-  gap: 40px; /* فاصله بین هر لینک */
+  justify-content: center;
+  gap: 40px;
 }
 
 .footer-post__share {
   display: flex;
-  align-items: center; /* هم‌ترازی عمودی آیکون و متن */
+  align-items: center; 
   text-decoration: none;
-  color: #000; /* رنگ متن و آیکون */
+  color: #000;
 }
 .footer-post__share span {
   margin-right: 6px;
 }
 
 .footer-post__share i {
-  font-size: 24px; /* اندازه بزرگتر آیکون‌ها */
-  margin-right: 10px; /* فاصله بین آیکون و متن */
+  font-size: 24px; 
+  margin-right: 10px;
 }
 
 .footer-post__share span {
-  font-size: 14px; /* اندازه متن */
+  font-size: 14px;
 }
 
 .footer-post__share:hover {
-  color: #007bff; /* تغییر رنگ هنگام هاور شدن */
+  color: #007bff; 
 }
-/* panel */
 .btn-danger {
   background-color: #ff6f61;
   border: 2px solid #ff6f61;
@@ -118,7 +117,6 @@
   outline: none;
 }
 
-/* استایل جدید برای لینک‌های شبکه اجتماعی */
 .social-link-group {
   display: flex;
   align-items: center;
@@ -145,4 +143,114 @@
 
 .remove-social-link:hover {
   background-color: #c82333;
+}
+
+/************************ PANEL / CAMPERS *************************/
+.table .camper-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  /* display: inline-block; */
+}
+.table td,
+.table th {
+  padding: 8px !important; 
+  vertical-align: middle;
+}
+
+.table-responsive {
+  border-radius: 10px;
+  /* overflow: hidden; */
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+}
+
+.table tbody tr {
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+.table img {
+  border: 2px solid #dee2e6;
+  padding: 2px;
+  width: 60px;
+  height: 60px;
+  transition: transform 0.3s ease;
+}
+
+.table img:hover {
+  transform: scale(1.05);
+}
+
+.btn {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+  border-color: #ffc107;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* استایل متن برای حالت "هیچ کمپی وجود ندارد" */
+.table tbody tr td[colspan="5"] {
+  font-size: 16px;
+  color: #6c757d;
+}
+/************************ WEBSITE / ABOUT *************************/
+.avatar-container {
+  display: inline-block;
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e0e0e0;
+}
+.avatar {
+  display: block;
+  border-radius: 15px;
+}
+.review-item__caption {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .review-item__textbox {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .title--h5 {
+    word-wrap: break-word;
+    white-space: normal;
+  }
 }

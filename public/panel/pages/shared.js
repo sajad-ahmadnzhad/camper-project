@@ -21,6 +21,15 @@ function clearErrors() {
   errorSpans.forEach((span) => span.remove());
 }
 
+function clearError(fieldId) {
+  const field = document.getElementById(fieldId);
+  const errorSpan = field.parentNode.querySelector(".text-danger");
+
+  if (errorSpan) {
+    errorSpan.remove();
+  }
+}
+
 function resetImage(imageId, defaultSrc, chosenTextId, resetButtonId) {
   document.getElementById(imageId).src = defaultSrc;
   document.getElementById(chosenTextId).textContent = "فایلی انتخاب نشده";
