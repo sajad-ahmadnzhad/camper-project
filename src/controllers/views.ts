@@ -107,7 +107,10 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
   res.render("pages/website/camper-info.ejs", {
     page: "camper-info",
     ownerInfo: ownerInfo?.dataValues || {},
-    camper,
+    camper: {
+      ...camper,
+      images: convertToArrayIfString(camper?.dataValues?.images),
+    },
     isLogin: !!(req as any).user,
     apiKey: process.env.API_KEY,
   });
