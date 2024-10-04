@@ -88,7 +88,7 @@ function createOrUpdateCamperModal(camper = null) {
     showCloseButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "ثبت کمپر",
+    confirmButtonText: camper ? "بروزرسانی کمپر" : "ثبت کمپر",
     cancelButtonText: "منصرف شدم",
     preConfirm: () => {
       return submitCamperData(
@@ -383,6 +383,7 @@ async function scriptImageSelected(camper) {
 }
 
 async function submitCamperData(isUpdate = false, camperId = null, originalCamper = {}) {
+  Swal.getConfirmButton().textContent = "ارسال اطلاعات ...";
   clearErrors();
 
   const name = document.getElementById("name").value;
@@ -435,20 +436,25 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     const response = await res.json();
 
     if (res.status === 201 || res.status === 200) {
+      Swal.getConfirmButton().textContent = isUpdate ? "بروزرسانی کمپر" : "ثبت کمپر";
       showAlertWithReload("success", "موفق", isUpdate ? "کمپر با موفقیت به‌روزرسانی شد!" : "کمپر با موفقیت ثبت شد!");
       return true;
     } else if (res.status === 400) {
       const errorMessage = Object.values(response).find((value) => value) || "خطای ناشناخته";
+      Swal.getConfirmButton().textContent = isUpdate ? "بروزرسانی کمپر" : "ثبت کمپر";
       showAlert("error", "خطا", errorMessage);
       return false;
     } else if (res.status >= 500 && res.status < 600) {
+      Swal.getConfirmButton().textContent = isUpdate ? "بروزرسانی کمپر" : "ثبت کمپر";
       showAlert("error", "خطای سرور", "مشکلی در سرور پیش آمده است. لطفاً بعداً دوباره امتحان کنید.");
       return false;
     } else {
+      Swal.getConfirmButton().textContent = isUpdate ? "بروزرسانی کمپر" : "ثبت کمپر";
       showAlert("error", "خطای ارتباطی", "ثبت کمپر با خطا مواجه شد. لطفاً مجدداً تلاش کنید.");
       return false;
     }
   } catch (error) {
+    Swal.getConfirmButton().textContent = isUpdate ? "بروزرسانی کمپر" : "ثبت کمپر";
     showAlert("error", "خطای ناشناخته", "یک خطای غیرمنتظره رخ داده است. لطفاً مجدداً تلاش کنید.");
     return false;
   }
