@@ -333,7 +333,6 @@ async function scriptImageSelected(camper) {
         reader.readAsDataURL(file);
       });
     }
-    console.log(selectedFiles);
   });
 
   document.getElementById("mainImage").addEventListener("change", function (event) {
@@ -432,7 +431,6 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
       method: method,
       body: formDataToSend,
     });
-    console.log(res);
     const response = await res.json();
 
     if (res.status === 201 || res.status === 200) {
