@@ -291,6 +291,7 @@ async function scriptImageSelected(camper) {
         child.remove();
       }
     });
+
     if (files.length > 3 || files.length + countChildImage > 3) {
       setError("formFiles", "شما فقط می‌توانید ۳ تصویر انتخاب کنید.");
       event.target.value = "";
@@ -302,6 +303,10 @@ async function scriptImageSelected(camper) {
       files.forEach((file, index) => {
         if (file.size > 2 * 1024 * 1024) {
           setError("formFiles", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
+          return;
+        }
+        if (file && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+          setError("formFiles", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
           return;
         }
 
