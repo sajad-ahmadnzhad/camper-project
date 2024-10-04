@@ -108,7 +108,7 @@ export const camperInfo = asyncHandler(async (req: Request, res: Response, next:
     page: "camper-info",
     ownerInfo: ownerInfo?.dataValues || {},
     camper: {
-      ...camper,
+      ...camper?.dataValues,
       images: convertToArrayIfString(camper?.dataValues?.images),
     },
     isLogin: !!(req as any).user,
