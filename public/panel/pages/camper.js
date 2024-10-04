@@ -114,6 +114,7 @@ function showInfoCamperClickHandler(camperEncode) {
   const priceValue = camper ? camper.price : "";
   const descriptionValue = camper ? camper.description : "";
   const mainImageSrc = camper ? camper.mainImage : "/assets/images/no-image.jpg";
+  const camperImages = camper ? convertToArrayIfString(camper.images) : "";
 
   Swal.fire({
     width: "550px",
@@ -143,7 +144,7 @@ function showInfoCamperClickHandler(camperEncode) {
           <div class="profile-cards">
             <label class="form-label fw-bold">تصاویر</label>
               <div id="imagePreviewContainer" class="d-flex flex-wrap mt-3 justify-content-center align-items-center">
-                ${camper.images
+                ${camperImages
                   .map(
                     (image) =>
                       `<div class="position-relative m-2">
@@ -211,7 +212,9 @@ async function scriptImageSelected(camper) {
   const imagePreviewContainer = document.getElementById("imagePreviewContainer");
 
   if (camper && camper.images && camper.images.length > 0) {
-    camper.images.forEach((imageUrl, index) => {
+    const camperImages = camper ? convertToArrayIfString(camper.images) : "";
+
+    camperImages.forEach((imageUrl, index) => {
       const imgContainer = document.createElement("div");
       imgContainer.classList.add("position-relative", "m-2");
 
@@ -384,10 +387,8 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
 
   const name = document.getElementById("name").value;
   const price = document.getElementById("price").value;
-  // const description = document.getElementById("description").value;
   const description = CKEDITOR.instances.description.getData();
   const camperMainImage = document.getElementById("mainImage").files[0];
-  // const multipleImages = document.getElementById("formFiles").files;
 
   //* Validate form data using the external validation function
   const formData = { name, price, description, camperMainImage, multipleImages: selectedFiles };

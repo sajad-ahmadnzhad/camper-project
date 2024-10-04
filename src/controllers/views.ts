@@ -5,6 +5,7 @@ import OwnerInfoModel from "../models/OwnerInfo";
 
 import CamperModel from "./../models/Camper";
 import pagination from "../utils/pagination";
+import convertToArrayIfString from "../utils/util";
 
 //* panel
 export const ownerInfos = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -83,7 +84,7 @@ export const campers = asyncHandler(async (req: Request, res: Response, next: Ne
     id: camper.dataValues.id,
     name: camper.dataValues.name,
     mainImage: camper.dataValues.mainImage,
-    images: camper.dataValues.images,
+    images: convertToArrayIfString(camper.dataValues.images),
     price: camper.dataValues.price,
     description: camper.dataValues.description,
   }));

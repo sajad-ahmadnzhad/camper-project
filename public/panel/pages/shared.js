@@ -1,4 +1,17 @@
 let hasError = false;
+
+function convertToArrayIfString(value) {
+  if (typeof value === "string") {
+    const parsed = JSON.parse(value);
+
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+  }
+
+  return value;
+}
+
 function setError(fieldId, errorMessage) {
   const field = document.getElementById(fieldId);
 
