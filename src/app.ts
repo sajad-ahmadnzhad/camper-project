@@ -37,7 +37,9 @@ app.use(cookieParser());
 app.use(expressEjsLayouts);
 app.set("view engine", "ejs");
 app.set("layout", "layouts/website/main.ejs");
-app.set("views", path.join(__dirname, "views"));
+
+app.use(expressEjsLayouts);
+
 
 const { PORT = 4000 } = process.env;
 
