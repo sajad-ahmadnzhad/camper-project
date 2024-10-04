@@ -1,12 +1,14 @@
 import { Sequelize } from "sequelize";
 
+const port = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3307;
 const sequelize = new Sequelize({
   host: process.env.DB_HOST,
   password: process.env.DB_PASSWORD,
   username: process.env.DB_USERNAME,
   database: process.env.DB_NAME,
-  dialect: "mysql",
+  dialect: "mariadb",
   logging: false,
+  port,
 });
 
 sequelize
