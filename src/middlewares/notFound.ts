@@ -8,6 +8,7 @@ export default async (req: Request, res: Response) => {
     page: "not-found",
     ownerInfo: ownerInfo?.dataValues,
     isLogin: !!(req as any).user,
+    apiKey: process.env.API_KEY,
   });
   // res.status(404).json({ message: "Page not found !!" });
 };
