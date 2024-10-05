@@ -39,7 +39,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>پنل مدیریت | <%- page === "campers" ? "کمپر ها" : page === "owner-infos" ? "درباره من" : "" %></title>
 
-    
     <link rel="stylesheet" href="/panel/assets/css/styles.css" />
     <link rel="stylesheet" href="/panel/dist/css/fa/style.css" />
     <link rel="stylesheet" href="/panel/pages/styles.css" />
@@ -81,6 +80,7 @@
       const apiKey = "<%= apiKey %>";
     </script>
 
+    <script src="/assets/libs/jquery/jquery-3.7.1.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
       integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
@@ -93,8 +93,6 @@
     <script src="/panel/pages/shared.js"></script>
     <script src="/panel/pages/camper.js"></script>
     <script src="/panel/pages/ownerInfo.js"></script>
-    <script src="/assets/libs/jquery/jquery-3.7.1.js"></script>
-
 
     <script src="/panel/assets/js/app.min.js"></script>
   </body>
