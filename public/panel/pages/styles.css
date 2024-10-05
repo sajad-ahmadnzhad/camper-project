@@ -204,3 +204,30 @@
     white-space: normal;
   }
 }
+
+/*********** camper info *************/
+#back-button {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  background-color: #f1f1f1;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 16px;
+}
+
+#back-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+#back-button i {
+  margin-left: 10px; /* برای فاصله بین آیکون و متن */
+  font-size: 18px;
+}
+
+#back-button span {
+  font-weight: bold;
+}

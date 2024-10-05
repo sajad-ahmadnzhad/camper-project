@@ -388,7 +388,6 @@ async function scriptImageSelected(camper) {
 }
 
 async function submitCamperData(isUpdate = false, camperId = null, originalCamper = {}) {
-  Swal.getConfirmButton().textContent = "ارسال اطلاعات ...";
   clearErrors();
 
   const name = document.getElementById("name").value;
@@ -430,6 +429,7 @@ async function submitCamperData(isUpdate = false, camperId = null, originalCampe
     formDataToSend.append("camperImages", selectedFiles[i]);
   }
 
+  Swal.getConfirmButton().textContent = "ارسال اطلاعات ...";
   const url = isUpdate ? `${apiKey}/api/campers/${camperId}` : `${apiKey}/api/campers`;
   const method = isUpdate ? "PUT" : "POST";
 

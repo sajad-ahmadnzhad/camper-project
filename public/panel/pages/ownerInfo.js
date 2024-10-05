@@ -201,12 +201,12 @@ document.getElementById("mainCover").addEventListener("change", function (event)
       setError("mainCover", "حجم فایل پروفایل نباید بیشتر از ۲ مگابایت باشد.");
       return (hasError = true);
     } else if (file && !["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
-      setError("avatarURL", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
+      setError("mainCover", "فقط فایل‌های تصویری (JPG, JPEG, PNG) مجاز هستند.");
       event.target.value = "";
       document.getElementById("file-chosen2").textContent = file.name;
       return (hasError = true);
     } else {
-      setError("avatarURL", "");
+      setError("mainCover", "");
     }
     const reader = new FileReader();
     reader.onload = function (e) {
